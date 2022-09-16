@@ -29,11 +29,12 @@ This is short hand for:
     +<input type="number" name="b" value="25">
     =<script nomodule be-calculating='{
         "observeClosest": "*",
-        "argList": "elements",
+        "on": "input",
+        "vft": "elements",
         "argName": "name",
         "filter": ["a", "b"],
         "argValue": "value",
-        "on": "input",
+        
 
     }'>parseInt(a.value) + parseInt(b.value)</script>
     <output name="x" for="a b">
