@@ -46,10 +46,10 @@ This is short hand for:
                 "vft": ".",
             }
         },
-        "transformClosest": "*"
+        "transformClosest": ":not(script)"
     }'>        
         export transform = ({a, b}) => ({
-            xName: {value: parseInt(a.value) + parseInt(b.value)}
+            "[name='x']: {value: parseInt(a.value) + parseInt(b.value)}
         });
     </script>
     <output name="x" for="a b">
