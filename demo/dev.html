@@ -18,7 +18,14 @@
         <input type="range" name="a" value="50">
         +<input type="number" name="b" value="25">
         =<output name="x"></output>
-        <script nomodule be-calculating>parseInt(a.value) + parseInt(b.value)</script>
+        <script nomodule be-calculating='{
+            "a": "elements.a",
+            "b": "elements.b"
+        }' type=module>
+            export const transform = {
+                xName: [value: parseInt(a.value) + parseInt(b.value)]
+            }
+        </script>
     </form>
 </body>
 </html>

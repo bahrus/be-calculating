@@ -16,8 +16,15 @@ The equivalent with be-calculating:
 <form>
     <input type="range" name="a" value="50">
     +<input type="number" name="b" value="25">
-    =<output name="x" for="a b"></output>
-    <script nomodule be-calculating>parseInt(a.value) + parseInt(b.value)</script>
+    =<output name="x"></output>
+    <script nomodule be-calculating='{
+        "a": "elements.a",
+        "b": "elements.b"
+    }' type=module>
+        export const transform = {
+            xName: [value: parseInt(a.value) + parseInt(b.value)]
+        }
+    </script>
 </form>
 ```
 
@@ -28,15 +35,26 @@ This is short hand for:
     <input type="range" name="a" value="50">
     +<input type="number" name="b" value="25">
     =<script nomodule be-calculating='{
-        "observeClosest": "*",
-        "on": "input",
-        "vft": "elements",
-        "argName": "name",
-        "filter": ["a", "b"],
-        "argValue": "value",
-        
+        "arguments":{
+            "a": {
+                "observeClosest": "*",
+                "on": "input",
+                "vft": "elements.a",
+            },
+            "b": {
+                "observeClosest": "*",
+                "on": "input",
+                "vft": "elements.b",
+            }
+        },
+        "transformClosest": "*"
 
-    }'>parseInt(a.value) + parseInt(b.value)</script>
+
+    }'>        
+        export transform = {
+            xName: [value: parseInt(a.value) + parseInt(b.value)]
+        }
+    </script>
     <output name="x" for="a b">
         
     </output>
