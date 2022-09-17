@@ -50,8 +50,6 @@ This is short hand for:
             }
         },
         "transformClosest": "*"
-
-
     }'>        
         export transform = ({a, b}) => ({
             xName: [value: parseInt(a.value) + parseInt(b.value)]
