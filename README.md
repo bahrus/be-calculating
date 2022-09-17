@@ -21,9 +21,9 @@ The equivalent with be-calculating:
         "a": "elements.a",
         "b": "elements.b"
     }' type=module>
-        export const transform = {
+        export const transform = ({a, b}) => ({
             xName: [value: parseInt(a.value) + parseInt(b.value)]
-        }
+        })
     </script>
 </form>
 ```
