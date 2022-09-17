@@ -21,7 +21,7 @@ The equivalent with be-calculating:
     =<output name="x"></output>
     <script type=module nomodule be-calculating='["a", "b"]'>
         ({a, b}) => ({
-            xN: [value: parseInt(a.value) + parseInt(b.value)]
+            xN: {value: parseInt(a.value) + parseInt(b.value)}
         })
     </script>
 </form>
@@ -49,7 +49,7 @@ This is short hand for:
         "transformClosest": "*"
     }'>        
         export transform = ({a, b}) => ({
-            xName: [value: parseInt(a.value) + parseInt(b.value)]
+            xName: {value: parseInt(a.value) + parseInt(b.value)}
         });
     </script>
     <output name="x" for="a b">
