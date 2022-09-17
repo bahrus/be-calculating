@@ -24,7 +24,7 @@ The equivalent with be-calculating:
         "b": "elements.b"
     }' type=module>
         ({a, b}) => ({
-            xName: [value: parseInt(a.value) + parseInt(b.value)]
+            xN: [value: parseInt(a.value) + parseInt(b.value)]
         })
     </script>
 </form>
