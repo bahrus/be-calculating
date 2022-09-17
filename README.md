@@ -1,5 +1,7 @@
 # be-calculating [TODO]
 
+be-calculating is an element decorator / behavior equivalent of [aggregator-fn](https://github.com/bahrus/aggregator-fn).
+
 be-calculating provides a more complete(?) solution to what the [output element](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/output) provides
 
 ```html
@@ -21,7 +23,7 @@ The equivalent with be-calculating:
         "a": "elements.a",
         "b": "elements.b"
     }' type=module>
-        export const transform = ({a, b}) => ({
+        ({a, b}) => ({
             xName: [value: parseInt(a.value) + parseInt(b.value)]
         })
     </script>
@@ -35,7 +37,7 @@ This is short hand for:
     <input type="range" name="a" value="50">
     +<input type="number" name="b" value="25">
     =<script nomodule be-calculating='{
-        "arguments":{
+        "args":{
             "a": {
                 "observeClosest": "*",
                 "on": "input",
@@ -51,9 +53,9 @@ This is short hand for:
 
 
     }'>        
-        export transform = {
+        export transform = ({a, b}) => ({
             xName: [value: parseInt(a.value) + parseInt(b.value)]
-        }
+        });
     </script>
     <output name="x" for="a b">
         
