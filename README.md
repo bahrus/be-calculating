@@ -19,7 +19,7 @@ The equivalent with be-calculating:
     <input type="range" name="a" value="50">
     +<input type="number" name="b" value="25">
     =<output name="x"></output>
-    <script type=module nomodule be-calculating='["a", "b"]'>
+    <script nomodule be-calculating='["a", "b"]'>
         ({a, b}) => ({
             xN: {value: parseInt(a.value) + parseInt(b.value)}
         })
@@ -33,7 +33,8 @@ This is short hand for:
 <form>
     <input type="range" name="a" value="50">
     +<input type="number" name="b" value="25">
-    =<script nomodule be-calculating='{
+    =<output name="x"></output>
+    <script type=module nomodule be-calculating='{
         "args":{
             "a": {
                 "observeName": "a",
@@ -41,7 +42,7 @@ This is short hand for:
                 "vft": ".",
             },
             "b": {
-                "observeClosest": "b",
+                "observeName": "b",
                 "on": "input",
                 "vft": ".",
             }
@@ -52,8 +53,5 @@ This is short hand for:
             "[name='x']: {value: parseInt(a.value) + parseInt(b.value)}
         });
     </script>
-    <output name="x" for="a b">
-        
-    </output>
 </form>
 ```
