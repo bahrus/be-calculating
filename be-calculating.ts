@@ -49,7 +49,6 @@ export class BeCalculating extends EventTarget implements Actions{
         if(hasAuto) explicit.push(autoConstructed);
         this.#propertyBag = new PropertyBag();
         this.#propertyBag.addEventListener('prop-changed', async e => {
-            console.log(e);
             const {DTR} = await import('trans-render/lib/DTR.js');
             const {transformGenerator, transformParent} = pp;
             const ctx: RenderContext = {
