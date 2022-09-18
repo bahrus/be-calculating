@@ -27,7 +27,7 @@ The equivalent with be-calculating:
 </form>
 ```
 
-This is short hand for:
+This is shorthand for:
 
 ```html
 <form>
@@ -47,9 +47,9 @@ This is short hand for:
                 "vft": ".",
             }
         },
-        "transformClosest": ":not(script)"
+        "transformParent": true
     }'>        
-        export transform = ({a, b}) => ({
+        export const transformGenerator = ({a, b}) => ({
             "[name='x']: {value: parseInt(a.value) + parseInt(b.value)}
         });
     </script>

@@ -5,9 +5,26 @@ import { IObserve, PropObserveMap, HookUpInfo } from '../be-observant/types';
 import {PropertyBag} from 'trans-render/lib/PropertyBag.js';
 
 export class BeCalculating extends EventTarget implements Actions{
+
+    async intro(proxy: Proxy, self: HTMLScriptElement){
+        debugger;
+        const inner = self.innerHTML.trim();
+        if(!inner.startsWith('export const transformGenerator = ')){
+            self.innerHTML = 'export const transformGenerator = ' + inner;
+        }
+        self.setAttribute('be-exportable', '');
+        import('be-exportable/be-exportable.js');
+        if((self as any)._modExport){
+            Object.assign(proxy, (self as any)._modExport);
+        }else{
+            self.addEventListener('load', e =>{
+                Object.assign(proxy, (self as any)._modExport);
+            }, {once: true});
+        }
+    }
     #propertyBag: PropertyBag | undefined;
     #abortControllers: AbortController[] | undefined;
-    async onArgs({args}: PP){
+    async onArgsAndTransformer({args, self}: PP){
         this.#disconnect();
         //construct explicit from defaults:
         const arr = Array.isArray(args) ? args : [args];
@@ -29,18 +46,21 @@ export class BeCalculating extends EventTarget implements Actions{
         }
         if(hasAuto) explicit.push(autoConstructed);
         this.#propertyBag = new PropertyBag();
-        await this.#doParams(explicit, )
+        for(const pom of explicit){
+            await this.#doParams(pom, self);
+        }
+        
 
     }
 
-    async #doParams(params: PropObserveMap, proxy: Proxy){
+    async #doParams(params: PropObserveMap, self: HTMLScriptElement){
         const {hookUp} = await import('be-observant/hookUp.js');
         let lastKey = '';
         for(const propKey in params){
             let parm = params[propKey] as string | IObserve;
             const startsWithHat = propKey[0] === '^';
             const key = startsWithHat ? lastKey : propKey;
-            const info = await hookUp(parm, this.#propertyBag!, key);
+            const info = await hookUp(parm, [self, this.#propertyBag!], key);
             this.#abortControllers!.push(info.controller!);
             if(!startsWithHat) lastKey = propKey;
         }  
@@ -74,12 +94,16 @@ define<Proxy & BeDecoratedProps<Proxy, Actions>, Actions>({
             upgrade,
             ifWantsToBe,
             forceVisible: [upgrade],
-            virtualProps: ['args'],
+            virtualProps: ['args', 'transformGenerator'],
             primaryProp: 'args',
-            primaryPropReq: true
+            primaryPropReq: true,
+            intro: 'intro',
+            finale: 'finale'
         },
         actions:{
-            onArgs: 'args'
+            onArgsAndTransformer: {
+                ifAllOf: ['args', 'transformGenerator']
+            }
         }
     },
     complexPropDefaults:{

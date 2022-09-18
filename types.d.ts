@@ -1,12 +1,16 @@
 import {BeDecoratedProps, MinimalProxy} from 'be-decorated/types';
 import {PropObserveMap} from 'be-observant/types';
+import {Matches} from 'trans-render/lib/types';
 
 export type CalculatingMap<Props = any, Actions = Props, TEvent = Event> = string | PropObserveMap<Props, Actions, TEvent>;
 export interface EndUserProps<Props = any, Actions = Props, TEvent = Event> {
     args: CalculatingMap<Props, Actions, TEvent> | CalculatingMap<Props, Actions, TEvent>[];
+    transformParent?: boolean,
 }
 
-export interface VirtualProps extends EndUserProps, MinimalProxy<HTMLScriptElement>{}
+export interface VirtualProps extends EndUserProps, MinimalProxy<HTMLScriptElement>{
+    transformGenerator: (et: EventTarget) =>  Matches;
+}
 
 export type Proxy = HTMLScriptElement & VirtualProps;
 
@@ -17,6 +21,7 @@ export interface ProxyProps extends VirtualProps{
 export type PP = ProxyProps;
 
 export interface Actions{
-    onArgs(pp: PP): void;
+    intro(proxy: Proxy, self: HTMLScriptElement): void;
+    onArgsAndTransformer(pp: PP): void;
     finale(): void;
 }
