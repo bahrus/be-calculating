@@ -1,4 +1,4 @@
-# be-calculating [TODO]
+# be-calculating
 
 be-calculating is an element decorator / behavior equivalent of [aggregator-fn](https://github.com/bahrus/aggregator-fn).
 
