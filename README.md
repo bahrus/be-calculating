@@ -60,13 +60,31 @@ This is shorthand for:
         "transformParent": true
     }'>        
         export const transformGenerator = ({a, b}) => ({
-            "[name='x']: {value: parseInt(a.v) + parseInt(b)}
+            "[name='x']: {value: parseInt(a) + parseInt(b)}
         });
     </script>
 </form>
 ```
 
 It leverages the robust syntax of [be-observant](https://github.com/bahrus/be-observant) and the transform relies on [trans-render](https://github.com/bahrus/trans-render).
+
+## Example 2:
+
+```html
+<form>
+    <input type="range" name="a" value="50">
+    +<input type="number" name="b" value="25">
+    =<output name="x"></output>
+    <script nomodule be-calculating='{
+        "args": ["a", "b"],
+        "defaultProp": "valueAsNumber"
+    }'>
+        ({a, b}) => ({
+            xN: {value: a + b}
+        })
+    </script>
+</form>
+```
 
 ## [Demo](https://codepen.io/bahrus/pen/NWMjxYV)
 

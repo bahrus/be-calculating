@@ -15,7 +15,7 @@ export class BeCalculating extends EventTarget implements Actions{
         self.setAttribute('be-exportable', '');
         import('be-exportable/be-exportable.js');
         if((self as any)._modExport){
-            Object.assign(this.#propertyBag.proxy, (self as any)._modExport);
+            Object.assign(this.#propertyBag!.proxy, (self as any)._modExport);
             proxy.transformGenerator = (self as any)._modExport.transformGenerator;
         }else{
             self.addEventListener('load', e =>{
@@ -23,7 +23,7 @@ export class BeCalculating extends EventTarget implements Actions{
             }, {once: true});
         }
     }
-    #propertyBag: PropertyBag = new PropertyBag();
+    #propertyBag: PropertyBag | undefined = new PropertyBag();
     #abortControllers: AbortController[] | undefined;
     async onArgsAndTG(pp: PP){
         const {args, self } = pp;
@@ -35,11 +35,13 @@ export class BeCalculating extends EventTarget implements Actions{
         let hasAuto = false;
         const explicit : PropObserveMap[] = [];
         for(const arg of arr){
+            
             if(typeof arg === 'string'){
+
                 const obs: IObserve = {
-                    "observeName": arg,
-                    "on": "input",
-                    "vft": "value",
+                    [pp.defaultObserveType!]: arg,
+                    "on": pp.defaultEventType,
+                    "vft": pp.defaultProp,
                 };
                 autoConstructed[arg] = obs;
                 hasAuto = true;
@@ -112,13 +114,16 @@ define<Proxy & BeDecoratedProps<Proxy, Actions>, Actions>({
             upgrade,
             ifWantsToBe,
             forceVisible: [upgrade],
-            virtualProps: ['args', 'transformGenerator', 'transformParent'],
+            virtualProps: ['args', 'transformGenerator', 'transformParent', 'defaultEventType', 'defaultObserveType', 'defaultProp'],
             primaryProp: 'args',
             primaryPropReq: true,
             intro: 'intro',
             finale: 'finale',
             proxyPropDefaults:{
                 transformParent: true,
+                defaultEventType: 'input',
+                defaultObserveType: 'observeName',
+                defaultProp: 'value'
             }
         },
         actions:{

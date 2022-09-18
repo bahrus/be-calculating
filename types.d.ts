@@ -6,6 +6,10 @@ export type CalculatingMap<Props = any, Actions = Props, TEvent = Event> = strin
 export interface EndUserProps<Props = any, Actions = Props, TEvent = Event> {
     args: CalculatingMap<Props, Actions, TEvent> | CalculatingMap<Props, Actions, TEvent>[];
     transformParent?: boolean,
+    transform?: Matches,
+    defaultProp?: string,
+    defaultObserveType?: string,
+    defaultEventType?: string,
 }
 
 export interface VirtualProps extends EndUserProps, MinimalProxy<HTMLScriptElement>{

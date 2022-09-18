@@ -33,9 +33,9 @@ export class BeCalculating extends EventTarget {
         for (const arg of arr) {
             if (typeof arg === 'string') {
                 const obs = {
-                    "observeName": arg,
-                    "on": "input",
-                    "vft": "value",
+                    [pp.defaultObserveType]: arg,
+                    "on": pp.defaultEventType,
+                    "vft": pp.defaultProp,
                 };
                 autoConstructed[arg] = obs;
                 hasAuto = true;
@@ -102,13 +102,16 @@ define({
             upgrade,
             ifWantsToBe,
             forceVisible: [upgrade],
-            virtualProps: ['args', 'transformGenerator', 'transformParent'],
+            virtualProps: ['args', 'transformGenerator', 'transformParent', 'defaultEventType', 'defaultObserveType', 'defaultProp'],
             primaryProp: 'args',
             primaryPropReq: true,
             intro: 'intro',
             finale: 'finale',
             proxyPropDefaults: {
                 transformParent: true,
+                defaultEventType: 'input',
+                defaultObserveType: 'observeName',
+                defaultProp: 'value'
             }
         },
         actions: {
