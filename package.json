@@ -10,7 +10,14 @@
   "description": "",
   "main": "be-calculating.js",
   "module": "be-calculating.js",
-
+  "exports": {
+    ".": "./be-calculating.js",
+    "./be-calculating.js": "./be-calculating.js"
+  },
+  "files": [
+    "*.*"
+  ],
+  "types": "types.d.ts",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/bahrus/be-calculating.git"
@@ -24,12 +31,13 @@
   },
   "devDependencies": {
     "may-it-serve": "0.0.2",
+    "@playwright/test": "1.25.2",
     "@skypack/package-check": "0.2.2",
     "@custom-elements-manifest/analyzer": "0.6.4"
   },
   
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "playwright test",
     "serve": "node node_modules/may-it-serve/serve.js",
     "package-check": "package-check",
     "doc": "custom-elements-manifest analyze"
