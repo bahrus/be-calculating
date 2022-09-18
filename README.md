@@ -66,6 +66,8 @@ This is shorthand for:
 </form>
 ```
 
+## [Demo](https://codepen.io/bahrus/pen/NWMjxYV)
+
 ## Viewing Locally
 
 1.  Install git.
