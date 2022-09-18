@@ -4,14 +4,14 @@ import { PropertyBag } from 'trans-render/lib/PropertyBag.js';
 export class BeCalculating extends EventTarget {
     #propertyBag = new PropertyBag();
     #abortControllers;
-    onNoTransform({ proxy, self }) {
+    insertBoilerplate({ proxy, self }) {
         const inner = self.innerHTML.trim();
         if (!inner.startsWith('export const transformGenerator = ')) {
             self.innerHTML = 'export const transformGenerator = ' + inner;
         }
-        proxy.appendedBoilerPlate = true;
+        proxy.insertedBoilerPlate = true;
     }
-    onReadyToLoadScript({ self, proxy, transform }) {
+    loadScript({ self, proxy, dynamicTransform: transform }) {
         self.setAttribute('be-exportable', '');
         import('be-exportable/be-exportable.js');
         if (self._modExport) {
@@ -29,14 +29,19 @@ export class BeCalculating extends EventTarget {
             proxy.scriptLoaded = true;
         }
     }
-    onStaticTransform({ proxy }) {
+    hookUpStaticTransform({ proxy }) {
+        proxy.readyToListen = true;
+    }
+    hookUpDynamicTransform({ transformGenerator, proxy }) {
+        this.#propertyBag?.addEventListener('prop-changed', e => {
+            proxy.dynamicTransform = proxy.transformGenerator(this.#propertyBag.proxy);
+        });
         proxy.readyToListen = true;
     }
     async listen(pp) {
         const { args, self, proxy } = pp;
         this.#disconnect();
         this.#abortControllers = [];
-        //construct explicit from defaults:
         const arr = Array.isArray(args) ? args : [args];
         const autoConstructed = {};
         let hasAuto = false;
@@ -62,18 +67,11 @@ export class BeCalculating extends EventTarget {
             await this.#doParams(pom, self);
         }
     }
-    onTG({ transformGenerator, proxy }) {
-        this.#propertyBag?.addEventListener('prop-changed', e => {
-            proxy.transform = proxy.transformGenerator(this.#propertyBag.proxy);
-        });
-        proxy.readyToListen = true;
-    }
-    async doTransform({ transform, self, transformParent }) {
+    async doDynamicTransform({ dynamicTransform, self, transformParent }) {
         const { DTR } = await import('trans-render/lib/DTR.js');
-        //const {transformGenerator, transformParent, self} = pp;
         const ctx = {
             host: this.#propertyBag.proxy,
-            match: transform,
+            match: dynamicTransform,
         };
         let elToTransform = self;
         if (transformParent) {
@@ -120,7 +118,7 @@ define({
             forceVisible: [upgrade],
             virtualProps: [
                 'args', 'transformGenerator', 'transformParent', 'defaultEventType', 'defaultObserveType', 'defaultProp',
-                'transform', 'appendedBoilerPlate', 'scriptLoaded', 'readyToListen', 'readyToTransform'
+                'dynamicTransform', 'staticTransform', 'insertedBoilerPlate', 'scriptLoaded', 'readyToListen', 'readyToTransform'
             ],
             primaryProp: 'args',
             primaryPropReq: true,
@@ -133,25 +131,25 @@ define({
             }
         },
         actions: {
+            insertBoilerplate: {
+                ifNoneOf: ['staticTransform']
+            },
+            loadScript: {
+                ifAtLeastOneOf: ['staticTransform', 'insertedBoilerPlate']
+            },
+            hookUpDynamicTransform: {
+                ifAllOf: ['scriptLoaded'],
+                ifNoneOf: ['staticTransform'],
+            },
+            hookUpStaticTransform: {
+                ifAllOf: ['staticTransform', 'scriptLoaded'],
+                ifNoneOf: ['readyToListen']
+            },
             listen: {
                 ifAllOf: ['readyToListen', 'args']
             },
-            onNoTransform: {
-                ifNoneOf: ['transform']
-            },
-            onReadyToLoadScript: {
-                ifAtLeastOneOf: ['transform', 'appendedBoilerPlate']
-            },
-            onTG: {
-                ifAllOf: ['scriptLoaded'],
-                ifNoneOf: ['transform'],
-            },
-            onStaticTransform: {
-                ifAllOf: ['transform', 'scriptLoaded'],
-                ifNoneOf: ['readyToListen']
-            },
-            doTransform: {
-                ifAllOf: ['readyToTransform', 'transform']
+            doDynamicTransform: {
+                ifAllOf: ['readyToTransform', 'dynamicTransform']
             }
         }
     },
