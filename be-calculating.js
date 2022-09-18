@@ -3,7 +3,6 @@ import { register } from "be-hive/register.js";
 import { PropertyBag } from 'trans-render/lib/PropertyBag.js';
 export class BeCalculating extends EventTarget {
     async intro(proxy, self) {
-        debugger;
         const inner = self.innerHTML.trim();
         if (!inner.startsWith('export const transformGenerator = ')) {
             self.innerHTML = 'export const transformGenerator = ' + inner;
@@ -23,6 +22,7 @@ export class BeCalculating extends EventTarget {
     #abortControllers;
     async onArgsAndTransformer({ args, self }) {
         this.#disconnect();
+        this.#abortControllers = [];
         //construct explicit from defaults:
         const arr = Array.isArray(args) ? args : [args];
         const autoConstructed = {};

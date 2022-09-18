@@ -7,7 +7,6 @@ import {PropertyBag} from 'trans-render/lib/PropertyBag.js';
 export class BeCalculating extends EventTarget implements Actions{
 
     async intro(proxy: Proxy, self: HTMLScriptElement){
-        debugger;
         const inner = self.innerHTML.trim();
         if(!inner.startsWith('export const transformGenerator = ')){
             self.innerHTML = 'export const transformGenerator = ' + inner;
@@ -26,6 +25,7 @@ export class BeCalculating extends EventTarget implements Actions{
     #abortControllers: AbortController[] | undefined;
     async onArgsAndTransformer({args, self}: PP){
         this.#disconnect();
+        this.#abortControllers = [];
         //construct explicit from defaults:
         const arr = Array.isArray(args) ? args : [args];
         const autoConstructed: PropObserveMap = {};
