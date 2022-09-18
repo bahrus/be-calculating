@@ -6,18 +6,20 @@ export type CalculatingMap<Props = any, Actions = Props, TEvent = Event> = strin
 export interface EndUserProps<Props = any, Actions = Props, TEvent = Event> {
     args: CalculatingMap<Props, Actions, TEvent> | CalculatingMap<Props, Actions, TEvent>[];
     transformParent?: boolean,
-    transform?: Matches,
+    
     defaultProp?: string,
     defaultObserveType?: string,
     defaultEventType?: string,
+    staticTransform?: Matches,
 }
 
 export interface VirtualProps extends EndUserProps, MinimalProxy<HTMLScriptElement>{
     transformGenerator: (et: EventTarget) =>  Matches;
-    appendedBoilerPlate?: boolean;
+    insertedBoilerPlate?: boolean;
     scriptLoaded?: boolean;
     readyToListen?: boolean;
     readyToTransform?: boolean;
+    dynamicTransform?: Matches,
 }
 
 export type Proxy = HTMLScriptElement & VirtualProps;
@@ -29,12 +31,12 @@ export interface ProxyProps extends VirtualProps{
 export type PP = ProxyProps;
 
 export interface Actions{
-    //intro(proxy: Proxy, self: HTMLScriptElement): void;
-    onTG(pp: PP): void;
-    onNoTransform(pp: PP): void;
-    onReadyToLoadScript(pp: PP): void;
-    onStaticTransform(pp: PP): void;
+    insertBoilerplate(pp: PP): void;
+    loadScript(pp: PP): void;
+    hookUpDynamicTransform(pp: PP): void;
+    hookUpStaticTransform(pp: PP): void;
     listen(pp: PP): void;
+    doDynamicTransform(pp: PP): void;
     finale(): void;
-    doTransform(pp: PP): void;
+    
 }
