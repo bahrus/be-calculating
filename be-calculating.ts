@@ -15,14 +15,15 @@ export class BeCalculating extends EventTarget implements Actions{
         self.setAttribute('be-exportable', '');
         import('be-exportable/be-exportable.js');
         if((self as any)._modExport){
-            Object.assign(proxy, (self as any)._modExport);
+            Object.assign(this.#propertyBag.proxy, (self as any)._modExport);
+            proxy.transformGenerator = (self as any)._modExport.transformGenerator;
         }else{
             self.addEventListener('load', e =>{
                 Object.assign(proxy, (self as any)._modExport);
             }, {once: true});
         }
     }
-    #propertyBag: PropertyBag | undefined;
+    #propertyBag: PropertyBag = new PropertyBag();
     #abortControllers: AbortController[] | undefined;
     async onArgsAndTG(pp: PP){
         const {args, self } = pp;
@@ -47,12 +48,14 @@ export class BeCalculating extends EventTarget implements Actions{
             }
         }
         if(hasAuto) explicit.push(autoConstructed);
-        this.#propertyBag = new PropertyBag();
+        if(this.#propertyBag === undefined){
+            this.#propertyBag = new PropertyBag();
+        }
         this.#propertyBag.addEventListener('prop-changed', async e => {
             const {DTR} = await import('trans-render/lib/DTR.js');
             const {transformGenerator, transformParent} = pp;
             const ctx: RenderContext = {
-                host: {},
+                host: this.#propertyBag!.proxy,
                 match: transformGenerator(this.#propertyBag!.proxy!),
             }
             let elToTransform: Element = self;
