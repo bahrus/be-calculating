@@ -2,27 +2,38 @@ import { define } from 'be-decorated/be-decorated.js';
 import { register } from "be-hive/register.js";
 import { PropertyBag } from 'trans-render/lib/PropertyBag.js';
 export class BeCalculating extends EventTarget {
-    async intro(proxy, self) {
+    #propertyBag = new PropertyBag();
+    #abortControllers;
+    onNoTransform({ proxy, self }) {
         const inner = self.innerHTML.trim();
         if (!inner.startsWith('export const transformGenerator = ')) {
             self.innerHTML = 'export const transformGenerator = ' + inner;
         }
+        proxy.appendedBoilerPlate = true;
+    }
+    onReadyToLoadScript({ self, proxy, transform }) {
         self.setAttribute('be-exportable', '');
         import('be-exportable/be-exportable.js');
         if (self._modExport) {
             Object.assign(this.#propertyBag.proxy, self._modExport);
-            proxy.transformGenerator = self._modExport.transformGenerator;
+            if (transform === undefined)
+                proxy.transformGenerator = self._modExport.transformGenerator; //might be null if 
+            proxy.scriptLoaded = true;
         }
         else {
             self.addEventListener('load', e => {
                 Object.assign(proxy, self._modExport);
+                if (transform === undefined)
+                    proxy.transformGenerator = self._modExport.transformGenerator; //might be null if 
             }, { once: true });
+            proxy.scriptLoaded = true;
         }
     }
-    #propertyBag = new PropertyBag();
-    #abortControllers;
-    async onArgsAndTG(pp) {
-        const { args, self } = pp;
+    onStaticTransform({ proxy }) {
+        proxy.readyToListen = true;
+    }
+    async listen(pp) {
+        const { args, self, proxy } = pp;
         this.#disconnect();
         this.#abortControllers = [];
         //construct explicit from defaults:
@@ -46,25 +57,29 @@ export class BeCalculating extends EventTarget {
         }
         if (hasAuto)
             explicit.push(autoConstructed);
-        if (this.#propertyBag === undefined) {
-            this.#propertyBag = new PropertyBag();
-        }
-        this.#propertyBag.addEventListener('prop-changed', async (e) => {
-            const { DTR } = await import('trans-render/lib/DTR.js');
-            const { transformGenerator, transformParent } = pp;
-            const ctx = {
-                host: this.#propertyBag.proxy,
-                match: transformGenerator(this.#propertyBag.proxy),
-            };
-            let elToTransform = self;
-            if (transformParent) {
-                elToTransform = self.parentElement;
-            }
-            DTR.transform(elToTransform, ctx);
-        });
+        proxy.readyToTransform = true;
         for (const pom of explicit) {
             await this.#doParams(pom, self);
         }
+    }
+    onTG({ transformGenerator, proxy }) {
+        this.#propertyBag?.addEventListener('prop-changed', e => {
+            proxy.transform = proxy.transformGenerator(this.#propertyBag.proxy);
+        });
+        proxy.readyToListen = true;
+    }
+    async doTransform({ transform, self, transformParent }) {
+        const { DTR } = await import('trans-render/lib/DTR.js');
+        //const {transformGenerator, transformParent, self} = pp;
+        const ctx = {
+            host: this.#propertyBag.proxy,
+            match: transform,
+        };
+        let elToTransform = self;
+        if (transformParent) {
+            elToTransform = self.parentElement;
+        }
+        DTR.transform(elToTransform, ctx);
     }
     async #doParams(params, self) {
         const { hookUp } = await import('be-observant/hookUp.js');
@@ -80,7 +95,7 @@ export class BeCalculating extends EventTarget {
         }
     }
     #disconnect() {
-        this.#propertyBag = undefined;
+        //this.#propertyBag = undefined;
         if (this.#abortControllers !== undefined) {
             for (const ac of this.#abortControllers) {
                 ac.abort();
@@ -90,6 +105,7 @@ export class BeCalculating extends EventTarget {
     }
     finale() {
         this.#disconnect();
+        this.#propertyBag = undefined;
     }
 }
 const tagName = 'be-calculating';
@@ -102,10 +118,12 @@ define({
             upgrade,
             ifWantsToBe,
             forceVisible: [upgrade],
-            virtualProps: ['args', 'transformGenerator', 'transformParent', 'defaultEventType', 'defaultObserveType', 'defaultProp'],
+            virtualProps: [
+                'args', 'transformGenerator', 'transformParent', 'defaultEventType', 'defaultObserveType', 'defaultProp',
+                'transform', 'appendedBoilerPlate', 'scriptLoaded', 'readyToListen', 'readyToTransform'
+            ],
             primaryProp: 'args',
             primaryPropReq: true,
-            intro: 'intro',
             finale: 'finale',
             proxyPropDefaults: {
                 transformParent: true,
@@ -115,8 +133,25 @@ define({
             }
         },
         actions: {
-            onArgsAndTG: {
-                ifAllOf: ['args', 'transformGenerator']
+            listen: {
+                ifAllOf: ['readyToListen', 'args']
+            },
+            onNoTransform: {
+                ifNoneOf: ['transform']
+            },
+            onReadyToLoadScript: {
+                ifAtLeastOneOf: ['transform', 'appendedBoilerPlate']
+            },
+            onTG: {
+                ifAllOf: ['scriptLoaded'],
+                ifNoneOf: ['transform'],
+            },
+            onStaticTransform: {
+                ifAllOf: ['transform', 'scriptLoaded'],
+                ifNoneOf: ['readyToListen']
+            },
+            doTransform: {
+                ifAllOf: ['readyToTransform', 'transform']
             }
         }
     },

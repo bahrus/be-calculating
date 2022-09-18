@@ -7,26 +7,39 @@ import {RenderContext} from 'trans-render/lib/types';
 
 export class BeCalculating extends EventTarget implements Actions{
 
-    async intro(proxy: Proxy, self: HTMLScriptElement){
+    #propertyBag: PropertyBag | undefined = new PropertyBag();
+    #abortControllers: AbortController[] | undefined;
+    
+    onNoTransform({proxy, self}: ProxyProps): void {
         const inner = self.innerHTML.trim();
         if(!inner.startsWith('export const transformGenerator = ')){
             self.innerHTML = 'export const transformGenerator = ' + inner;
         }
+        proxy.appendedBoilerPlate = true;
+    }
+
+    onReadyToLoadScript({self, proxy, transform}: ProxyProps) {
         self.setAttribute('be-exportable', '');
         import('be-exportable/be-exportable.js');
         if((self as any)._modExport){
             Object.assign(this.#propertyBag!.proxy, (self as any)._modExport);
-            proxy.transformGenerator = (self as any)._modExport.transformGenerator;
+            if(transform === undefined) proxy.transformGenerator = (self as any)._modExport.transformGenerator; //might be null if 
+            proxy.scriptLoaded = true;
         }else{
             self.addEventListener('load', e =>{
                 Object.assign(proxy, (self as any)._modExport);
+                if(transform === undefined) proxy.transformGenerator = (self as any)._modExport.transformGenerator; //might be null if 
             }, {once: true});
+            proxy.scriptLoaded = true;
         }
     }
-    #propertyBag: PropertyBag | undefined = new PropertyBag();
-    #abortControllers: AbortController[] | undefined;
-    async onArgsAndTG(pp: PP){
-        const {args, self } = pp;
+
+    onStaticTransform({proxy}: ProxyProps): void {
+        proxy.readyToListen = true;
+    }
+    
+    async listen(pp: PP){
+        const {args, self, proxy } = pp;
         this.#disconnect();
         this.#abortControllers = [];
         //construct explicit from defaults:
@@ -50,26 +63,34 @@ export class BeCalculating extends EventTarget implements Actions{
             }
         }
         if(hasAuto) explicit.push(autoConstructed);
-        if(this.#propertyBag === undefined){
-            this.#propertyBag = new PropertyBag();
-        }
-        this.#propertyBag.addEventListener('prop-changed', async e => {
-            const {DTR} = await import('trans-render/lib/DTR.js');
-            const {transformGenerator, transformParent} = pp;
-            const ctx: RenderContext = {
-                host: this.#propertyBag!.proxy,
-                match: transformGenerator(this.#propertyBag!.proxy!),
-            }
-            let elToTransform: Element = self;
-            if(transformParent){
-                elToTransform = self.parentElement!;
-            }
-            DTR.transform(elToTransform, ctx);
-        })
+
+        proxy.readyToTransform = true;
         for(const pom of explicit){
             await this.#doParams(pom, self);
         }
         
+    }
+
+
+    onTG({transformGenerator, proxy}: PP){
+        this.#propertyBag?.addEventListener('prop-changed', e => {
+            proxy.transform = proxy.transformGenerator(this.#propertyBag!.proxy!);
+        });
+        proxy.readyToListen = true;
+    }
+
+    async doTransform({transform, self, transformParent}: PP){
+        const {DTR} = await import('trans-render/lib/DTR.js');
+        //const {transformGenerator, transformParent, self} = pp;
+        const ctx: RenderContext = {
+            host: this.#propertyBag!.proxy,
+            match: transform,
+        }
+        let elToTransform: Element = self;
+        if(transformParent){
+            elToTransform = self.parentElement!;
+        }
+        DTR.transform(elToTransform, ctx);
 
     }
 
@@ -87,7 +108,7 @@ export class BeCalculating extends EventTarget implements Actions{
     }
 
     #disconnect(){
-        this.#propertyBag = undefined;
+        //this.#propertyBag = undefined;
         if(this.#abortControllers !== undefined){
             for(const ac of this.#abortControllers){
                 ac.abort();
@@ -98,6 +119,7 @@ export class BeCalculating extends EventTarget implements Actions{
 
     finale(): void {
         this.#disconnect();
+        this.#propertyBag = undefined;
     }
 }
 
@@ -114,10 +136,12 @@ define<Proxy & BeDecoratedProps<Proxy, Actions>, Actions>({
             upgrade,
             ifWantsToBe,
             forceVisible: [upgrade],
-            virtualProps: ['args', 'transformGenerator', 'transformParent', 'defaultEventType', 'defaultObserveType', 'defaultProp'],
+            virtualProps: [
+                'args', 'transformGenerator', 'transformParent', 'defaultEventType', 'defaultObserveType', 'defaultProp', 
+                'transform', 'appendedBoilerPlate', 'scriptLoaded', 'readyToListen', 'readyToTransform'
+            ],
             primaryProp: 'args',
             primaryPropReq: true,
-            intro: 'intro',
             finale: 'finale',
             proxyPropDefaults:{
                 transformParent: true,
@@ -127,8 +151,25 @@ define<Proxy & BeDecoratedProps<Proxy, Actions>, Actions>({
             }
         },
         actions:{
-            onArgsAndTG: {
-                ifAllOf: ['args', 'transformGenerator']
+            listen: {
+                ifAllOf: ['readyToListen', 'args']
+            },
+            onNoTransform:{
+                ifNoneOf: ['transform']
+            },
+            onReadyToLoadScript: {
+                ifAtLeastOneOf: ['transform', 'appendedBoilerPlate']
+            },
+            onTG: {
+                ifAllOf: ['scriptLoaded'],
+                ifNoneOf: ['transform'],
+            },
+            onStaticTransform: {
+                ifAllOf: ['transform', 'scriptLoaded'],
+                ifNoneOf: ['readyToListen']
+            },
+            doTransform: {
+                ifAllOf: ['readyToTransform', 'transform']
             }
         }
     },
