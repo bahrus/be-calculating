@@ -66,6 +66,8 @@ This is shorthand for:
 </form>
 ```
 
+It leverages the robust syntax of [be-observant](https://github.com/bahrus/be-observant) and the transform relies on [trans-render](https://github.com/bahrus/trans-render).
+
 ## [Demo](https://codepen.io/bahrus/pen/NWMjxYV)
 
 ## Viewing Locally
