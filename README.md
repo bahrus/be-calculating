@@ -31,7 +31,7 @@ The equivalent with be-calculating:
     =<output name="x"></output>
     <script nomodule be-calculating='["a", "b"]'>
         ({a, b}) => ({
-            xN: {value: parseInt(a.value) + parseInt(b.value)}
+            xN: {value: parseInt(a) + parseInt(b)}
         })
     </script>
 </form>
@@ -49,18 +49,18 @@ This is shorthand for:
             "a": {
                 "observeName": "a",
                 "on": "input",
-                "vft": ".",
+                "vft": "value"
             },
             "b": {
                 "observeName": "b",
                 "on": "input",
-                "vft": ".",
+                "vft": "value"
             }
         },
         "transformParent": true
     }'>        
         export const transformGenerator = ({a, b}) => ({
-            "[name='x']: {value: parseInt(a.value) + parseInt(b.value)}
+            "[name='x']: {value: parseInt(a.v) + parseInt(b)}
         });
     </script>
 </form>

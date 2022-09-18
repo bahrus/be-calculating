@@ -35,7 +35,7 @@ export class BeCalculating extends EventTarget {
                 const obs = {
                     "observeName": arg,
                     "on": "input",
-                    "vft": ".",
+                    "vft": "value",
                 };
                 autoConstructed[arg] = obs;
                 hasAuto = true;
