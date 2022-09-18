@@ -3,6 +3,7 @@ import {Actions, VirtualProps, PP, Proxy, ProxyProps} from './types';
 import {register} from "be-hive/register.js";
 import { IObserve, PropObserveMap, HookUpInfo } from '../be-observant/types';
 import {PropertyBag} from 'trans-render/lib/PropertyBag.js';
+import {RenderContext} from 'trans-render/lib/types';
 
 export class BeCalculating extends EventTarget implements Actions{
 
@@ -23,7 +24,8 @@ export class BeCalculating extends EventTarget implements Actions{
     }
     #propertyBag: PropertyBag | undefined;
     #abortControllers: AbortController[] | undefined;
-    async onArgsAndTransformer({args, self}: PP){
+    async onArgsAndTG(pp: PP){
+        const {args, self } = pp;
         this.#disconnect();
         this.#abortControllers = [];
         //construct explicit from defaults:
@@ -46,6 +48,20 @@ export class BeCalculating extends EventTarget implements Actions{
         }
         if(hasAuto) explicit.push(autoConstructed);
         this.#propertyBag = new PropertyBag();
+        this.#propertyBag.addEventListener('prop-changed', async e => {
+            console.log(e);
+            const {DTR} = await import('trans-render/lib/DTR.js');
+            const {transformGenerator, transformParent} = pp;
+            const ctx: RenderContext = {
+                host: {},
+                match: transformGenerator(this.#propertyBag!.proxy!),
+            }
+            let elToTransform: Element = self;
+            if(transformParent){
+                elToTransform = self.parentElement!;
+            }
+            DTR.transform(elToTransform, ctx);
+        })
         for(const pom of explicit){
             await this.#doParams(pom, self);
         }
@@ -60,7 +76,7 @@ export class BeCalculating extends EventTarget implements Actions{
             let parm = params[propKey] as string | IObserve;
             const startsWithHat = propKey[0] === '^';
             const key = startsWithHat ? lastKey : propKey;
-            const info = await hookUp(parm, [self, this.#propertyBag!], key);
+            const info = await hookUp(parm, [self, this.#propertyBag!.proxy!], key);
             this.#abortControllers!.push(info.controller!);
             if(!startsWithHat) lastKey = propKey;
         }  
@@ -94,14 +110,17 @@ define<Proxy & BeDecoratedProps<Proxy, Actions>, Actions>({
             upgrade,
             ifWantsToBe,
             forceVisible: [upgrade],
-            virtualProps: ['args', 'transformGenerator'],
+            virtualProps: ['args', 'transformGenerator', 'transformParent'],
             primaryProp: 'args',
             primaryPropReq: true,
             intro: 'intro',
-            finale: 'finale'
+            finale: 'finale',
+            proxyPropDefaults:{
+                transformParent: true,
+            }
         },
         actions:{
-            onArgsAndTransformer: {
+            onArgsAndTG: {
                 ifAllOf: ['args', 'transformGenerator']
             }
         }

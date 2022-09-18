@@ -22,6 +22,6 @@ export type PP = ProxyProps;
 
 export interface Actions{
     intro(proxy: Proxy, self: HTMLScriptElement): void;
-    onArgsAndTransformer(pp: PP): void;
+    onArgsAndTG(pp: PP): void;
     finale(): void;
 }

@@ -20,7 +20,8 @@ export class BeCalculating extends EventTarget {
     }
     #propertyBag;
     #abortControllers;
-    async onArgsAndTransformer({ args, self }) {
+    async onArgsAndTG(pp) {
+        const { args, self } = pp;
         this.#disconnect();
         this.#abortControllers = [];
         //construct explicit from defaults:
@@ -45,6 +46,20 @@ export class BeCalculating extends EventTarget {
         if (hasAuto)
             explicit.push(autoConstructed);
         this.#propertyBag = new PropertyBag();
+        this.#propertyBag.addEventListener('prop-changed', async (e) => {
+            console.log(e);
+            const { DTR } = await import('trans-render/lib/DTR.js');
+            const { transformGenerator, transformParent } = pp;
+            const ctx = {
+                host: {},
+                match: transformGenerator(this.#propertyBag.proxy),
+            };
+            let elToTransform = self;
+            if (transformParent) {
+                elToTransform = self.parentElement;
+            }
+            DTR.transform(elToTransform, ctx);
+        });
         for (const pom of explicit) {
             await this.#doParams(pom, self);
         }
@@ -56,7 +71,7 @@ export class BeCalculating extends EventTarget {
             let parm = params[propKey];
             const startsWithHat = propKey[0] === '^';
             const key = startsWithHat ? lastKey : propKey;
-            const info = await hookUp(parm, [self, this.#propertyBag], key);
+            const info = await hookUp(parm, [self, this.#propertyBag.proxy], key);
             this.#abortControllers.push(info.controller);
             if (!startsWithHat)
                 lastKey = propKey;
@@ -85,14 +100,17 @@ define({
             upgrade,
             ifWantsToBe,
             forceVisible: [upgrade],
-            virtualProps: ['args', 'transformGenerator'],
+            virtualProps: ['args', 'transformGenerator', 'transformParent'],
             primaryProp: 'args',
             primaryPropReq: true,
             intro: 'intro',
-            finale: 'finale'
+            finale: 'finale',
+            proxyPropDefaults: {
+                transformParent: true,
+            }
         },
         actions: {
-            onArgsAndTransformer: {
+            onArgsAndTG: {
                 ifAllOf: ['args', 'transformGenerator']
             }
         }
