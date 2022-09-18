@@ -1,13 +1,13 @@
 import {define, BeDecoratedProps} from 'be-decorated/be-decorated.js';
 import {Actions, VirtualProps, PP, Proxy, ProxyProps} from './types';
 import {register} from "be-hive/register.js";
-import { IObserve, PropObserveMap } from '../be-observant/types';
+import { IObserve, PropObserveMap, HookUpInfo } from '../be-observant/types';
 import {PropertyBag} from 'trans-render/lib/PropertyBag.js';
 
 export class BeCalculating extends EventTarget implements Actions{
     #propertyBag: PropertyBag | undefined;
     #abortControllers: AbortController[] | undefined;
-    onArgs({args}: PP): void {
+    async onArgs({args}: PP){
         this.#disconnect();
         //construct explicit from defaults:
         const arr = Array.isArray(args) ? args : [args];
@@ -29,6 +29,21 @@ export class BeCalculating extends EventTarget implements Actions{
         }
         if(hasAuto) explicit.push(autoConstructed);
         this.#propertyBag = new PropertyBag();
+        await this.#doParams(explicit, )
+
+    }
+
+    async #doParams(params: PropObserveMap, proxy: Proxy){
+        const {hookUp} = await import('be-observant/hookUp.js');
+        let lastKey = '';
+        for(const propKey in params){
+            let parm = params[propKey] as string | IObserve;
+            const startsWithHat = propKey[0] === '^';
+            const key = startsWithHat ? lastKey : propKey;
+            const info = await hookUp(parm, this.#propertyBag!, key);
+            this.#abortControllers!.push(info.controller!);
+            if(!startsWithHat) lastKey = propKey;
+        }  
     }
 
     #disconnect(){
