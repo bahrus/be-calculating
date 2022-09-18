@@ -5,6 +5,8 @@ import { IObserve, PropObserveMap } from '../be-observant/types';
 import {PropertyBag} from 'trans-render/lib/PropertyBag.js';
 
 export class BeCalculating extends EventTarget implements Actions{
+    #propertyBag: PropertyBag | undefined;
+    #abortControllers: AbortController[] | undefined;
     onArgs({args}: PP): void {
         this.#disconnect();
         //construct explicit from defaults:
@@ -26,11 +28,21 @@ export class BeCalculating extends EventTarget implements Actions{
             }
         }
         if(hasAuto) explicit.push(autoConstructed);
-
+        this.#propertyBag = new PropertyBag();
     }
 
     #disconnect(){
+        this.#propertyBag = undefined;
+        if(this.#abortControllers !== undefined){
+            for(const ac of this.#abortControllers){
+                ac.abort();
+            }
+            this.#abortControllers = undefined;
+        }
+    }
 
+    finale(): void {
+        this.#disconnect();
     }
 }
 
