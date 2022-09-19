@@ -9,32 +9,30 @@ export class BeCalculating extends EventTarget implements Actions{
 
     #propertyBag: PropertyBag | undefined = new PropertyBag();
     #abortControllers: AbortController[] | undefined; 
-    
-    insertTrGen({proxy, self}: PP): void {
-        const inner = self.innerHTML.trim();
-        if(!inner.startsWith('export const transformGenerator = ')){
-            self.innerHTML = 'export const transformGenerator = ' + inner;
-        }
-        proxy.insertedBoilerPlate = true;
-    }
 
-    loadScript({self, proxy, dynamicTransform: transform}: PP) {
+    intro(proxy: Proxy, self: HTMLScriptElement){
+        const inner = self.innerHTML.trim();
+        if(!inner.startsWith('export const calculator = ')){
+            self.innerHTML = 'export const calculator = ' + inner;
+        }
         self.setAttribute('be-exportable', '');
         import('be-exportable/be-exportable.js');
         if((self as any)._modExport){
             Object.assign(this.#propertyBag!.proxy, (self as any)._modExport);
-            if(transform === undefined) proxy.transformGenerator = (self as any)._modExport.transformGenerator; //might be null if 
-            proxy.scriptLoaded = true;
+            proxy.calculator = (self as any)._modExport.calculator; 
+            //proxy.scriptLoaded = true;
         }else{
             self.addEventListener('load', e =>{
                 Object.assign(proxy, (self as any)._modExport);
-                if(transform === undefined) proxy.transformGenerator = (self as any)._modExport.transformGenerator; //might be null if 
+                proxy.calculator = (self as any)._modExport.calculator; 
+                //proxy.scriptLoaded = true;
             }, {once: true});
-            proxy.scriptLoaded = true;
         }
     }
+    
 
-    async hookUpStaticTransform(pp: PP){
+
+    async hookUpTransform(pp: PP){
         const {proxy, transform} = pp;
         const transforms = Array.isArray(transform) ? transform : [transform];
         const {DTR} = await import('trans-render/lib/DTR.js');
@@ -50,14 +48,7 @@ export class BeCalculating extends EventTarget implements Actions{
             await dtr.transform(fragment);
             await dtr.subscribe(true);
         }
-        proxy.readyToListen = true;
-    }
-
-    hookUpDynamicTransform({proxy}: PP){
-        this.#propertyBag?.addEventListener('prop-changed', e => {
-            proxy.dynamicTransform = proxy.transformGenerator!(this.#propertyBag!.proxy!);
-        });
-        proxy.readyToListen = true;
+        //proxy.readyToListen = true;
     }
 
 
@@ -103,28 +94,12 @@ export class BeCalculating extends EventTarget implements Actions{
             }
         }
         if(hasAuto) explicit.push(autoConstructed);
-
-        proxy.readyToTransform = true;
         for(const pom of explicit){
             await this.#doParams(pom, self, proxy);
         }
         
     }
 
-
-
-
-    async doDynamicTransform(pp: PP){
-        const {dynamicTransform} = pp;
-        const {DTR} = await import('trans-render/lib/DTR.js');
-        const ctx: RenderContext = {
-            host: this.#propertyBag!.proxy,
-            match: dynamicTransform,
-        }
-        const elToTransform = await this.#getTransformTarget(pp);
-        DTR.transform(elToTransform, ctx);
-
-    }
 
     async #getTransformTarget({transformParent, self}: PP){
         let elToTransform: Element = self;
@@ -187,11 +162,12 @@ define<Proxy & BeDecoratedProps<Proxy, Actions>, Actions>({
             ifWantsToBe,
             forceVisible: [upgrade],
             virtualProps: [
-                'args', 'transformGenerator', 'calculator', 'transformParent', 'defaultEventType', 'defaultObserveType', 'defaultProp', 
-                'dynamicTransform', 'transform', 'insertedBoilerPlate', 'scriptLoaded', 'readyToListen', 'readyToTransform', 'props'
+                'args', 'calculator', 'transformParent', 'defaultEventType', 'defaultObserveType', 'defaultProp', 
+                'transform', 'props'
             ],
             primaryProp: 'args',
             primaryPropReq: true,
+            intro: 'intro',
             finale: 'finale',
             proxyPropDefaults:{
                 transformParent: true,
@@ -201,26 +177,8 @@ define<Proxy & BeDecoratedProps<Proxy, Actions>, Actions>({
             }
         },
         actions:{
-            insertTrGen:{
-                ifNoneOf: ['transform']
-            },
-            loadScript: {
-                ifAtLeastOneOf: ['transform', 'insertedBoilerPlate']
-            },
-            hookUpDynamicTransform: {
-                ifAllOf: ['scriptLoaded'],
-                ifNoneOf: ['transform'],
-            },
-            hookUpStaticTransform: {
-                ifAllOf: ['transform', 'scriptLoaded'],
-                ifNoneOf: ['readyToListen']
-            },
-            listen: {
-                ifAllOf: ['readyToListen', 'args']
-            },
-            doDynamicTransform: {
-                ifAllOf: ['readyToTransform', 'dynamicTransform']
-            },
+            hookUpTransform: 'transform',
+            listen: 'args',
             hookupCalc: {
                 ifAllOf: ['props', 'calculator']
             }

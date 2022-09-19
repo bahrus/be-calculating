@@ -4,32 +4,27 @@ import { PropertyBag } from 'trans-render/lib/PropertyBag.js';
 export class BeCalculating extends EventTarget {
     #propertyBag = new PropertyBag();
     #abortControllers;
-    insertTrGen({ proxy, self }) {
+    intro(proxy, self) {
         const inner = self.innerHTML.trim();
-        if (!inner.startsWith('export const transformGenerator = ')) {
-            self.innerHTML = 'export const transformGenerator = ' + inner;
+        if (!inner.startsWith('export const calculator = ')) {
+            self.innerHTML = 'export const calculator = ' + inner;
         }
-        proxy.insertedBoilerPlate = true;
-    }
-    loadScript({ self, proxy, dynamicTransform: transform }) {
         self.setAttribute('be-exportable', '');
         import('be-exportable/be-exportable.js');
         if (self._modExport) {
             Object.assign(this.#propertyBag.proxy, self._modExport);
-            if (transform === undefined)
-                proxy.transformGenerator = self._modExport.transformGenerator; //might be null if 
-            proxy.scriptLoaded = true;
+            proxy.calculator = self._modExport.calculator;
+            //proxy.scriptLoaded = true;
         }
         else {
             self.addEventListener('load', e => {
                 Object.assign(proxy, self._modExport);
-                if (transform === undefined)
-                    proxy.transformGenerator = self._modExport.transformGenerator; //might be null if 
+                proxy.calculator = self._modExport.calculator;
+                //proxy.scriptLoaded = true;
             }, { once: true });
-            proxy.scriptLoaded = true;
         }
     }
-    async hookUpStaticTransform(pp) {
+    async hookUpTransform(pp) {
         const { proxy, transform } = pp;
         const transforms = Array.isArray(transform) ? transform : [transform];
         const { DTR } = await import('trans-render/lib/DTR.js');
@@ -44,13 +39,7 @@ export class BeCalculating extends EventTarget {
             await dtr.transform(fragment);
             await dtr.subscribe(true);
         }
-        proxy.readyToListen = true;
-    }
-    hookUpDynamicTransform({ proxy }) {
-        this.#propertyBag?.addEventListener('prop-changed', e => {
-            proxy.dynamicTransform = proxy.transformGenerator(this.#propertyBag.proxy);
-        });
-        proxy.readyToListen = true;
+        //proxy.readyToListen = true;
     }
     #calcControllers;
     async hookupCalc({ calculator, props }) {
@@ -93,20 +82,9 @@ export class BeCalculating extends EventTarget {
         }
         if (hasAuto)
             explicit.push(autoConstructed);
-        proxy.readyToTransform = true;
         for (const pom of explicit) {
             await this.#doParams(pom, self, proxy);
         }
-    }
-    async doDynamicTransform(pp) {
-        const { dynamicTransform } = pp;
-        const { DTR } = await import('trans-render/lib/DTR.js');
-        const ctx = {
-            host: this.#propertyBag.proxy,
-            match: dynamicTransform,
-        };
-        const elToTransform = await this.#getTransformTarget(pp);
-        DTR.transform(elToTransform, ctx);
     }
     async #getTransformTarget({ transformParent, self }) {
         let elToTransform = self;
@@ -162,11 +140,12 @@ define({
             ifWantsToBe,
             forceVisible: [upgrade],
             virtualProps: [
-                'args', 'transformGenerator', 'calculator', 'transformParent', 'defaultEventType', 'defaultObserveType', 'defaultProp',
-                'dynamicTransform', 'transform', 'insertedBoilerPlate', 'scriptLoaded', 'readyToListen', 'readyToTransform', 'props'
+                'args', 'calculator', 'transformParent', 'defaultEventType', 'defaultObserveType', 'defaultProp',
+                'transform', 'props'
             ],
             primaryProp: 'args',
             primaryPropReq: true,
+            intro: 'intro',
             finale: 'finale',
             proxyPropDefaults: {
                 transformParent: true,
@@ -176,26 +155,8 @@ define({
             }
         },
         actions: {
-            insertTrGen: {
-                ifNoneOf: ['transform']
-            },
-            loadScript: {
-                ifAtLeastOneOf: ['transform', 'insertedBoilerPlate']
-            },
-            hookUpDynamicTransform: {
-                ifAllOf: ['scriptLoaded'],
-                ifNoneOf: ['transform'],
-            },
-            hookUpStaticTransform: {
-                ifAllOf: ['transform', 'scriptLoaded'],
-                ifNoneOf: ['readyToListen']
-            },
-            listen: {
-                ifAllOf: ['readyToListen', 'args']
-            },
-            doDynamicTransform: {
-                ifAllOf: ['readyToTransform', 'dynamicTransform']
-            },
+            hookUpTransform: 'transform',
+            listen: 'args',
             hookupCalc: {
                 ifAllOf: ['props', 'calculator']
             }

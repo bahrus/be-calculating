@@ -10,17 +10,15 @@ export interface EndUserProps<Props = any, Actions = Props, TEvent = Event> {
     defaultObserveType?: string,
     defaultEventType?: string,
     transform?: Matches | Matches[],
-    transformGenerator?: (et: EventTarget) =>  Matches;
+    //transformGenerator?: (et: EventTarget) =>  Matches;
     calculator?: (et: EventTarget, ppci?: ProxyPropChangeInfo) => any;
 }
 
 export interface VirtualProps extends EndUserProps, MinimalProxy<HTMLScriptElement>{
-    
-    insertedBoilerPlate?: boolean;
-    scriptLoaded?: boolean;
-    readyToListen?: boolean;
-    readyToTransform?: boolean;
-    dynamicTransform?: Matches;
+    //scriptLoaded?: boolean;
+    //readyToListen?: boolean;
+    //readyToTransform?: boolean;
+    //dynamicTransform?: Matches;
     props?: Set<string>;
 }
 
@@ -33,12 +31,9 @@ export interface ProxyProps extends VirtualProps{
 export type PP = ProxyProps;
 
 export interface Actions{
-    insertTrGen(pp: PP): void;
-    loadScript(pp: PP): void;
-    hookUpDynamicTransform(pp: PP): void;
-    hookUpStaticTransform(pp: PP): void;
+    intro(proxy: Proxy, self: HTMLScriptElement): void;
+    hookUpTransform(pp: PP): void;
     listen(pp: PP): void;
-    doDynamicTransform(pp: PP): void;
     hookupCalc(pp: PP): void;
     finale(): void;
     
