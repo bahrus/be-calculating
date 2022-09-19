@@ -4,7 +4,7 @@ import { PropertyBag } from 'trans-render/lib/PropertyBag.js';
 export class BeCalculating extends EventTarget {
     #propertyBag = new PropertyBag();
     #abortControllers;
-    insertBoilerplate({ proxy, self }) {
+    insertTrGen({ proxy, self }) {
         const inner = self.innerHTML.trim();
         if (!inner.startsWith('export const transformGenerator = ')) {
             self.innerHTML = 'export const transformGenerator = ' + inner;
@@ -29,14 +29,45 @@ export class BeCalculating extends EventTarget {
             proxy.scriptLoaded = true;
         }
     }
-    hookUpStaticTransform({ proxy }) {
+    async hookUpStaticTransform(pp) {
+        const { proxy, staticTransform } = pp;
+        const transforms = Array.isArray(staticTransform) ? staticTransform : [staticTransform];
+        const { DTR } = await import('trans-render/lib/DTR.js');
+        for (const t of transforms) {
+            const ctx = {
+                host: this.#propertyBag.proxy,
+                match: t,
+                //plugins: transformPlugins,
+            };
+            const dtr = new DTR(ctx);
+            const fragment = await this.#getTransformTarget(pp);
+            await dtr.transform(fragment);
+            await dtr.subscribe(true);
+        }
         proxy.readyToListen = true;
     }
-    hookUpDynamicTransform({ transformGenerator, proxy }) {
+    hookUpDynamicTransform({ proxy }) {
         this.#propertyBag?.addEventListener('prop-changed', e => {
             proxy.dynamicTransform = proxy.transformGenerator(this.#propertyBag.proxy);
         });
         proxy.readyToListen = true;
+    }
+    #calcControllers;
+    async hookupCalc({ calculator, props }) {
+        //this.#disconnect();
+        this.#calcControllers = [];
+        const keys = Array.from(props);
+        const proxy = this.#propertyBag.proxy;
+        for (const key of keys) {
+            const ac = new AbortController();
+            this.#propertyBag.addEventListener(key, async (e) => {
+                const calculations = await calculator(proxy, e.detail);
+                Object.assign(proxy, calculations);
+            }, { signal: ac.signal });
+            this.#calcControllers.push(ac);
+        }
+        const calculations = await calculator(proxy);
+        Object.assign(proxy, calculations);
     }
     async listen(pp) {
         const { args, self, proxy } = pp;
@@ -64,33 +95,41 @@ export class BeCalculating extends EventTarget {
             explicit.push(autoConstructed);
         proxy.readyToTransform = true;
         for (const pom of explicit) {
-            await this.#doParams(pom, self);
+            await this.#doParams(pom, self, proxy);
         }
     }
-    async doDynamicTransform({ dynamicTransform, self, transformParent }) {
+    async doDynamicTransform(pp) {
+        const { dynamicTransform } = pp;
         const { DTR } = await import('trans-render/lib/DTR.js');
         const ctx = {
             host: this.#propertyBag.proxy,
             match: dynamicTransform,
         };
+        const elToTransform = await this.#getTransformTarget(pp);
+        DTR.transform(elToTransform, ctx);
+    }
+    async #getTransformTarget({ transformParent, self }) {
         let elToTransform = self;
         if (transformParent) {
             elToTransform = self.parentElement;
         }
-        DTR.transform(elToTransform, ctx);
+        return elToTransform;
     }
-    async #doParams(params, self) {
+    async #doParams(params, self, proxy) {
         const { hookUp } = await import('be-observant/hookUp.js');
         let lastKey = '';
+        const props = new Set();
         for (const propKey in params) {
             let parm = params[propKey];
             const startsWithHat = propKey[0] === '^';
             const key = startsWithHat ? lastKey : propKey;
             const info = await hookUp(parm, [self, this.#propertyBag.proxy], key);
+            props.add(key);
             this.#abortControllers.push(info.controller);
             if (!startsWithHat)
                 lastKey = propKey;
         }
+        proxy.props = props;
     }
     #disconnect() {
         //this.#propertyBag = undefined;
@@ -99,6 +138,12 @@ export class BeCalculating extends EventTarget {
                 ac.abort();
             }
             this.#abortControllers = undefined;
+        }
+        if (this.#calcControllers !== undefined) {
+            for (const ac of this.#calcControllers) {
+                ac.abort();
+            }
+            this.#calcControllers = undefined;
         }
     }
     finale() {
@@ -117,8 +162,8 @@ define({
             ifWantsToBe,
             forceVisible: [upgrade],
             virtualProps: [
-                'args', 'transformGenerator', 'transformParent', 'defaultEventType', 'defaultObserveType', 'defaultProp',
-                'dynamicTransform', 'staticTransform', 'insertedBoilerPlate', 'scriptLoaded', 'readyToListen', 'readyToTransform'
+                'args', 'transformGenerator', 'calculator', 'transformParent', 'defaultEventType', 'defaultObserveType', 'defaultProp',
+                'dynamicTransform', 'staticTransform', 'insertedBoilerPlate', 'scriptLoaded', 'readyToListen', 'readyToTransform', 'props'
             ],
             primaryProp: 'args',
             primaryPropReq: true,
@@ -131,7 +176,7 @@ define({
             }
         },
         actions: {
-            insertBoilerplate: {
+            insertTrGen: {
                 ifNoneOf: ['staticTransform']
             },
             loadScript: {
@@ -150,6 +195,9 @@ define({
             },
             doDynamicTransform: {
                 ifAllOf: ['readyToTransform', 'dynamicTransform']
+            },
+            hookupCalc: {
+                ifAllOf: ['props', 'calculator']
             }
         }
     },
