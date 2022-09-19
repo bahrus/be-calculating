@@ -27,7 +27,7 @@
     "be-exportable": "0.0.32",
     "be-hive": "0.0.66",
     "be-observant": "0.0.143",
-    "trans-render": "0.0.607"
+    "trans-render": "0.0.608"
   },
   "devDependencies": {
     "may-it-serve": "0.0.2",
