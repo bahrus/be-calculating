@@ -30,8 +30,8 @@ export class BeCalculating extends EventTarget {
         }
     }
     async hookUpStaticTransform(pp) {
-        const { proxy, staticTransform } = pp;
-        const transforms = Array.isArray(staticTransform) ? staticTransform : [staticTransform];
+        const { proxy, transform } = pp;
+        const transforms = Array.isArray(transform) ? transform : [transform];
         const { DTR } = await import('trans-render/lib/DTR.js');
         for (const t of transforms) {
             const ctx = {
@@ -163,7 +163,7 @@ define({
             forceVisible: [upgrade],
             virtualProps: [
                 'args', 'transformGenerator', 'calculator', 'transformParent', 'defaultEventType', 'defaultObserveType', 'defaultProp',
-                'dynamicTransform', 'staticTransform', 'insertedBoilerPlate', 'scriptLoaded', 'readyToListen', 'readyToTransform', 'props'
+                'dynamicTransform', 'transform', 'insertedBoilerPlate', 'scriptLoaded', 'readyToListen', 'readyToTransform', 'props'
             ],
             primaryProp: 'args',
             primaryPropReq: true,
@@ -177,17 +177,17 @@ define({
         },
         actions: {
             insertTrGen: {
-                ifNoneOf: ['staticTransform']
+                ifNoneOf: ['transform']
             },
             loadScript: {
-                ifAtLeastOneOf: ['staticTransform', 'insertedBoilerPlate']
+                ifAtLeastOneOf: ['transform', 'insertedBoilerPlate']
             },
             hookUpDynamicTransform: {
                 ifAllOf: ['scriptLoaded'],
-                ifNoneOf: ['staticTransform'],
+                ifNoneOf: ['transform'],
             },
             hookUpStaticTransform: {
-                ifAllOf: ['staticTransform', 'scriptLoaded'],
+                ifAllOf: ['transform', 'scriptLoaded'],
                 ifNoneOf: ['readyToListen']
             },
             listen: {

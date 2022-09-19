@@ -9,7 +9,7 @@ export interface EndUserProps<Props = any, Actions = Props, TEvent = Event> {
     defaultProp?: string,
     defaultObserveType?: string,
     defaultEventType?: string,
-    staticTransform?: Matches,
+    transform?: Matches | Matches[],
     transformGenerator?: (et: EventTarget) =>  Matches;
     calculator?: (et: EventTarget, ppci?: ProxyPropChangeInfo) => any;
 }
