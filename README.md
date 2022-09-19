@@ -1,4 +1,4 @@
-# be-calculating [TODO]
+# be-calculating
 
 [![The Plan](https://www.berfrois.com/uploads/2011/06/rr3.jpg)](https://www.berfrois.com/2011/06/wile-e-coyote-pursues-road-runner/)
 
@@ -24,14 +24,21 @@ be-calculating provides a more complete(?) solution to what the [output element]
 
 The equivalent with be-calculating:
 
+## Example 1
+
 ```html
 <form>
     <input type="range" name="a" value="50">
     +<input type="number" name="b" value="25">
     =<output name="x"></output>
-    <script nomodule be-calculating='["a", "b"]'>
+    <script nomodule be-calculating='{
+        "args": ["a", "b"],
+        "transform": {
+            "xN": "sum"
+        }
+    }'>
         ({a, b}) => ({
-            xN: {value: parseInt(a) + parseInt(b)}
+            sum: parseInt(a) + parseInt(b)
         })
     </script>
 </form>

@@ -143,8 +143,6 @@ define({
                 'args', 'calculator', 'transformParent', 'defaultEventType', 'defaultObserveType', 'defaultProp',
                 'transform', 'props'
             ],
-            primaryProp: 'args',
-            primaryPropReq: true,
             intro: 'intro',
             finale: 'finale',
             proxyPropDefaults: {
