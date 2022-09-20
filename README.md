@@ -27,21 +27,19 @@ The equivalent with be-calculating:
 ## Example 1
 
 ```html
-<form>
-    <input type="range" name="a" value="50">
-    +<input type="number" name="b" value="25">
-    =<output name="x"></output>
-    <script nomodule be-calculating='{
-        "args": ["a", "b"],
-        "transform": {
-            "xN": "sum"
-        }
-    }'>
-        ({a, b}) => ({
-            sum: parseInt(a) + parseInt(b)
-        })
-    </script>
-</form>
+    <form>
+        <input type="range" name="a" value="50">
+        +<input type="number" name="b" value="25">
+        =<output name="x"></output>
+        <script nomodule be-calculating='["a", "b"]'>
+            ({a, b}) => ({
+                sum: Number(a) + Number(b)
+            });
+            export const transform = {
+                xN: 'sum'
+            }
+        </script>
+    </form>
 ```
 
 This is shorthand for:
@@ -66,16 +64,19 @@ This is shorthand for:
         },
         "transformParent": true
     }'>        
-        export const transformGenerator = ({a, b}) => ({
-            "[name='x']: {value: parseInt(a) + parseInt(b)}
+        export const calculator = ({a, b}) => ({
+            sum: Number(a) + Number(b)
         });
+        export const transform = {
+            [name='x']: 'sum'
+        }
     </script>
 </form>
 ```
 
-It leverages the robust syntax of [be-observant](https://github.com/bahrus/be-observant) and the transform relies on [trans-render](https://github.com/bahrus/trans-render).
+It leverages the robust syntax of [be-observant](https://github.com/bahrus/be-observant) and the transform relies on [declarative trans-rendering (DTR)](https://github.com/bahrus/trans-render).
 
-## Example 2:
+## Example 2:  More declarative (faster parsing time)
 
 ```html
 <form>
@@ -84,14 +85,42 @@ It leverages the robust syntax of [be-observant](https://github.com/bahrus/be-ob
     =<output name="x"></output>
     <script nomodule be-calculating='{
         "args": ["a", "b"],
-        "defaultProp": "valueAsNumber"
+        "transform": {
+            "xN": "sum"
+        }
     }'>
         ({a, b}) => ({
-            xN: {value: a + b}
+            sum: Number(a) + Number(b)
         })
     </script>
 </form>
 ```
+
+If editing JSON inside HTML attributes feels weird, the [json-in-html](https://marketplace.visualstudio.com/items?itemName=andersonbruceb.json-in-html) makes it feel much more natural.
+
+And the [may-it-be](https://github.com/bahrus/may-it-be) allows us to benefit from TypeScript tooling, and compiles to an HTML file.
+
+## Example 3:  Use the platform
+
+```html
+<form>
+    <input type="range" name="a" value="50">
+    +<input type="number" name="b" value="25">
+    =<output name="x"></output>
+    <script nomodule be-calculating='{
+        "args": ["a", "b"],
+        "defaultProp": "valueAsNumber",
+        "transform": {
+            "xN": "sum"
+        }
+    }'>
+        ({a, b}) => ({
+            sum: a + b
+        });
+    </script>
+</form>
+```
+
 
 ## [Demo](https://codepen.io/bahrus/pen/NWMjxYV)
 

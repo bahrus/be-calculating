@@ -13,14 +13,13 @@
         =<output name="x"></output>
         <script nomodule be-calculating='{
             "args": ["a", "b"],
-            "defaultProp": "valueAsNumber",
             "transform": {
                 "xN": "sum"
             }
         }'>
             ({a, b}) => ({
-                sum: a + b
-            });
+                sum: Number(a) + Number(b)
+            })
         </script>
     </form>
     <script type=importmap>

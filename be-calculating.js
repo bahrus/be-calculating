@@ -12,14 +12,12 @@ export class BeCalculating extends EventTarget {
         self.setAttribute('be-exportable', '');
         import('be-exportable/be-exportable.js');
         if (self._modExport) {
-            Object.assign(this.#propertyBag.proxy, self._modExport);
-            proxy.calculator = self._modExport.calculator;
+            Object.assign(proxy, self._modExport);
             //proxy.scriptLoaded = true;
         }
         else {
             self.addEventListener('load', e => {
                 Object.assign(proxy, self._modExport);
-                proxy.calculator = self._modExport.calculator;
                 //proxy.scriptLoaded = true;
             }, { once: true });
         }
@@ -143,6 +141,8 @@ define({
                 'args', 'calculator', 'transformParent', 'defaultEventType', 'defaultObserveType', 'defaultProp',
                 'transform', 'props'
             ],
+            primaryProp: 'args',
+            primaryPropReq: true,
             intro: 'intro',
             finale: 'finale',
             proxyPropDefaults: {

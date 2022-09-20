@@ -18,13 +18,11 @@ export class BeCalculating extends EventTarget implements Actions{
         self.setAttribute('be-exportable', '');
         import('be-exportable/be-exportable.js');
         if((self as any)._modExport){
-            Object.assign(this.#propertyBag!.proxy, (self as any)._modExport);
-            proxy.calculator = (self as any)._modExport.calculator; 
+            Object.assign(proxy, (self as any)._modExport);
             //proxy.scriptLoaded = true;
         }else{
             self.addEventListener('load', e =>{
                 Object.assign(proxy, (self as any)._modExport);
-                proxy.calculator = (self as any)._modExport.calculator; 
                 //proxy.scriptLoaded = true;
             }, {once: true});
         }
@@ -165,6 +163,8 @@ define<Proxy & BeDecoratedProps<Proxy, Actions>, Actions>({
                 'args', 'calculator', 'transformParent', 'defaultEventType', 'defaultObserveType', 'defaultProp', 
                 'transform', 'props'
             ],
+            primaryProp: 'args',
+            primaryPropReq: true,
             intro: 'intro',
             finale: 'finale',
             proxyPropDefaults:{
