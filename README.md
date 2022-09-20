@@ -139,7 +139,6 @@ And the [may-it-be](https://github.com/bahrus/may-it-be) allows us to benefit fr
 ```JavaScript
 import 'be-calculating/be-calculating.js';
 
-const {importFromScriptRef} = await import('be-calculating/importFromScriptRef.js');
 ```
 
 ## Using from CDN:
