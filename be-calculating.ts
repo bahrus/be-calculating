@@ -4,13 +4,9 @@ import {register} from "be-hive/register.js";
 import { IObserve, PropObserveMap, HookUpInfo } from '../be-observant/types';
 import {PropertyBag} from 'trans-render/lib/PropertyBag.js';
 import {RenderContext, Transformer} from 'trans-render/lib/types';
+import {BeSyndicating} from 'be-syndicating/be-syndicating.js';
+export class BeCalculating extends BeSyndicating implements Actions{
 
-export class BeCalculating extends EventTarget implements Actions{
-
-
-
-    #propertyBag: PropertyBag | undefined = new PropertyBag();
-    syndicate: EventTarget = this.#propertyBag!.proxy;
 
     intro(proxy: Proxy, self: HTMLScriptElement){
         const inner = self.innerHTML.trim();
@@ -38,7 +34,7 @@ export class BeCalculating extends EventTarget implements Actions{
             const ctx: RenderContext = {
                 host: this.syndicate,
                 match: t,
-                //plugins: transformPlugins,
+                //[TODO]: plugins: transformPlugins,
             }
             
             const dtr = new DTR(ctx);
@@ -46,12 +42,11 @@ export class BeCalculating extends EventTarget implements Actions{
             await dtr.transform(fragment);
             await dtr.subscribe(true);
         }
-        //proxy.readyToListen = true;
     }
 
 
     #proxyControllers: AbortController[] | undefined;
-    async hookupCalc({calculator, props}: PP) {
+    async hookupCalc({calculator, props, proxy}: PP) {
         this.#disconnectProxyListeners();
         this.#proxyControllers = [];
         const keys = Array.from(props!);
@@ -66,38 +61,10 @@ export class BeCalculating extends EventTarget implements Actions{
         }
         const calculations = await calculator!(syndicate);
         Object.assign(syndicate, calculations);
+        proxy.resolved
     }
     
-    #externalControllers: AbortController[] | undefined; 
-    async listen(pp: PP){
-        const {args, self, proxy } = pp;
-        this.#disconnectExternalListeners();
-        this.#externalControllers = [];
-        const arr = Array.isArray(args) ? args : [args];
-        const autoConstructed: PropObserveMap = {};
-        let hasAuto = false;
-        const explicit : PropObserveMap[] = [];
-        for(const arg of arr){
-            
-            if(typeof arg === 'string'){
 
-                const obs: IObserve = {
-                    [pp.defaultObserveType!]: arg,
-                    "on": pp.defaultEventType,
-                    "vft": pp.defaultProp,
-                };
-                autoConstructed[arg] = obs;
-                hasAuto = true;
-            }else{
-                explicit.push(arg);
-            }
-        }
-        if(hasAuto) explicit.push(autoConstructed);
-        for(const pom of explicit){
-            await this.#doParams(pom, self, proxy);
-        }
-        
-    }
 
 
     async #getTransformTarget({transformParent, self}: PP){
@@ -108,32 +75,7 @@ export class BeCalculating extends EventTarget implements Actions{
         return elToTransform;
     }
 
-    
-    async #doParams(params: PropObserveMap, self: HTMLScriptElement, proxy: Proxy){
-        const {hookUp} = await import('be-observant/hookUp.js');
-        let lastKey = '';
-        const props = new Set<string>();
-        const syndicate = this.#propertyBag!.proxy!;
-        for(const propKey in params){
-            let parm = params[propKey] as string | IObserve;
-            const startsWithHat = propKey[0] === '^';
-            const key = startsWithHat ? lastKey : propKey;
-            const info = await hookUp(parm, [self, syndicate], key);
-            props.add(key);
-            this.#externalControllers!.push(info.controller!);
-            if(!startsWithHat) lastKey = propKey;
-        }
-        proxy.props = props;  
-    }
 
-    #disconnectExternalListeners(){
-        if(this.#externalControllers !== undefined){
-            for(const ac of this.#externalControllers){
-                ac.abort();
-            }
-            this.#externalControllers = undefined;
-        }
-    }
 
     #disconnectProxyListeners(){
         if(this.#proxyControllers !== undefined){
@@ -145,10 +87,8 @@ export class BeCalculating extends EventTarget implements Actions{
     }
 
     finale(): void {
-        this.#disconnectExternalListeners();
         this.#disconnectProxyListeners();
-        this.#propertyBag = undefined;
-        this.syndicate = undefined as any as EventTarget;
+        super.finale();
     }
 }
 

@@ -1,9 +1,7 @@
 import { define } from 'be-decorated/be-decorated.js';
 import { register } from "be-hive/register.js";
-import { PropertyBag } from 'trans-render/lib/PropertyBag.js';
-export class BeCalculating extends EventTarget {
-    #propertyBag = new PropertyBag();
-    syndicate = this.#propertyBag.proxy;
+import { BeSyndicating } from 'be-syndicating/be-syndicating.js';
+export class BeCalculating extends BeSyndicating {
     intro(proxy, self) {
         const inner = self.innerHTML.trim();
         if (!inner.startsWith('export const calculator = ')) {
@@ -28,17 +26,16 @@ export class BeCalculating extends EventTarget {
             const ctx = {
                 host: this.syndicate,
                 match: t,
-                //plugins: transformPlugins,
+                //[TODO]: plugins: transformPlugins,
             };
             const dtr = new DTR(ctx);
             const fragment = await this.#getTransformTarget(pp);
             await dtr.transform(fragment);
             await dtr.subscribe(true);
         }
-        //proxy.readyToListen = true;
     }
     #proxyControllers;
-    async hookupCalc({ calculator, props }) {
+    async hookupCalc({ calculator, props, proxy }) {
         this.#disconnectProxyListeners();
         this.#proxyControllers = [];
         const keys = Array.from(props);
@@ -53,35 +50,7 @@ export class BeCalculating extends EventTarget {
         }
         const calculations = await calculator(syndicate);
         Object.assign(syndicate, calculations);
-    }
-    #externalControllers;
-    async listen(pp) {
-        const { args, self, proxy } = pp;
-        this.#disconnectExternalListeners();
-        this.#externalControllers = [];
-        const arr = Array.isArray(args) ? args : [args];
-        const autoConstructed = {};
-        let hasAuto = false;
-        const explicit = [];
-        for (const arg of arr) {
-            if (typeof arg === 'string') {
-                const obs = {
-                    [pp.defaultObserveType]: arg,
-                    "on": pp.defaultEventType,
-                    "vft": pp.defaultProp,
-                };
-                autoConstructed[arg] = obs;
-                hasAuto = true;
-            }
-            else {
-                explicit.push(arg);
-            }
-        }
-        if (hasAuto)
-            explicit.push(autoConstructed);
-        for (const pom of explicit) {
-            await this.#doParams(pom, self, proxy);
-        }
+        proxy.resolved;
     }
     async #getTransformTarget({ transformParent, self }) {
         let elToTransform = self;
@@ -89,31 +58,6 @@ export class BeCalculating extends EventTarget {
             elToTransform = self.parentElement;
         }
         return elToTransform;
-    }
-    async #doParams(params, self, proxy) {
-        const { hookUp } = await import('be-observant/hookUp.js');
-        let lastKey = '';
-        const props = new Set();
-        const syndicate = this.#propertyBag.proxy;
-        for (const propKey in params) {
-            let parm = params[propKey];
-            const startsWithHat = propKey[0] === '^';
-            const key = startsWithHat ? lastKey : propKey;
-            const info = await hookUp(parm, [self, syndicate], key);
-            props.add(key);
-            this.#externalControllers.push(info.controller);
-            if (!startsWithHat)
-                lastKey = propKey;
-        }
-        proxy.props = props;
-    }
-    #disconnectExternalListeners() {
-        if (this.#externalControllers !== undefined) {
-            for (const ac of this.#externalControllers) {
-                ac.abort();
-            }
-            this.#externalControllers = undefined;
-        }
     }
     #disconnectProxyListeners() {
         if (this.#proxyControllers !== undefined) {
@@ -124,10 +68,8 @@ export class BeCalculating extends EventTarget {
         }
     }
     finale() {
-        this.#disconnectExternalListeners();
         this.#disconnectProxyListeners();
-        this.#propertyBag = undefined;
-        this.syndicate = undefined;
+        super.finale();
     }
 }
 const tagName = 'be-calculating';

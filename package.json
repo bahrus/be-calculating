@@ -27,6 +27,7 @@
     "be-exportable": "0.0.32",
     "be-hive": "0.0.66",
     "be-observant": "0.0.143",
+    "be-syndicating": "0.0.1",
     "trans-render": "0.0.608"
   },
   "devDependencies": {
@@ -41,7 +42,7 @@
     "package-check": "package-check",
     "doc": "custom-elements-manifest analyze"
   },
-  "author": "",
+  "author": "Bruce B. Anderson <anderson.bruce.b@gmail.com>",
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/bahrus/be-calculating/issues"
