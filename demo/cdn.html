@@ -13,12 +13,15 @@
         =<output name="x"></output>
         <script nomodule be-calculating='["a", "b"]'>
             ({a, b}) => ({
-                xN: {value: parseInt(a.value) + parseInt(b.value)}
-            })
+                sum: Number(a) + Number(b)
+            });
+            export const transform = {
+                xN: 'sum'
+            }
         </script>
     </form>
     <script type=module crossorigin='anonymous'>
-        import 'https://esm.run/be-calculating'
+        import 'https://esm.run/be-calculating@0.0.3'
     </script>
 
 </body>

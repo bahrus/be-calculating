@@ -3,7 +3,6 @@ import { register } from "be-hive/register.js";
 import { PropertyBag } from 'trans-render/lib/PropertyBag.js';
 export class BeCalculating extends EventTarget {
     #propertyBag = new PropertyBag();
-    #abortControllers;
     intro(proxy, self) {
         const inner = self.innerHTML.trim();
         if (!inner.startsWith('export const calculator = ')) {
@@ -13,12 +12,10 @@ export class BeCalculating extends EventTarget {
         import('be-exportable/be-exportable.js');
         if (self._modExport) {
             Object.assign(proxy, self._modExport);
-            //proxy.scriptLoaded = true;
         }
         else {
             self.addEventListener('load', e => {
                 Object.assign(proxy, self._modExport);
-                //proxy.scriptLoaded = true;
             }, { once: true });
         }
     }
@@ -39,10 +36,10 @@ export class BeCalculating extends EventTarget {
         }
         //proxy.readyToListen = true;
     }
-    #calcControllers;
+    #proxyControllers;
     async hookupCalc({ calculator, props }) {
-        //this.#disconnect();
-        this.#calcControllers = [];
+        this.#disconnectProxyListeners();
+        this.#proxyControllers = [];
         const keys = Array.from(props);
         const proxy = this.#propertyBag.proxy;
         for (const key of keys) {
@@ -51,15 +48,16 @@ export class BeCalculating extends EventTarget {
                 const calculations = await calculator(proxy, e.detail);
                 Object.assign(proxy, calculations);
             }, { signal: ac.signal });
-            this.#calcControllers.push(ac);
+            this.#proxyControllers.push(ac);
         }
         const calculations = await calculator(proxy);
         Object.assign(proxy, calculations);
     }
+    #externalControllers;
     async listen(pp) {
         const { args, self, proxy } = pp;
-        this.#disconnect();
-        this.#abortControllers = [];
+        this.#disconnectExternalListeners();
+        this.#externalControllers = [];
         const arr = Array.isArray(args) ? args : [args];
         const autoConstructed = {};
         let hasAuto = false;
@@ -101,29 +99,31 @@ export class BeCalculating extends EventTarget {
             const key = startsWithHat ? lastKey : propKey;
             const info = await hookUp(parm, [self, this.#propertyBag.proxy], key);
             props.add(key);
-            this.#abortControllers.push(info.controller);
+            this.#externalControllers.push(info.controller);
             if (!startsWithHat)
                 lastKey = propKey;
         }
         proxy.props = props;
     }
-    #disconnect() {
-        //this.#propertyBag = undefined;
-        if (this.#abortControllers !== undefined) {
-            for (const ac of this.#abortControllers) {
+    #disconnectExternalListeners() {
+        if (this.#externalControllers !== undefined) {
+            for (const ac of this.#externalControllers) {
                 ac.abort();
             }
-            this.#abortControllers = undefined;
+            this.#externalControllers = undefined;
         }
-        if (this.#calcControllers !== undefined) {
-            for (const ac of this.#calcControllers) {
+    }
+    #disconnectProxyListeners() {
+        if (this.#proxyControllers !== undefined) {
+            for (const ac of this.#proxyControllers) {
                 ac.abort();
             }
-            this.#calcControllers = undefined;
+            this.#proxyControllers = undefined;
         }
     }
     finale() {
-        this.#disconnect();
+        this.#disconnectExternalListeners();
+        this.#disconnectProxyListeners();
         this.#propertyBag = undefined;
     }
 }

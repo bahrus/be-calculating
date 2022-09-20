@@ -8,7 +8,7 @@ import {RenderContext, Transformer} from 'trans-render/lib/types';
 export class BeCalculating extends EventTarget implements Actions{
 
     #propertyBag: PropertyBag | undefined = new PropertyBag();
-    #abortControllers: AbortController[] | undefined; 
+    
 
     intro(proxy: Proxy, self: HTMLScriptElement){
         const inner = self.innerHTML.trim();
@@ -19,11 +19,9 @@ export class BeCalculating extends EventTarget implements Actions{
         import('be-exportable/be-exportable.js');
         if((self as any)._modExport){
             Object.assign(proxy, (self as any)._modExport);
-            //proxy.scriptLoaded = true;
         }else{
             self.addEventListener('load', e =>{
                 Object.assign(proxy, (self as any)._modExport);
-                //proxy.scriptLoaded = true;
             }, {once: true});
         }
     }
@@ -50,10 +48,10 @@ export class BeCalculating extends EventTarget implements Actions{
     }
 
 
-    #calcControllers: AbortController[] | undefined;
+    #proxyControllers: AbortController[] | undefined;
     async hookupCalc({calculator, props}: PP) {
-        //this.#disconnect();
-        this.#calcControllers = [];
+        this.#disconnectProxyListeners();
+        this.#proxyControllers = [];
         const keys = Array.from(props!);
         const proxy = this.#propertyBag!.proxy!;
         for(const key of keys){
@@ -62,16 +60,17 @@ export class BeCalculating extends EventTarget implements Actions{
                 const calculations = await calculator!(proxy, (e as CustomEvent).detail);
                 Object.assign(proxy, calculations);
             }, {signal: ac.signal});
-            this.#calcControllers.push(ac);
+            this.#proxyControllers.push(ac);
         }
         const calculations = await calculator!(proxy);
         Object.assign(proxy, calculations);
     }
     
+    #externalControllers: AbortController[] | undefined; 
     async listen(pp: PP){
         const {args, self, proxy } = pp;
-        this.#disconnect();
-        this.#abortControllers = [];
+        this.#disconnectExternalListeners();
+        this.#externalControllers = [];
         const arr = Array.isArray(args) ? args : [args];
         const autoConstructed: PropObserveMap = {};
         let hasAuto = false;
@@ -118,30 +117,33 @@ export class BeCalculating extends EventTarget implements Actions{
             const key = startsWithHat ? lastKey : propKey;
             const info = await hookUp(parm, [self, this.#propertyBag!.proxy!], key);
             props.add(key);
-            this.#abortControllers!.push(info.controller!);
+            this.#externalControllers!.push(info.controller!);
             if(!startsWithHat) lastKey = propKey;
         }
         proxy.props = props;  
     }
 
-    #disconnect(){
-        //this.#propertyBag = undefined;
-        if(this.#abortControllers !== undefined){
-            for(const ac of this.#abortControllers){
+    #disconnectExternalListeners(){
+        if(this.#externalControllers !== undefined){
+            for(const ac of this.#externalControllers){
                 ac.abort();
             }
-            this.#abortControllers = undefined;
+            this.#externalControllers = undefined;
         }
-        if(this.#calcControllers !== undefined){
-            for(const ac of this.#calcControllers){
+    }
+
+    #disconnectProxyListeners(){
+        if(this.#proxyControllers !== undefined){
+            for(const ac of this.#proxyControllers){
                 ac.abort();
             }
-            this.#calcControllers = undefined;
+            this.#proxyControllers = undefined;
         }
     }
 
     finale(): void {
-        this.#disconnect();
+        this.#disconnectExternalListeners();
+        this.#disconnectProxyListeners();
         this.#propertyBag = undefined;
     }
 }
