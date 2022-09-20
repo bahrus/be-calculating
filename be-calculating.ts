@@ -7,8 +7,10 @@ import {RenderContext, Transformer} from 'trans-render/lib/types';
 
 export class BeCalculating extends EventTarget implements Actions{
 
+
+
     #propertyBag: PropertyBag | undefined = new PropertyBag();
-    
+    syndicate: EventTarget = this.#propertyBag!.proxy;
 
     intro(proxy: Proxy, self: HTMLScriptElement){
         const inner = self.innerHTML.trim();
@@ -29,12 +31,12 @@ export class BeCalculating extends EventTarget implements Actions{
 
 
     async hookUpTransform(pp: PP){
-        const {proxy, transform} = pp;
+        const {transform} = pp;
         const transforms = Array.isArray(transform) ? transform : [transform];
         const {DTR} = await import('trans-render/lib/DTR.js');
         for(const t of transforms){
             const ctx: RenderContext = {
-                host: this.#propertyBag!.proxy,
+                host: this.syndicate,
                 match: t,
                 //plugins: transformPlugins,
             }
@@ -53,17 +55,17 @@ export class BeCalculating extends EventTarget implements Actions{
         this.#disconnectProxyListeners();
         this.#proxyControllers = [];
         const keys = Array.from(props!);
-        const proxy = this.#propertyBag!.proxy!;
+        const syndicate = this.syndicate;
         for(const key of keys){
             const ac = new AbortController();
-            this.#propertyBag!.addEventListener(key, async e => {
-                const calculations = await calculator!(proxy, (e as CustomEvent).detail);
-                Object.assign(proxy, calculations);
+            this.syndicate.addEventListener(key, async e => {
+                const calculations = await calculator!(syndicate, (e as CustomEvent).detail);
+                Object.assign(syndicate, calculations);
             }, {signal: ac.signal});
             this.#proxyControllers.push(ac);
         }
-        const calculations = await calculator!(proxy);
-        Object.assign(proxy, calculations);
+        const calculations = await calculator!(syndicate);
+        Object.assign(syndicate, calculations);
     }
     
     #externalControllers: AbortController[] | undefined; 
@@ -111,11 +113,12 @@ export class BeCalculating extends EventTarget implements Actions{
         const {hookUp} = await import('be-observant/hookUp.js');
         let lastKey = '';
         const props = new Set<string>();
+        const syndicate = this.#propertyBag!.proxy!;
         for(const propKey in params){
             let parm = params[propKey] as string | IObserve;
             const startsWithHat = propKey[0] === '^';
             const key = startsWithHat ? lastKey : propKey;
-            const info = await hookUp(parm, [self, this.#propertyBag!.proxy!], key);
+            const info = await hookUp(parm, [self, syndicate], key);
             props.add(key);
             this.#externalControllers!.push(info.controller!);
             if(!startsWithHat) lastKey = propKey;
@@ -145,6 +148,7 @@ export class BeCalculating extends EventTarget implements Actions{
         this.#disconnectExternalListeners();
         this.#disconnectProxyListeners();
         this.#propertyBag = undefined;
+        this.syndicate = undefined as any as EventTarget;
     }
 }
 

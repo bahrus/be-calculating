@@ -98,7 +98,7 @@ It leverages the robust syntax of [be-observant](https://github.com/bahrus/be-ob
 
 If editing JSON inside HTML attributes feels weird, the [json-in-html](https://marketplace.visualstudio.com/items?itemName=andersonbruceb.json-in-html) makes it feel much more natural.
 
-And the [may-it-be](https://github.com/bahrus/may-it-be) allows us to benefit from TypeScript tooling, and compiles to an HTML file.
+And the [may-it-be](https://github.com/bahrus/may-it-be) package allows us to benefit from TypeScript tooling, and compiles to an HTML file.
 
 ## Example 3:  Use the platform
 

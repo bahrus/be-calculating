@@ -15,10 +15,6 @@ export interface EndUserProps<Props = any, Actions = Props, TEvent = Event> {
 }
 
 export interface VirtualProps extends EndUserProps, MinimalProxy<HTMLScriptElement>{
-    //scriptLoaded?: boolean;
-    //readyToListen?: boolean;
-    //readyToTransform?: boolean;
-    //dynamicTransform?: Matches;
     props?: Set<string>;
 }
 
