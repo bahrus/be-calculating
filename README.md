@@ -166,7 +166,9 @@ And the [may-it-be](https://github.com/bahrus/may-it-be) package allows us to be
 
 vft stands for Value From Target.
 
-Think of what we've accomplished here!  We have now purified the JavaScript's domain to be independent of the UI.  We now have a reusable function that can be used in a multiple contexts -- anywhere we need to add two numbers together (we've been showing inline examples, but the code can be imported via ESM modules), that we can patent and earn Turing Awards with.
+Think of what we've accomplished here!  We have now purified the JavaScript's domain to be independent of the UI.  We now have a reusable function that can be used in a multiple contexts -- anywhere we need to add two numbers together. We've been showing inline examples, but the code can be imported via ESM modules.
+
+Code that we can patent and earn Turing Awards with!
 
 
 ## [Demo](https://codepen.io/bahrus/pen/NWMjxYV)
