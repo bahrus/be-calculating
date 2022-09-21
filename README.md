@@ -63,8 +63,6 @@ And what if we want to pass the sum to multiple places?  be-calculating can do t
 
 So what be-calculating is wanting to do with this example is shown below:
 
-The equivalent with be-calculating:
-
 ## Example 1
 
 ```html
