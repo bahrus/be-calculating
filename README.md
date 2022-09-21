@@ -123,6 +123,8 @@ And the [may-it-be](https://github.com/bahrus/may-it-be) package allows us to be
 </form>
 ```
 
+vft stands for Value From Target.
+
 
 ## [Demo](https://codepen.io/bahrus/pen/NWMjxYV)
 
