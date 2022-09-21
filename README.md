@@ -27,7 +27,7 @@ It is unclear how to leverage that magic outside the confines of this example (h
 
 Nevertheless, be-calculating tries to approach the brevity, but also provide more flexible options:
 
-The most exact analog to what the code above is doing, but with the help of be-calculating, is shown below:
+The most exact equivalent to what the code above is doing, but with the help of be-calculating, is shown below:
 
 ## Example 0
 
