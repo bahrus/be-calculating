@@ -12,7 +12,7 @@
 
 be-calculating is an element decorator / behavior equivalent of [aggregator-fn](https://github.com/bahrus/aggregator-fn).
 
-be-calculating provides a more complete(?) solution to what the [output element](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/output) provides
+be-calculating can't help but admire the brevity and magic on [display here](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/output):
 
 ```html
 <form oninput="x.value=parseInt(a.value)+parseInt(b.value)">
@@ -22,25 +22,66 @@ be-calculating provides a more complete(?) solution to what the [output element]
 </form>
 ```
 
+
+It is unclear how to leverage that magic outside the confines of this example (how does the context of the names get passed so elegantly into the expression)?
+
+Nevertheless, be-calculating tries to approach the brevity, but also provide more flexible options:
+
+The most exact analog to what the code above is doing, but with the help of be-calculating, is shown below:
+
+## Example 0
+
+```html
+<form>
+    <input type="range" name="a" value="50">
+    +<input type="number" name="b" value="25">
+    =<output name="x"></output>
+</form>
+<script nomodule be-calculating='{
+    "args": {
+        "form": {
+            "observe": "form",
+            "on": "input",
+            "vft": "."
+        }
+    },
+    "transform": {
+        "xN": "sum"
+    }
+}'>
+    ({form}) => ({
+        sum: parseInt(form.a.value) + parseInt(form.b.value)
+    });
+</script>
+```
+
+But this isn't really playing to be-calculating's strengths.  Both examples above recalculate and rebind the value of the sum any time any form element inside is modified by the user.
+
+That means if the form has 10 more input elements, the sum will be recalculated, and the value passed to output, even when editing the 8 input elements that aren't part of the sum.
+
+So what be-calculating is wanting to do with this example is shown below:
+
 The equivalent with be-calculating:
 
 ## Example 1
 
 ```html
-    <form>
-        <input type="range" name="a" value="50">
-        +<input type="number" name="b" value="25">
-        =<output name="x"></output>
-        <script nomodule be-calculating='["a", "b"]'>
-            ({a, b}) => ({
-                sum: Number(a) + Number(b)
-            });
-            export const transform = {
-                xN: 'sum'
-            }
-        </script>
-    </form>
+<form>
+    <input type="range" name="a" value="50">
+    +<input type="number" name="b" value="25">
+    =<output name="x"></output>
+    <script nomodule be-calculating='["a", "b"]'>
+        ({a, b}) => ({
+            sum: Number(a) + Number(b)
+        });
+        export const transform = {
+            xN: 'sum'
+        }
+    </script>
+</form>
 ```
+
+Basically, be-calculating is picking and choosing pieces of the form that is relevant to the sum.
 
 This is shorthand for:
 
