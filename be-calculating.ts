@@ -25,7 +25,19 @@ export class BeCalculating extends BeSyndicating implements Actions{
     }
     
 
-
+    strArgToIObs({defaultObserve, defaultWhat, defaultWhen}: ProxyProps, arg: string): IObserve {
+        const o: IObserve = {...defaultObserve, ...defaultWhat, ...defaultWhen};
+        if(defaultObserve === undefined){
+            o.observeName = arg;
+        }
+        if(defaultWhat === undefined){
+            o.vft = 'value';
+        }
+        if(defaultWhen === undefined){
+            o.on = 'input';
+        }
+        return o;
+    }
     async hookUpTransform(pp: PP){
         const {transform} = pp;
         const transforms = Array.isArray(transform) ? transform : [transform];
@@ -86,7 +98,7 @@ export class BeCalculating extends BeSyndicating implements Actions{
         }
     }
 
-    finale(): void {
+    override finale(): void {
         this.#disconnectProxyListeners();
         super.finale();
     }
@@ -106,7 +118,7 @@ define<Proxy & BeDecoratedProps<Proxy, Actions>, Actions>({
             ifWantsToBe,
             forceVisible: [upgrade],
             virtualProps: [
-                'args', 'calculator', 'transformParent', 'defaultEventType', 'defaultObserveType', 'defaultProp', 
+                'args', 'calculator', 'transformParent', 'defaultObserve', 'defaultWhat', 'defaultWhat', 
                 'transform', 'props'
             ],
             primaryProp: 'args',
@@ -115,9 +127,6 @@ define<Proxy & BeDecoratedProps<Proxy, Actions>, Actions>({
             finale: 'finale',
             proxyPropDefaults:{
                 transformParent: true,
-                defaultEventType: 'input',
-                defaultObserveType: 'observeName',
-                defaultProp: 'value'
             }
         },
         actions:{

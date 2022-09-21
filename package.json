@@ -26,8 +26,8 @@
     "be-decorated": "0.0.161",
     "be-exportable": "0.0.32",
     "be-hive": "0.0.66",
-    "be-observant": "0.0.143",
-    "be-syndicating": "0.0.1",
+    "be-observant": "0.0.145",
+    "be-syndicating": "0.0.2",
     "trans-render": "0.0.608"
   },
   "devDependencies": {

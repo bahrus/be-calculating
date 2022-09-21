@@ -18,6 +18,19 @@ export class BeCalculating extends BeSyndicating {
             }, { once: true });
         }
     }
+    strArgToIObs({ defaultObserve, defaultWhat, defaultWhen }, arg) {
+        const o = { ...defaultObserve, ...defaultWhat, ...defaultWhen };
+        if (defaultObserve === undefined) {
+            o.observeName = arg;
+        }
+        if (defaultWhat === undefined) {
+            o.vft = 'value';
+        }
+        if (defaultWhen === undefined) {
+            o.on = 'input';
+        }
+        return o;
+    }
     async hookUpTransform(pp) {
         const { transform } = pp;
         const transforms = Array.isArray(transform) ? transform : [transform];
@@ -83,7 +96,7 @@ define({
             ifWantsToBe,
             forceVisible: [upgrade],
             virtualProps: [
-                'args', 'calculator', 'transformParent', 'defaultEventType', 'defaultObserveType', 'defaultProp',
+                'args', 'calculator', 'transformParent', 'defaultObserve', 'defaultWhat', 'defaultWhat',
                 'transform', 'props'
             ],
             primaryProp: 'args',
@@ -92,9 +105,6 @@ define({
             finale: 'finale',
             proxyPropDefaults: {
                 transformParent: true,
-                defaultEventType: 'input',
-                defaultObserveType: 'observeName',
-                defaultProp: 'value'
             }
         },
         actions: {
