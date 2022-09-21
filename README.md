@@ -109,7 +109,9 @@ And the [may-it-be](https://github.com/bahrus/may-it-be) package allows us to be
     =<output name="x"></output>
     <script nomodule be-calculating='{
         "args": ["a", "b"],
-        "defaultProp": "valueAsNumber",
+        "defaultWhat": {
+            "vft": "valueAsNumber"
+        },
         "transform": {
             "xN": "sum"
         }
