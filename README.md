@@ -10,9 +10,9 @@
 
 <a href="https://nodei.co/npm/be-calculating/"><img src="https://nodei.co/npm/be-calculating.png"></a>
 
-be-calculating is an element decorator / behavior equivalent of [aggregator-fn](https://github.com/bahrus/aggregator-fn).
+*be-calculating* is an element decorator / behavior equivalent of web component [aggregator-fn](https://github.com/bahrus/aggregator-fn).
 
-be-calculating can't help but admire the brevity and magic on [display here](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/output):
+*be-calculating* can't help but admire the brevity and magic on [display here](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/output):
 
 ```html
 <form oninput="x.value=parseInt(a.value)+parseInt(b.value)">
@@ -25,7 +25,7 @@ be-calculating can't help but admire the brevity and magic on [display here](htt
 
 It is unclear how to leverage that magic outside the confines of this example (how does the context of the names get passed so elegantly into the expression)?
 
-Nevertheless, be-calculating tries to approach the brevity, but also provide more flexible options:
+Nevertheless, be-calculating hopes to at least come close when it comes to brevity, while also providing more flexible options.
 
 The most exact equivalent to what the code above is doing, but with the help of be-calculating, is shown below:
 
@@ -57,11 +57,11 @@ The most exact equivalent to what the code above is doing, but with the help of 
 
 But this isn't really playing to be-calculating's strengths.  Both examples above recalculate and rebind the value of the sum any time any form element inside is modified by the user.
 
-That means if the form has 10 more input elements, the sum will be recalculated, and the value passed to output, even when editing the 8 input elements that aren't part of the sum.
+That means if the form has 8 more input elements, the sum will be recalculated, and the value passed to output, even when editing the 8 input elements that aren't part of the sum.
 
 And what if we want to pass the sum to multiple places?  be-calculating can do that as well.
 
-So what be-calculating is wanting to do with this example is shown below:
+So what *be-calculating* is wanting to do with this example is shown below:
 
 ## Example 1
 
@@ -81,7 +81,7 @@ So what be-calculating is wanting to do with this example is shown below:
 </form>
 ```
 
-Basically, be-calculating is picking and choosing pieces of the form that is relevant to the sum.
+Basically, *be-calculating* is picking and choosing only those pieces of the form that are relevant to the sum.
 
 This is shorthand for:
 
@@ -115,7 +115,7 @@ This is shorthand for:
 </form>
 ```
 
-It leverages the robust syntax of [be-observant](https://github.com/bahrus/be-observant) and the transform relies on [declarative trans-rendering (DTR)](https://github.com/bahrus/trans-render).
+It leverages the robust syntax options provided by [be-observant](https://github.com/bahrus/be-observant), and the transform relies on [declarative trans-rendering (DTR)](https://github.com/bahrus/trans-render).
 
 ## Example 2:  More declarative (faster parsing time)
 
@@ -137,7 +137,7 @@ It leverages the robust syntax of [be-observant](https://github.com/bahrus/be-ob
 </form>
 ```
 
-If editing JSON inside HTML attributes feels weird, the [json-in-html](https://marketplace.visualstudio.com/items?itemName=andersonbruceb.json-in-html) makes it feel much more natural.
+If editing JSON inside HTML attributes feels weird, the [json-in-html](https://marketplace.visualstudio.com/items?itemName=andersonbruceb.json-in-html) vs-code extension makes it feel much more natural, even when editing README files.  Because of the declarative, side-effect-free nature of the extension, it can be used with the web version of VSCode as well.
 
 And the [may-it-be](https://github.com/bahrus/may-it-be) package allows us to benefit from TypeScript tooling, and compiles to an HTML file.
 
@@ -170,10 +170,68 @@ Think of what we've accomplished here!  We have now purified the JavaScript's do
 
 Code that we can patent and earn Turing Awards with!
 
-For now we have a reusable function that can be used in a multiple contexts -- anywhere we need to add two numbers together. We've been showing inline examples, but the code can be imported via ESM modules.
+Because now we have a reusable function that can be used in a multiple contexts -- anywhere we need to add two numbers together. We've been showing inline examples, but the code can be imported via ESM modules, which is discussed below [TODO].
 
+## Yeah, but can your framework do this?
 
+>Okay, yeah, that's great, but what if I throw a wrench into the works, and add a requirement to show a product as well?
 
+## Example 5:
+
+```html
+<form>
+    <input type="range" name="a" value="50">
+    +<input type="number" name="b" value="25">
+    =<output name="x"></output>
+    <p>
+        Yes, and did you also know that <span part='augend'></span> * <span part='addend'></span> = <span part='by-product'></span>
+    </p>
+    <script nomodule be-calculating='{
+        "args": ["a", "b"],
+        "get": {
+            "vft": "valueAsNumber"
+        },
+        "transform": {
+            "xN": "sum",
+            "augendP": "a",
+            "addendP": "b",
+            "byProductP": "product"
+        }
+    }'>
+        ({a, b}) => ({
+            sum: a + b,
+            product: a*b
+        });
+    </script>
+</form>
+```
+
+## External Module Renaming [TODO]
+
+If we want to share our calculating code with the world, we might package it as an npm package.  But as things stand, you will need to specify the name of the calculator thusly:
+
+```JavaScript
+export const calculator = ({a, b}) => ({
+    sum: a + b,
+    product: a*b
+});
+```
+
+If you wish to give it a different name, *be-calculating* needs to know about that:
+
+```JavaScript
+export const TuringAwardDeservingAlgorithm = ({a, b}) => ({
+    sum: a + b,
+    product: a*b
+});
+```
+
+```html
+<script nomodule be-calculating='{
+    ...
+    "importCalculatorAs": "TuringAwardDeservingAlgorithm"
+}
+```
 
 ## [Demo](https://codepen.io/bahrus/pen/NWMjxYV)
 
