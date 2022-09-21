@@ -18,15 +18,15 @@ export class BeCalculating extends BeSyndicating {
             }, { once: true });
         }
     }
-    strArgToIObs({ defaultObserve, defaultWhat, defaultWhen }, arg) {
-        const o = { ...defaultObserve, ...defaultWhat, ...defaultWhen };
-        if (defaultObserve === undefined) {
+    strArgToIObs({ from, get, on }, arg) {
+        const o = { ...from, ...get, ...on };
+        if (from === undefined) {
             o.observeName = arg;
         }
-        if (defaultWhat === undefined) {
+        if (get === undefined) {
             o.vft = 'value';
         }
-        if (defaultWhen === undefined) {
+        if (on === undefined) {
             o.on = 'input';
         }
         return o;
@@ -96,7 +96,7 @@ define({
             ifWantsToBe,
             forceVisible: [upgrade],
             virtualProps: [
-                'args', 'calculator', 'transformParent', 'defaultObserve', 'defaultWhat', 'defaultWhen',
+                'args', 'calculator', 'transformParent', 'from', 'get', 'on',
                 'transform', 'props'
             ],
             primaryProp: 'args',

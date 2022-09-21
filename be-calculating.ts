@@ -25,15 +25,15 @@ export class BeCalculating extends BeSyndicating implements Actions{
     }
     
 
-    strArgToIObs({defaultObserve, defaultWhat, defaultWhen}: ProxyProps, arg: string): IObserve {
-        const o: IObserve = {...defaultObserve, ...defaultWhat, ...defaultWhen};
-        if(defaultObserve === undefined){
+    strArgToIObs({from, get, on}: ProxyProps, arg: string): IObserve {
+        const o: IObserve = {...from, ...get, ...on};
+        if(from === undefined){
             o.observeName = arg;
         }
-        if(defaultWhat === undefined){
+        if(get === undefined){
             o.vft = 'value';
         }
-        if(defaultWhen === undefined){
+        if(on === undefined){
             o.on = 'input';
         }
         return o;
@@ -118,7 +118,7 @@ define<Proxy & BeDecoratedProps<Proxy, Actions>, Actions>({
             ifWantsToBe,
             forceVisible: [upgrade],
             virtualProps: [
-                'args', 'calculator', 'transformParent', 'defaultObserve', 'defaultWhat', 'defaultWhen', 
+                'args', 'calculator', 'transformParent', 'from', 'get', 'on', 
                 'transform', 'props'
             ],
             primaryProp: 'args',

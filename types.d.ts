@@ -11,9 +11,9 @@ export interface EndUserProps<Props = any, Actions = Props, TEvent = Event> exte
     // defaultProp?: string,
     // defaultObserveType?: string,
     // defaultEventType?: string,
-    defaultObserve:WhatToObserve,
-    defaultWhen: WhenToAct,
-    defaultWhat: GetValConfig,
+    from:WhatToObserve,
+    on: WhenToAct,
+    get: GetValConfig,
     transform?: Matches | Matches[],
     calculator?: (et: EventTarget, ppci?: ProxyPropChangeInfo) => any,
 }
