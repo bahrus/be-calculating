@@ -118,7 +118,7 @@ define<Proxy & BeDecoratedProps<Proxy, Actions>, Actions>({
             ifWantsToBe,
             forceVisible: [upgrade],
             virtualProps: [
-                'args', 'calculator', 'transformParent', 'defaultObserve', 'defaultWhat', 'defaultWhat', 
+                'args', 'calculator', 'transformParent', 'defaultObserve', 'defaultWhat', 'defaultWhen', 
                 'transform', 'props'
             ],
             primaryProp: 'args',
