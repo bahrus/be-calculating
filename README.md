@@ -59,6 +59,8 @@ But this isn't really playing to be-calculating's strengths.  Both examples abov
 
 That means if the form has 10 more input elements, the sum will be recalculated, and the value passed to output, even when editing the 8 input elements that aren't part of the sum.
 
+And what if we want to pass the sum to multiple places?  be-calculating can do that as well.
+
 So what be-calculating is wanting to do with this example is shown below:
 
 The equivalent with be-calculating:
