@@ -6,7 +6,7 @@ import {EndUserProps as BeSyndicatingEndUserProps, VirtualProps as BeSyndicating
 export type CalculatingMap<Props = any, Actions = Props, TEvent = Event> = string | PropObserveMap<Props, Actions, TEvent>;
 
 export interface EndUserProps<Props = any, Actions = Props, TEvent = Event> extends BeSyndicatingEndUserProps<Props, Actions, TEvent> {
-    transformParent?: boolean,
+    //transformParent?: boolean,
     from:WhatToObserve,
     on: WhenToAct,
     get: GetValConfig,

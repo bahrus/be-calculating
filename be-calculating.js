@@ -80,11 +80,20 @@ export class BeCalculating extends BeSyndicating {
         Object.assign(syndicate, calculations);
         proxy.resolved;
     }
-    async #getTransformTarget({ transformParent, self }) {
-        let elToTransform = self;
-        if (transformParent) {
+    async #getTransformTarget({ transformScope, self }) {
+        let elToTransform = null;
+        const { parent, host, closest } = transformScope;
+        if (closest) {
+            elToTransform = self.closest(closest);
+        }
+        else if (host) {
+            elToTransform = self.getRootNode();
+        }
+        else {
             elToTransform = self.parentElement;
         }
+        if (elToTransform === null)
+            throw 'bC.404';
         return elToTransform;
     }
     #disconnectProxyListeners() {

@@ -97,11 +97,17 @@ export class BeCalculating extends BeSyndicating implements Actions{
 
 
 
-    async #getTransformTarget({transformParent, self}: PP){
-        let elToTransform: Element = self;
-        if(transformParent){
+    async #getTransformTarget({transformScope, self}: PP){
+        let elToTransform: Element | DocumentFragment | null = null;
+        const {parent, host, closest} = transformScope!;
+        if(closest){
+            elToTransform = self.closest(closest);
+        }else if(host){
+            elToTransform = self.getRootNode() as DocumentFragment;
+        }else{
             elToTransform = self.parentElement!;
         }
+        if(elToTransform === null) throw 'bC.404';
         return elToTransform;
     }
 
