@@ -210,12 +210,40 @@ Because now we have a reusable function that can be used in a multiple contexts 
 
 If we want to share our calculating code with the world, we might package it as an npm package.  But as things stand, you will need to specify the name of the calculator thusly:
 
+### Example 6
+
 ```JavaScript
+//file calculator.js
 export const calculator = ({a, b}) => ({
     sum: a + b,
     product: a*b
 });
 ```
+
+```html
+<form>
+    <input type="range" name="a" value="50">
+    +<input type="number" name="b" value="25">
+    =<output name="x"></output>
+    <p aria-live=polite>
+        Yes, and did you also know that <span part='augend'></span> * <span part='addend'></span> = <span part='by-product'></span>
+    </p>
+    <script nomodule src='calculator.js' be-calculating='{
+        "args": ["a", "b"],
+        "get": {
+            "vft": "valueAsNumber"
+        },
+        "transform": {
+            "xN": "sum",
+            "augendP": "a",
+            "addendP": "b",
+            "byProductP": "product"
+        }
+    }'></script>
+</form>
+```
+
+
 
 If you wish to give it a different name, *be-calculating* needs to know about that:
 
