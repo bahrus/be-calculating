@@ -208,7 +208,9 @@ Because now we have a reusable function that can be used in a multiple contexts 
 
 ## External Module Renaming
 
-If we want to share our calculating code with the world, we might package it as an npm package.  But as things stand, we will need to specify the name of the calculator thusly:
+If we want to share our calculating code with the world, we might package it as an npm package.  Note that the code is library neutral, so doesn't need to be accompanied by 17 black-hole-o-grams of dependencies, and a cottage industry of boot camps to master.  Just saying.
+
+But as things stand, we will need to specify the name of the calculator thusly:
 
 ### Example 6
 
