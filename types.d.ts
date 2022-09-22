@@ -6,16 +6,14 @@ import {EndUserProps as BeSyndicatingEndUserProps, VirtualProps as BeSyndicating
 export type CalculatingMap<Props = any, Actions = Props, TEvent = Event> = string | PropObserveMap<Props, Actions, TEvent>;
 
 export interface EndUserProps<Props = any, Actions = Props, TEvent = Event> extends BeSyndicatingEndUserProps<Props, Actions, TEvent> {
-    //args: CalculatingMap<Props, Actions, TEvent> | CalculatingMap<Props, Actions, TEvent>[];
     transformParent?: boolean,
-    // defaultProp?: string,
-    // defaultObserveType?: string,
-    // defaultEventType?: string,
     from:WhatToObserve,
     on: WhenToAct,
     get: GetValConfig,
     transform?: Matches | Matches[],
     calculator?: (et: EventTarget, ppci?: ProxyPropChangeInfo) => any,
+    importCalculatorFrom?: string,
+    importTransformFrom?: string,
 }
 
 export interface VirtualProps extends EndUserProps, BeSyndicatingVirtualProps<HTMLScriptElement>{}
@@ -29,7 +27,8 @@ export interface ProxyProps extends VirtualProps{
 export type PP = ProxyProps;
 
 export interface Actions extends BeSyndicatingActions{
-    intro(proxy: Proxy, self: HTMLScriptElement): void,
+    //intro(proxy: Proxy, self: HTMLScriptElement): void,
+    importSymbols(pp: PP): void,
     hookUpTransform(pp: PP): void,
     hookupCalc(pp: PP): void,
     

@@ -8,7 +8,9 @@ import {BeSyndicating} from 'be-syndicating/be-syndicating.js';
 export class BeCalculating extends BeSyndicating implements Actions{
 
 
-    intro(proxy: Proxy, self: HTMLScriptElement){
+
+
+    importSymbols({proxy, importCalculatorFrom, importTransformFrom, self}: ProxyProps): void {
         const inner = self.innerHTML.trim();
         if(!inner.startsWith('export const calculator = ')){
             self.innerHTML = 'export const calculator = ' + inner;
@@ -19,7 +21,20 @@ export class BeCalculating extends BeSyndicating implements Actions{
             Object.assign(proxy, (self as any)._modExport);
         }else{
             self.addEventListener('load', e =>{
-                Object.assign(proxy, (self as any)._modExport);
+                //Object.assign(proxy, (self as any)._modExport);
+                if(importCalculatorFrom !== undefined){
+                    const calculator = (self as any)._modExport[importCalculatorFrom];
+                    if(calculator !== undefined){
+                        proxy.calculator = calculator;
+                    }
+                }
+                if(importTransformFrom !== undefined){
+                    const transform = (self as any)._modExport[importTransformFrom];
+                    if(transform !== undefined){
+                        proxy.transform = transform;
+                    }
+                }
+                
             }, {once: true});
         }
     }
@@ -119,14 +134,15 @@ define<Proxy & BeDecoratedProps<Proxy, Actions>, Actions>({
             forceVisible: [upgrade],
             virtualProps: [
                 'args', 'calculator', 'transformParent', 'from', 'get', 'on', 
-                'transform', 'props'
+                'transform', 'props', 'importCalculatorFrom', 'importTransformFrom'
             ],
             primaryProp: 'args',
             primaryPropReq: true,
-            intro: 'intro',
             finale: 'finale',
             proxyPropDefaults:{
                 transformParent: true,
+                importCalculatorFrom: 'calculator',
+                importTransformFrom: 'transform'
             }
         },
         actions:{
@@ -134,6 +150,9 @@ define<Proxy & BeDecoratedProps<Proxy, Actions>, Actions>({
             listen: 'args',
             hookupCalc: {
                 ifAllOf: ['props', 'calculator']
+            },
+            importSymbols: {
+                ifKeyIn: ['importCalculatorFrom', 'importTransformFrom']
             }
         }
     },

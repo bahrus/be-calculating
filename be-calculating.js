@@ -2,7 +2,7 @@ import { define } from 'be-decorated/be-decorated.js';
 import { register } from "be-hive/register.js";
 import { BeSyndicating } from 'be-syndicating/be-syndicating.js';
 export class BeCalculating extends BeSyndicating {
-    intro(proxy, self) {
+    importSymbols({ proxy, importCalculatorFrom, importTransformFrom, self }) {
         const inner = self.innerHTML.trim();
         if (!inner.startsWith('export const calculator = ')) {
             self.innerHTML = 'export const calculator = ' + inner;
@@ -14,7 +14,19 @@ export class BeCalculating extends BeSyndicating {
         }
         else {
             self.addEventListener('load', e => {
-                Object.assign(proxy, self._modExport);
+                //Object.assign(proxy, (self as any)._modExport);
+                if (importCalculatorFrom !== undefined) {
+                    const calculator = self._modExport[importCalculatorFrom];
+                    if (calculator !== undefined) {
+                        proxy.calculator = calculator;
+                    }
+                }
+                if (importTransformFrom !== undefined) {
+                    const transform = self._modExport[importTransformFrom];
+                    if (transform !== undefined) {
+                        proxy.transform = transform;
+                    }
+                }
             }, { once: true });
         }
     }
@@ -97,14 +109,15 @@ define({
             forceVisible: [upgrade],
             virtualProps: [
                 'args', 'calculator', 'transformParent', 'from', 'get', 'on',
-                'transform', 'props'
+                'transform', 'props', 'importCalculatorFrom', 'importTransformFrom'
             ],
             primaryProp: 'args',
             primaryPropReq: true,
-            intro: 'intro',
             finale: 'finale',
             proxyPropDefaults: {
                 transformParent: true,
+                importCalculatorFrom: 'calculator',
+                importTransformFrom: 'transform'
             }
         },
         actions: {
@@ -112,6 +125,9 @@ define({
             listen: 'args',
             hookupCalc: {
                 ifAllOf: ['props', 'calculator']
+            },
+            importSymbols: {
+                ifKeyIn: ['importCalculatorFrom', 'importTransformFrom']
             }
         }
     },

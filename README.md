@@ -206,7 +206,7 @@ Because now we have a reusable function that can be used in a multiple contexts 
 </form>
 ```
 
-## External Module Renaming [TODO]
+## External Module Renaming
 
 If we want to share our calculating code with the world, we might package it as an npm package.  But as things stand, you will need to specify the name of the calculator thusly:
 
