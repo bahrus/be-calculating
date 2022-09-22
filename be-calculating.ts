@@ -142,7 +142,7 @@ define<Proxy & BeDecoratedProps<Proxy, Actions>, Actions>({
             ifWantsToBe,
             forceVisible: [upgrade],
             virtualProps: [
-                'args', 'calculator', 'transformParent', 'from', 'get', 'on', 
+                'args', 'calculator', 'transformScope', 'from', 'get', 'on', 
                 'transform', 'props', 'importCalculatorFrom', 'importTransformFrom',
                 'transformScope'
             ],
@@ -150,7 +150,9 @@ define<Proxy & BeDecoratedProps<Proxy, Actions>, Actions>({
             primaryPropReq: true,
             finale: 'finale',
             proxyPropDefaults:{
-                transformParent: true,
+                transformScope: {
+                    parent: true
+                },
                 importCalculatorFrom: 'calculator',
                 importTransformFrom: 'transform'
             }
