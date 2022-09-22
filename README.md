@@ -103,7 +103,9 @@ This is shorthand for:
                 "vft": "value"
             }
         },
-        "transformParent": true
+        "transformScope": {
+            "parent": true //TODO
+        }
     }'>        
         export const calculator = ({a, b}) => ({
             sum: Number(a) + Number(b)

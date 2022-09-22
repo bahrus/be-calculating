@@ -65,6 +65,9 @@ export class BeCalculating extends BeSyndicating {
         this.#proxyControllers = [];
         const keys = Array.from(props);
         const syndicate = this.syndicate;
+        if (syndicate.self === undefined) {
+            syndicate.self = syndicate; //should this be done in PropertyBag?
+        }
         for (const key of keys) {
             const ac = new AbortController();
             this.syndicate.addEventListener(key, async (e) => {
@@ -109,7 +112,8 @@ define({
             forceVisible: [upgrade],
             virtualProps: [
                 'args', 'calculator', 'transformParent', 'from', 'get', 'on',
-                'transform', 'props', 'importCalculatorFrom', 'importTransformFrom'
+                'transform', 'props', 'importCalculatorFrom', 'importTransformFrom',
+                'transformScope'
             ],
             primaryProp: 'args',
             primaryPropReq: true,

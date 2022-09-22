@@ -78,6 +78,9 @@ export class BeCalculating extends BeSyndicating implements Actions{
         this.#proxyControllers = [];
         const keys = Array.from(props!);
         const syndicate = this.syndicate;
+        if((<any>syndicate).self === undefined){
+            (<any>syndicate).self = syndicate; //should this be done in PropertyBag?
+        }
         for(const key of keys){
             const ac = new AbortController();
             this.syndicate.addEventListener(key, async e => {
