@@ -14,6 +14,11 @@ export interface EndUserProps<Props = any, Actions = Props, TEvent = Event> exte
     calculator?: (et: EventTarget, ppci?: ProxyPropChangeInfo) => any,
     importCalculatorFrom?: string,
     importTransformFrom?: string,
+    transformScope?: {
+        host?: boolean;
+        parent?: boolean;
+        closest?: string;
+    }
 }
 
 export interface VirtualProps extends EndUserProps, BeSyndicatingVirtualProps<HTMLScriptElement>{}

@@ -263,6 +263,20 @@ export const TuringAwardDeservingAlgorithm = ({a, b}) => ({
 }
 ```
 
+## Other things [TODO]
+
+Behind the scenes, the object that appears before the arrow function is an ES6 proxy that implements the EventTarget (basically).
+
+To directly update the proxy, add "self" to the destructuring.  self references the proxy
+
+```JavaScript
+export const calculator = ({a, b, self}) => {
+    self.sum = a + b;
+    self.product = a * b;
+};
+```
+
+
 ## [Demo](https://codepen.io/bahrus/pen/NWMjxYV)
 
 ## Viewing Locally
