@@ -12,7 +12,7 @@
 
 *be-calculating* is an element decorator / behavior equivalent of web component [aggregator-fn](https://github.com/bahrus/aggregator-fn).
 
-*be-calculating* can't help but admire the brevity and magic on [display here](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/output):
+*be-calculating* can't help but admire the brevity and sorcery on [display here](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/output):
 
 ```html
 <form oninput="x.value=parseInt(a.value)+parseInt(b.value)">
@@ -23,9 +23,9 @@
 ```
 
 
-It is unclear how to leverage that magic outside the confines of this example (how does the context of the names get passed so elegantly into the expression)?
+It is unclear how to leverage that magic outside the confines of this example. How does the context of the names get passed so elegantly into the expression?
 
-Nevertheless, be-calculating hopes to at least come close when it comes to brevity, while also providing more flexible options.
+Anyway, be-calculating hopes to at least come close when it comes to brevity, while also providing more flexible options.
 
 The most exact equivalent to what the code above is doing, but with the help of be-calculating, is shown below:
 
@@ -55,7 +55,7 @@ The most exact equivalent to what the code above is doing, but with the help of 
 </script>
 ```
 
-But this isn't really playing to be-calculating's strengths.  Both examples above recalculate and rebind the value of the sum any time any form element inside is modified by the user.
+But this isn't really playing to *be-calculating*'s strengths.  Both examples above recalculate and rebind the value of the sum any time any form element inside is modified by the user.
 
 That means if the form has 8 more input elements, the sum will be recalculated, and the value passed to output, even when editing the 8 input elements that aren't part of the sum.
 
@@ -183,7 +183,7 @@ Because now we have a reusable function that can be used in a multiple contexts 
     <input type="range" name="a" value="50">
     +<input type="number" name="b" value="25">
     =<output name="x"></output>
-    <p>
+    <p aria-live=polite>
         Yes, and did you also know that <span part='augend'></span> * <span part='addend'></span> = <span part='by-product'></span>
     </p>
     <script nomodule be-calculating='{
@@ -229,7 +229,7 @@ export const TuringAwardDeservingAlgorithm = ({a, b}) => ({
 ```html
 <script nomodule be-calculating='{
     ...
-    "importCalculatorAs": "TuringAwardDeservingAlgorithm"
+    "importCalculatorFrom": "TuringAwardDeservingAlgorithm"
 }
 ```
 
