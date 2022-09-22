@@ -104,7 +104,7 @@ This is shorthand for:
             }
         },
         "transformScope": {
-            "parent": true //TODO
+            "parent": true 
         }
     }'>        
         export const calculator = ({a, b}) => ({
@@ -172,7 +172,7 @@ Think of what we've accomplished here!  We have now purified the JavaScript's do
 
 Code that we can patent and earn Turing Awards with!
 
-Because now we have a reusable function that can be used in a multiple contexts -- anywhere we need to add two numbers together. We've been showing inline examples, but the code can be imported via ESM modules, which is discussed below [TODO].
+Because now we have a reusable function that can be used in a multiple contexts -- anywhere we need to add two numbers together. We've been showing inline examples, but the code can be imported via ESM modules, which is discussed below.
 
 ## Yeah, but can your framework do this?
 
@@ -265,7 +265,7 @@ export const TuringAwardDeservingAlgorithm = ({a, b}) => ({
 }
 ```
 
-## Other things [TODO]
+## Other things
 
 Behind the scenes, the object that appears before the arrow function is an ES6 proxy that implements the EventTarget (basically).
 
