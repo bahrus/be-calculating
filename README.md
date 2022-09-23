@@ -301,6 +301,8 @@ transformScope?: {
 }
 ```
 
+The default value is parent.  It is beneficial from both a performance and a namespace collision avoiding point of view to use the smallest scope possible.
+
 
 ## [Demo](https://codepen.io/bahrus/pen/NWMjxYV)
 
