@@ -267,15 +267,38 @@ export const TuringAwardDeservingAlgorithm = ({a, b}) => ({
 
 ## Other things
 
-Behind the scenes, the object that appears before the arrow function is an ES6 proxy that implements the EventTarget (basically).
+Behind the scenes, the object that appears before the => represents an ES6 proxy that implements the EventTarget (basically).
 
-To directly update the proxy, add "self" to the destructuring.  self references the proxy
+To directly update the proxy, add "self" to the destructuring.  "self" references the proxy
 
 ```JavaScript
 export const calculator = ({a, b, self}) => {
     self.sum = a + b;
     self.product = a * b;
 };
+```
+
+The scope of the transform is configured  via the transformScope setting:
+
+```TypeScript
+/**
+ * Outer boundary that transform should act on.
+ */
+transformScope?: {
+    /**
+     * use native function getRootNode() to set the boundary
+     *
+     */ 
+    rootNode?: boolean;
+    /**
+     * Use the parent element as the boundary
+     */
+    parent?: boolean;
+    /**
+     * Use the native "closest" function to set the boundary
+     */
+    closest?: string;
+}
 ```
 
 

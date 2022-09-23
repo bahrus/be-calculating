@@ -14,9 +14,22 @@ export interface EndUserProps<Props = any, Actions = Props, TEvent = Event> exte
     calculator?: (et: EventTarget, ppci?: ProxyPropChangeInfo) => any,
     importCalculatorFrom?: string,
     importTransformFrom?: string,
+    /**
+     * Outer boundary that transform should act on.
+     */
     transformScope?: {
+        /**
+         * use native function getRootNode() to set the boundary
+         *
+         */ 
         rootNode?: boolean;
+        /**
+         * Use the parent element as the boundary
+         */
         parent?: boolean;
+        /**
+         * Use the native "closest" function to set the boundary
+         */
         closest?: string;
     }
 }
