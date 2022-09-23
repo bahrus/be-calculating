@@ -99,10 +99,10 @@ export class BeCalculating extends BeSyndicating implements Actions{
 
     async #getTransformTarget({transformScope, self}: PP){
         let elToTransform: Element | DocumentFragment | null = null;
-        const {parent, host, closest} = transformScope!;
+        const {parent, rootNode, closest} = transformScope!;
         if(closest){
             elToTransform = self.closest(closest);
-        }else if(host){
+        }else if(rootNode){
             elToTransform = self.getRootNode() as DocumentFragment;
         }else{
             elToTransform = self.parentElement!;

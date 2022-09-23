@@ -82,11 +82,11 @@ export class BeCalculating extends BeSyndicating {
     }
     async #getTransformTarget({ transformScope, self }) {
         let elToTransform = null;
-        const { parent, host, closest } = transformScope;
+        const { parent, rootNode, closest } = transformScope;
         if (closest) {
             elToTransform = self.closest(closest);
         }
-        else if (host) {
+        else if (rootNode) {
             elToTransform = self.getRootNode();
         }
         else {

@@ -15,7 +15,7 @@ export interface EndUserProps<Props = any, Actions = Props, TEvent = Event> exte
     importCalculatorFrom?: string,
     importTransformFrom?: string,
     transformScope?: {
-        host?: boolean;
+        rootNode?: boolean;
         parent?: boolean;
         closest?: string;
     }
