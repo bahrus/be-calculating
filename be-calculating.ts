@@ -12,8 +12,8 @@ export class BeCalculating extends BeSyndicating implements Actions{
 
     importSymbols({proxy, importCalculatorFrom, importTransformFrom, self}: ProxyProps): void {
         const inner = self.innerHTML.trim();
-        if(!inner.startsWith('export const calculator = ')){
-            self.innerHTML = 'export const calculator = ' + inner;
+        if(!inner.startsWith(`export const ${importCalculatorFrom} = async `)){
+            self.innerHTML = `export const ${importCalculatorFrom} = async ` + inner;
         }
         self.setAttribute('be-exportable', '');
         import('be-exportable/be-exportable.js');

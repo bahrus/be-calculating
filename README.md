@@ -107,7 +107,7 @@ This is shorthand for:
             "parent": true 
         }
     }'>        
-        export const calculator = ({a, b}) => ({
+        export const async calculator = ({a, b}) => ({
             sum: Number(a) + Number(b)
         });
         export const transform = {
@@ -172,7 +172,7 @@ Think of what we've accomplished here!  We have now purified the JavaScript's do
 
 Code that we can patent and earn Turing Awards with!
 
-Because now we have a reusable function that can be used in a multiple contexts -- anywhere we need to add two numbers together. We've been showing inline examples, but the code can be imported via ESM modules, which is discussed below.
+Because now we have a reusable function that can be used in multiple contexts -- anywhere we need to add two numbers together. We've been showing inline examples, but the code can be imported via ESM modules, which is discussed below.
 
 ## Yeah, but can your framework do this?
 
@@ -185,8 +185,8 @@ Because now we have a reusable function that can be used in a multiple contexts 
     <input type="range" name="a" value="50">
     +<input type="number" name="b" value="25">
     =<output name="x"></output>
-    <p aria-live=polite>
-        Yes, and did you also know that <span part='augend'></span> * <span part='addend'></span> = <span part='by-product'></span>
+    <p aria-live=polite itemscope>
+        Yes, and did you also know that <span itemprop='augend'></span> * <span itemprop='addend'></span> = <span itemprop='by-product'></span>
     </p>
     <script nomodule be-calculating='{
         "args": ["a", "b"],
@@ -239,9 +239,9 @@ export const calculator = ({a, b}) => ({
         },
         "transform": {
             "xN": "sum",
-            "augendP": "a",
-            "addendP": "b",
-            "byProductP": "product"
+            "augendI": "a",
+            "addendI": "b",
+            "byProductI": "product"
         }
     }'></script>
 </form>

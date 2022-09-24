@@ -4,8 +4,8 @@ import { BeSyndicating } from 'be-syndicating/be-syndicating.js';
 export class BeCalculating extends BeSyndicating {
     importSymbols({ proxy, importCalculatorFrom, importTransformFrom, self }) {
         const inner = self.innerHTML.trim();
-        if (!inner.startsWith('export const calculator = ')) {
-            self.innerHTML = 'export const calculator = ' + inner;
+        if (!inner.startsWith(`export const ${importCalculatorFrom} = async `)) {
+            self.innerHTML = `export const ${importCalculatorFrom} = async ` + inner;
         }
         self.setAttribute('be-exportable', '');
         import('be-exportable/be-exportable.js');
