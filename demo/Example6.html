@@ -16,14 +16,15 @@
         </p>
         <script nomodule be-calculating='{
             "args": ["a", "b"],
-            "get": {
-                "vft": "valueAsNumber"
-            },
+            "get": "valueAsNumber",
             "transform": {
                 "xN": "sum",
                 "augendP": "a",
                 "addendP": "b",
                 "byProductP": "product"
+            },
+            "transformScope":{
+                "parent": true
             }
         }'>
             ({a, b, self}) => {
