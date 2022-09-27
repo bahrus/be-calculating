@@ -100,14 +100,12 @@ This is shorthand for:
         },
         "transformScope": {
             "upSearch": "*" 
-        }
+        },
+        "transform":{"*": "value"}
     }'>        
         export const calculator = async ({a, b}) => ({
-            sum: Number(a) + Number(b)
+            value: Number(a) + Number(b)
         });
-        export const transform = {
-            '*': 'value'
-        }
     </script>
 </form>
 ```
