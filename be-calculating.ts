@@ -5,11 +5,20 @@ import { IObserve, GetValConfig } from '../be-observant/types';
 import {PropertyBag} from 'trans-render/lib/PropertyBag.js';
 import {RenderContext, Transformer} from 'trans-render/lib/types';
 import {BeSyndicating} from 'be-syndicating/be-syndicating.js';
+import {ArgMap} from 'be-syndicating/types';
 export class BeCalculating extends BeSyndicating implements Actions{
 
-    importSymbols({proxy, importCalculatorFrom, importTransformFrom, self}: ProxyProps): void {
+    importSymbols({proxy, importCalculatorFrom, importTransformFrom, self, args}: ProxyProps): void {
         const inner = self.innerHTML.trim();
-        if(!inner.startsWith(`export const ${importCalculatorFrom} = async `)){
+        if(inner.indexOf('=>') === -1){
+            const strArgs: string[] = [];
+            this.getStringArgs(args, strArgs);
+            const str = `export const ${importCalculatorFrom} = async ({${strArgs.join(',')}}) => ({
+                value: ${inner}
+            })`;
+            console.log({str});
+            self.innerHTML = str
+        }else if(!inner.startsWith(`export const ${importCalculatorFrom} = async `)){
             self.innerHTML = `export const ${importCalculatorFrom} = async ` + inner;
         }
         self.setAttribute('be-exportable', '');
@@ -33,6 +42,22 @@ export class BeCalculating extends BeSyndicating implements Actions{
                 }
                 
             }, {once: true});
+        }
+    }
+
+    getStringArgs(args: ArgMap | ArgMap[], acc: string[]){
+        if(Array.isArray(args)){
+            for(const arg of args){
+                this.getStringArgs(arg, acc);
+            }
+            return;
+        }
+        if(typeof args === 'string'){
+            acc.push(args);
+        }else{
+            for(const key in args){
+                acc.push(key);
+            }
         }
     }
     

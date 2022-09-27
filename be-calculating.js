@@ -2,9 +2,18 @@ import { define } from 'be-decorated/be-decorated.js';
 import { register } from "be-hive/register.js";
 import { BeSyndicating } from 'be-syndicating/be-syndicating.js';
 export class BeCalculating extends BeSyndicating {
-    importSymbols({ proxy, importCalculatorFrom, importTransformFrom, self }) {
+    importSymbols({ proxy, importCalculatorFrom, importTransformFrom, self, args }) {
         const inner = self.innerHTML.trim();
-        if (!inner.startsWith(`export const ${importCalculatorFrom} = async `)) {
+        if (inner.indexOf('=>') === -1) {
+            const strArgs = [];
+            this.getStringArgs(args, strArgs);
+            const str = `export const ${importCalculatorFrom} = async ({${strArgs.join(',')}}) => ({
+                value: ${inner}
+            })`;
+            console.log({ str });
+            self.innerHTML = str;
+        }
+        else if (!inner.startsWith(`export const ${importCalculatorFrom} = async `)) {
             self.innerHTML = `export const ${importCalculatorFrom} = async ` + inner;
         }
         self.setAttribute('be-exportable', '');
@@ -28,6 +37,22 @@ export class BeCalculating extends BeSyndicating {
                     }
                 }
             }, { once: true });
+        }
+    }
+    getStringArgs(args, acc) {
+        if (Array.isArray(args)) {
+            for (const arg of args) {
+                this.getStringArgs(arg, acc);
+            }
+            return;
+        }
+        if (typeof args === 'string') {
+            acc.push(args);
+        }
+        else {
+            for (const key in args) {
+                acc.push(key);
+            }
         }
     }
     strArgToIObs({ from, get, on }, arg) {

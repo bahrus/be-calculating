@@ -63,7 +63,7 @@ And what if we want to pass the sum to multiple places?  be-calculating can do t
 
 So what *be-calculating* is wanting to do with this example is shown below:
 
-## Example 1 [TODO]
+## Example 1
 
 ```html
 <form>
@@ -71,9 +71,7 @@ So what *be-calculating* is wanting to do with this example is shown below:
     +<input type="number" name="b" value="25">
     =<output name="x"></output>
     <script nomodule be-calculating='["a", "b"]'>
-        ({a, b}) => ({
-            sum: Number(a) + Number(b)
-        });
+        Number(a) + Number(b)
     </script>
 </form>
 ```
@@ -101,15 +99,12 @@ This is shorthand for:
             }
         },
         "transformScope": {
-            "parent": true 
+            "upSearch": "*" 
         }
     }'>        
         export const calculator = async ({a, b}) => ({
             sum: Number(a) + Number(b)
         });
-        export const transform = {
-            [name='x']: 'sum'
-        }
     </script>
 </form>
 ```
