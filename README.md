@@ -251,8 +251,8 @@ export const calculator = ({a, b}) => ({
     <input type="range" name="a" value="50">
     +<input type="number" name="b" value="25">
     =<output name="x"></output>
-    <p aria-live=polite>
-        Yes, and did you also know that <span part='augend'></span> * <span part='addend'></span> = <span part='by-product'></span>
+    <p aria-live=polite itemscope>
+        Yes, and did you also know that <span itemprop='augend'></span> * <span itemprop='addend'></span> = <span itemprop='by-product'></span>
     </p>
     <script nomodule src='calculator.js' be-calculating='{
         "args": ["a", "b"],
