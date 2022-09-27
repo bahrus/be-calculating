@@ -116,7 +116,7 @@ If editing JSON inside HTML attributes feels weird, the [json-in-html](https://m
 
 And the [may-it-be](https://github.com/bahrus/may-it-be) package allows us to benefit from TypeScript tooling, and compiles to an HTML file.
 
-## Example 3:  Use the platform
+## Example 2:  Use the platform
 
 ```html
 <form>
@@ -126,13 +126,8 @@ And the [may-it-be](https://github.com/bahrus/may-it-be) package allows us to be
     <script nomodule be-calculating='{
         "args": ["a", "b"],
         "get": "valueAsNumber",
-        "transform": {
-            "xN": "sum"
-        }
     }'>
-        ({a, b}) => ({
-            sum: a + b
-        });
+        a + b
     </script>
 </form>
 ```
@@ -169,13 +164,18 @@ Think of what we've accomplished here!  We have now purified the JavaScript's do
 
 Code that we can patent and earn Turing Awards with!
 
-Because now we have a reusable function that can be used in multiple contexts -- anywhere we need to add two numbers together. We've been showing inline examples, but the code can be imported via ESM modules, which is discussed below.
+Because now, with a little more tender loving care, we can start to see that we can create reusable function that can be used in multiple contexts -- anywhere we need to add two numbers together. We've been showing inline examples, but the code can be imported via ESM modules, which is discussed below.
 
 ## Yeah, but can your framework do this?
 
 >Okay, yeah, that's great, but what if I throw a wrench into the works, and add a requirement to show a product as well?
 
-## Example 5:
+So there are lots of equally good ways to approach this -- separate scripts tags is one way.  But let's see what this looks like sticking to a single script tag.
+
+In this scenario, we need to ask the developer to do something that is always a bit emotionally draining:  Coming up with names for that thing you get when you add two numbers together, and that other thing when you multiple two numbers together.  We also need to start provide a little more context, indicating we are using an arrow function:
+
+
+## Example 3:
 
 ```html
 <form>
@@ -193,6 +193,9 @@ Because now we have a reusable function that can be used in multiple contexts --
             "augendI": "a",
             "addendI": "b",
             "byProductI": "product"
+        },
+        "transformScope"{
+            "parent": true,
         }
     }'>
         ({a, b}) => ({
