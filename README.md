@@ -105,6 +105,9 @@ This is shorthand for:
         export const calculator = async ({a, b}) => ({
             sum: Number(a) + Number(b)
         });
+        export const transform = {
+            '*': 'value'
+        }
     </script>
 </form>
 ```
