@@ -165,7 +165,7 @@ And the [may-it-be](https://github.com/bahrus/may-it-be) package allows us to be
 ```
 
 <details>
-    <summary>get in detail</summary>
+    <summary>More about the get parameter</summary>
 The "get" parameter can also be an object, where we can specify lots of options:
 
 ```TypeScript
