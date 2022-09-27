@@ -31,7 +31,10 @@ export class BeCalculating extends BeSyndicating {
         }
     }
     strArgToIObs({ from, get, on }, arg) {
-        const o = { ...from, ...get, ...on };
+        const getConfig = typeof (get) === 'string' ? {
+            vft: get
+        } : get;
+        const o = { ...from, ...getConfig, ...on };
         if (from === undefined) {
             o.observeName = arg;
         }

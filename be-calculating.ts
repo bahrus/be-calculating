@@ -1,14 +1,11 @@
 import {define, BeDecoratedProps} from 'be-decorated/be-decorated.js';
 import {Actions, VirtualProps, PP, Proxy, ProxyProps} from './types';
 import {register} from "be-hive/register.js";
-import { IObserve, PropObserveMap, HookUpInfo } from '../be-observant/types';
+import { IObserve, GetValConfig } from '../be-observant/types';
 import {PropertyBag} from 'trans-render/lib/PropertyBag.js';
 import {RenderContext, Transformer} from 'trans-render/lib/types';
 import {BeSyndicating} from 'be-syndicating/be-syndicating.js';
 export class BeCalculating extends BeSyndicating implements Actions{
-
-
-
 
     importSymbols({proxy, importCalculatorFrom, importTransformFrom, self}: ProxyProps): void {
         const inner = self.innerHTML.trim();
@@ -41,7 +38,10 @@ export class BeCalculating extends BeSyndicating implements Actions{
     
 
     strArgToIObs({from, get, on}: ProxyProps, arg: string): IObserve {
-        const o: IObserve = {...from, ...get, ...on};
+        const getConfig: GetValConfig = typeof(get) === 'string' ? {
+            vft: get
+        } as GetValConfig : get;
+        const o: IObserve = {...from, ...getConfig, ...on};
         if(from === undefined){
             o.observeName = arg;
         }

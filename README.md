@@ -107,7 +107,7 @@ This is shorthand for:
             "parent": true 
         }
     }'>        
-        export const async calculator = ({a, b}) => ({
+        export const calculator = async ({a, b}) => ({
             sum: Number(a) + Number(b)
         });
         export const transform = {
@@ -152,9 +152,7 @@ And the [may-it-be](https://github.com/bahrus/may-it-be) package allows us to be
     =<output name="x"></output>
     <script nomodule be-calculating='{
         "args": ["a", "b"],
-        "get": {
-            "vft": "valueAsNumber"
-        },
+        "get": "valueAsNumber",
         "transform": {
             "xN": "sum"
         }
@@ -166,7 +164,34 @@ And the [may-it-be](https://github.com/bahrus/may-it-be) package allows us to be
 </form>
 ```
 
-vft stands for Value From Target.
+The "get" parameter can also be an object, where we can specify lots of options:
+
+```TypeScript
+export interface GetValConfig<Props = any> {
+    
+    /**
+     * The path to the (sub) property of the element being observed.
+     * 
+     */
+    valFromTarget?: string,
+    /**
+     * Abbreviation for valFromTarget.  Does the same thing
+     */
+    vft?: keyof Props & string,
+    /**
+     * The path to the place in the event we want to use as the value to set.  
+     * For example:  detail.value
+     */
+    valFromEvent?: string,
+    /**
+     * Abbreviation for vfe.  Does the same thing.
+     */
+    vfe?: string,
+    /**
+     * Perform a structural clone before passing the observed value.
+     */
+}
+```
 
 Think of what we've accomplished here!  We have now purified the JavaScript's domain to be independent of the UI.  
 

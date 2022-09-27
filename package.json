@@ -26,13 +26,13 @@
     "be-decorated": "0.0.163",
     "be-exportable": "0.0.34",
     "be-hive": "0.0.68",
-    "be-observant": "0.0.148",
+    "be-observant": "0.0.149",
     "be-syndicating": "0.0.4",
-    "trans-render": "0.0.610"
+    "trans-render": "0.0.613"
   },
   "devDependencies": {
     "may-it-serve": "0.0.2",
-    "@playwright/test": "1.25.2",
+    "@playwright/test": "1.26.0",
     "@skypack/package-check": "0.2.2",
     "@custom-elements-manifest/analyzer": "0.6.4"
   },
