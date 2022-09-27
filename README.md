@@ -164,6 +164,8 @@ And the [may-it-be](https://github.com/bahrus/may-it-be) package allows us to be
 </form>
 ```
 
+<details>
+    <summary>get in detail</summary>
 The "get" parameter can also be an object, where we can specify lots of options:
 
 ```TypeScript
@@ -192,6 +194,7 @@ export interface GetValConfig<Props = any> {
      */
 }
 ```
+</details>
 
 Think of what we've accomplished here!  We have now purified the JavaScript's domain to be independent of the UI.  
 
