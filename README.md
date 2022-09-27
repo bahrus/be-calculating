@@ -112,26 +112,6 @@ This is shorthand for:
 
 It leverages the robust syntax options provided by [be-observant](https://github.com/bahrus/be-observant), and the transform relies on [declarative trans-rendering (DTR)](https://github.com/bahrus/trans-render).
 
-## Example 2:  More declarative (faster parsing time)
-
-```html
-<form>
-    <input type="range" name="a" value="50">
-    +<input type="number" name="b" value="25">
-    =<output name="x"></output>
-    <script nomodule be-calculating='{
-        "args": ["a", "b"],
-        "transform": {
-            "xN": "sum"
-        }
-    }'>
-        ({a, b}) => ({
-            sum: Number(a) + Number(b)
-        })
-    </script>
-</form>
-```
-
 If editing JSON inside HTML attributes feels weird, the [json-in-html](https://marketplace.visualstudio.com/items?itemName=andersonbruceb.json-in-html) vs-code extension makes it feel much more natural, even when editing README files.  Because of the declarative, side-effect-free nature of the extension, it can be used with the web version of VSCode as well.
 
 And the [may-it-be](https://github.com/bahrus/may-it-be) package allows us to benefit from TypeScript tooling, and compiles to an HTML file.
