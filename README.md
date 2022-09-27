@@ -223,9 +223,9 @@ Because now we have a reusable function that can be used in multiple contexts --
         },
         "transform": {
             "xN": "sum",
-            "augendP": "a",
-            "addendP": "b",
-            "byProductP": "product"
+            "augendI": "a",
+            "addendI": "b",
+            "byProductI": "product"
         }
     }'>
         ({a, b}) => ({
