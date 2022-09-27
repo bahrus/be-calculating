@@ -44,14 +44,9 @@ The most exact equivalent to what the code above is doing, but with the help of 
             "on": "input",
             "vft": "."
         }
-    },
-    "transform": {
-        "xN": "sum"
     }
 }'>
-    ({form}) => ({
-        sum: parseInt(form.a.value) + parseInt(form.b.value)
-    });
+    parseInt(form.a.value) + parseInt(form.b.value)
 </script>
 ```
 
