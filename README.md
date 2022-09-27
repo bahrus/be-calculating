@@ -170,7 +170,6 @@ The "get" parameter can also be an object, where we can specify lots of options:
 
 ```TypeScript
 export interface GetValConfig<Props = any> {
-    
     /**
      * The path to the (sub) property of the element being observed.
      * 
@@ -186,12 +185,9 @@ export interface GetValConfig<Props = any> {
      */
     valFromEvent?: string,
     /**
-     * Abbreviation for vfe.  Does the same thing.
+     * Abbreviation for valFromEvent.  Does the same thing.
      */
     vfe?: string,
-    /**
-     * Perform a structural clone before passing the observed value.
-     */
 }
 ```
 </details>
@@ -218,9 +214,7 @@ Because now we have a reusable function that can be used in multiple contexts --
     </p>
     <script nomodule be-calculating='{
         "args": ["a", "b"],
-        "get": {
-            "vft": "valueAsNumber"
-        },
+        "get": "valueAsNumber",
         "transform": {
             "xN": "sum",
             "augendI": "a",
@@ -262,9 +256,7 @@ export const calculator = ({a, b}) => ({
     </p>
     <script nomodule src='calculator.js' be-calculating='{
         "args": ["a", "b"],
-        "get": {
-            "vft": "valueAsNumber"
-        },
+        "get": "valueAsNumber",
         "transform": {
             "xN": "sum",
             "augendI": "a",
