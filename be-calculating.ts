@@ -99,8 +99,11 @@ export class BeCalculating extends BeSyndicating implements Actions{
 
     async #getTransformTarget({transformScope, self}: PP){
         let elToTransform: Element | DocumentFragment | null = null;
-        const {parent, rootNode, closest} = transformScope!;
-        if(closest){
+        const {parent, rootNode, closest, upSearch: us} = transformScope!;
+        if(us !== undefined){
+            const {upSearch} = await import('trans-render/lib/upSearch.js');
+            elToTransform = upSearch(self, us);
+        }else if(closest !== undefined){
             elToTransform = self.closest(closest);
         }else if(rootNode){
             elToTransform = self.getRootNode() as DocumentFragment;
@@ -151,7 +154,10 @@ define<Proxy & BeDecoratedProps<Proxy, Actions>, Actions>({
             finale: 'finale',
             proxyPropDefaults:{
                 transformScope: {
-                    parent: true
+                    upSearch: '*'
+                },
+                transform:{
+                    '*': 'value'
                 },
                 importCalculatorFrom: 'calculator',
                 importTransformFrom: 'transform'
