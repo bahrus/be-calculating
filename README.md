@@ -159,7 +159,7 @@ Think of what we've accomplished here!  We have now purified the JavaScript's do
 
 Code that we can patent and earn Turing Awards with!
 
-Because now, with a little more tender loving care, we can start to see that we can create reusable function that can be used in multiple contexts -- anywhere we need to add two numbers together. We've been showing inline examples, but the code can be imported via ESM modules, which is discussed below.
+Because now, with a little more tender loving care, we can start to see that we can create a reusable function that can be used in multiple contexts -- anywhere we need to add two numbers together. We've been showing inline examples, but the code can be imported via ESM modules, which is discussed below.
 
 ## Yeah, but can your framework do this?
 
@@ -167,7 +167,7 @@ Because now, with a little more tender loving care, we can start to see that we 
 
 So there are lots of equally good ways to approach this -- separate scripts tags is one way.  But let's see what this looks like sticking to a single script tag.
 
-In this scenario, we need to ask the developer to do something that is always a bit emotionally draining:  Coming up with names for that thing you get when you add two numbers together, and that other thing when you multiple two numbers together.  We also need to start provide a little more context, indicating we are using an arrow function:
+In this scenario, we need to ask the developer to do something that is always a bit emotionally draining:  Coming up with names for that thing you get when you add two numbers together, and that other thing when you multiple two numbers together.  We also need to start providing a little more context, indicating we are using an arrow function:
 
 
 ## Example 3:
@@ -218,24 +218,27 @@ export const calculator = ({a, b}) => ({
 ```
 
 ```html
-<form>
-    <input type="range" name="a" value="50">
-    +<input type="number" name="b" value="25">
-    =<output name="x"></output>
-    <p aria-live=polite itemscope>
-        Yes, and did you also know that <span itemprop='augend'></span> * <span itemprop='addend'></span> = <span itemprop='by-product'></span>
-    </p>
-    <script nomodule src='calculator.js' be-calculating='{
-        "args": ["a", "b"],
-        "get": "valueAsNumber",
-        "transform": {
-            "xN": "sum",
-            "augendI": "a",
-            "addendI": "b",
-            "byProductI": "product"
-        }
-    }'></script>
-</form>
+    <form>
+        <input type="range" name="a" value="50">
+        +<input type="number" name="b" value="25">
+        =<output name="x"></output>
+        <p aria-live=polite itemscope>
+            Yes, and did you also know that <span itemprop='augend'></span> * <span itemprop='addend'></span> = <span itemprop='by-product'></span>
+        </p>
+        <script nomodule src='calculator.js' be-calculating='{
+            "args": ["a", "b"],
+            "get": "valueAsNumber",
+            "transform": {
+                "xN": "sum",
+                "augendI": "a",
+                "addendI": "b",
+                "byProductI": "product"
+            },
+            "transformScope": {
+                "parent": true
+            }
+        }'></script>
+    </form>
 ```
 
 
@@ -275,8 +278,8 @@ The scope of the transform is configured  via the transformScope setting:
 /**
  * Outer boundary that transform should act on.
  */
-transformScope?: {
-    /**
+export interface TransformScope{
+     /**
      * use native function getRootNode() to set the boundary
      *
      */ 
@@ -286,13 +289,17 @@ transformScope?: {
      */
     parent?: boolean;
     /**
-     * Use the native "closest" function to set the boundary
+     * Use the native "closest()" function to set the boundary
      */
     closest?: string;
+    /**
+     * Find nearest previous sibling, parent, previous sibling of parent, etc that matches this string.
+     */
+    upSearch?: string,
 }
 ```
 
-The default value is parent.  It is beneficial from both a performance and a namespace collision avoiding point of view to use the smallest scope possible.
+The default value is upSearch='*'.  It is beneficial from both a performance and a namespace collision avoiding point of view to use the smallest scope possible.
 
 
 ## [Demo](https://codepen.io/bahrus/pen/NWMjxYV)
