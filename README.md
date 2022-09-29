@@ -93,9 +93,7 @@ This is shorthand for:
                 "vft": "value"
             }
         },
-        "transformScope": {
-            "upSearch": "*" 
-        },
+        "transformScope": ["upSearch", "*"],
         "transform":{"*": "value"}
     }'>        
         export const calculator = async ({a, b}) => ({
@@ -189,9 +187,7 @@ In this scenario, we need to ask the developer to do something that is always a 
             "addendI": "b",
             "byProductI": "product"
         },
-        "transformScope"{
-            "parent": true,
-        }
+        "transformScope": "parent"
     }'>
         ({a, b}) => ({
             sum: a + b,
@@ -234,9 +230,7 @@ export const calculator = ({a, b}) => ({
                 "addendI": "b",
                 "byProductI": "product"
             },
-            "transformScope": {
-                "parent": true
-            }
+            "transformScope": "parent"
         }'></script>
     </form>
 ```
@@ -272,32 +266,70 @@ export const calculator = ({a, b, self}) => {
 };
 ```
 
+<details>
+    <summary>transformScope in detail</summary>
+
 The scope of the transform is configured  via the transformScope setting:
 
 ```TypeScript
 /**
  * Outer boundary that transform should act on.
  */
-export interface TransformScope{
-     /**
-     * use native function getRootNode() to set the boundary
-     *
+export type Scope = 
+    /**
+    * use native function getRootNode() to set the boundary
+    *
+    */ 
+    'rootNode' | 
+    /**
+    * abbrev for rootNode
+    */ 
+    'rn' |
+    /**
+    * Use the parent element as the boundary
+    */ 
+    'parent' | 
+    /**
+    * abbrev for parent
+    */
+    'p' |
+    /**
+     * Use the element itslef as the boundary
      */ 
-    rootNode?: boolean;
+    'self' | 
     /**
-     * Use the parent element as the boundary
-     */
-    parent?: boolean;
+     * Use the element itslef as the boundary
+     */ 
+    's' |
     /**
-     * Use the native "closest()" function to set the boundary
+     * abbrev for self
      */
-    closest?: string;
+    ['closest', string] |
+    /**
+     * abbrev for closet
+     */
+    ['c', string] | 
     /**
      * Find nearest previous sibling, parent, previous sibling of parent, etc that matches this string.
      */
-    upSearch?: string,
-}
+    ['upSearch', string] |
+    /**
+     * abbrev for upSearch
+     */
+    ['us', string] |
+    /**
+     * second element is true, then tries .closest('itemscope').  If string, tries .closest([string value])
+     * If that comes out to null, do .getRootNode
+     */
+    ['closestOrHost', boolean | string] |
+    /**
+     * abbrev for closestOrHost
+     */
+    ['coh', true | string]
+;
 ```
+
+</details>
 
 The default value is upSearch='*'.  It is beneficial from both a performance and a namespace collision avoiding point of view to use the smallest scope possible.
 
