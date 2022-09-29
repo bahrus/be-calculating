@@ -176,7 +176,10 @@ In this scenario, we need to ask the developer to do something that is always a 
     +<input type="number" name="b" value="25">
     =<output name="x"></output>
     <p aria-live=polite itemscope>
-        Yes, and did you also know that <span itemprop='augend'></span> * <span itemprop='addend'></span> = <span itemprop='by-product'></span>
+        Yes, and did you also know that 
+        <span itemprop='augend'></span> 
+        * <span itemprop='addend'></span> 
+        = <span itemprop='by-product'></span>
     </p>
     <script nomodule be-calculating='{
         "args": ["a", "b"],
