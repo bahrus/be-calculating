@@ -3,6 +3,7 @@ import { register } from "be-hive/register.js";
 import { BeSyndicating } from 'be-syndicating/be-syndicating.js';
 export class BeCalculating extends BeSyndicating {
     importSymbols({ proxy, importCalculatorFrom, importTransformFrom, self, args }) {
+        console.log(import.meta.url);
         const inner = self.innerHTML.trim();
         if (inner.indexOf('=>') === -1) {
             const strArgs = [];

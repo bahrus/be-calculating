@@ -9,6 +9,7 @@ import {ArgMap} from 'be-syndicating/types';
 export class BeCalculating extends BeSyndicating implements Actions{
 
     importSymbols({proxy, importCalculatorFrom, importTransformFrom, self, args}: ProxyProps): void {
+        console.log(import.meta.url);
         const inner = self.innerHTML.trim();
         if(inner.indexOf('=>') === -1){
             const strArgs: string[] = [];
