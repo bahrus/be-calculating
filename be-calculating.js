@@ -72,9 +72,10 @@ export class BeCalculating extends BeSyndicating {
         return o;
     }
     async hookUpTransform(pp) {
-        const { transform } = pp;
+        const { transform, self, transformScope } = pp;
         const transforms = Array.isArray(transform) ? transform : [transform];
         const { DTR } = await import('trans-render/lib/DTR.js');
+        const { findRealm } = await import('trans-render/lib/findRealm.js');
         for (const t of transforms) {
             const ctx = {
                 host: this.syndicate,
@@ -82,7 +83,7 @@ export class BeCalculating extends BeSyndicating {
                 //[TODO]: plugins: transformPlugins,
             };
             const dtr = new DTR(ctx);
-            const fragment = await this.#getTransformTarget(pp);
+            const fragment = await findRealm(self, transformScope);
             await dtr.transform(fragment);
             await dtr.subscribe(true);
         }
@@ -106,28 +107,24 @@ export class BeCalculating extends BeSyndicating {
         }
         const calculations = await calculator(syndicate);
         Object.assign(syndicate, calculations);
-        proxy.resolved;
+        proxy.resolved = true;
     }
-    async #getTransformTarget({ transformScope, self }) {
-        let elToTransform = null;
-        const { parent, rootNode, closest, upSearch: us } = transformScope;
-        if (us !== undefined) {
-            const { upSearch } = await import('trans-render/lib/upSearch.js');
-            elToTransform = upSearch(self, us);
-        }
-        else if (closest !== undefined) {
-            elToTransform = self.closest(closest);
-        }
-        else if (rootNode) {
-            elToTransform = self.getRootNode();
-        }
-        else {
-            elToTransform = self.parentElement;
-        }
-        if (elToTransform === null)
-            throw 'bC.404';
-        return elToTransform;
-    }
+    // async #getTransformTarget({transformScope, self}: PP){
+    //     let elToTransform: Element | DocumentFragment | null = null;
+    //     const {parent, rootNode, closest, upSearch: us} = transformScope!;
+    //     if(us !== undefined){
+    //         const {upSearch} = await import('trans-render/lib/upSearch.js');
+    //         elToTransform = upSearch(self, us);
+    //     }else if(closest !== undefined){
+    //         elToTransform = self.closest(closest);
+    //     }else if(rootNode){
+    //         elToTransform = self.getRootNode() as DocumentFragment;
+    //     }else{
+    //         elToTransform = self.parentElement!;
+    //     }
+    //     if(elToTransform === null) throw 'bC.404';
+    //     return elToTransform;
+    // }
     #disconnectProxyListeners() {
         if (this.#proxyControllers !== undefined) {
             for (const ac of this.#proxyControllers) {
@@ -160,9 +157,7 @@ define({
             primaryPropReq: true,
             finale: 'finale',
             proxyPropDefaults: {
-                transformScope: {
-                    upSearch: '*'
-                },
+                transformScope: ['us', '*'],
                 transform: {
                     '*': 'value'
                 },

@@ -3,7 +3,7 @@ import {Actions, VirtualProps, PP, Proxy, ProxyProps} from './types';
 import {register} from "be-hive/register.js";
 import { IObserve, GetValConfig } from '../be-observant/types';
 import {PropertyBag} from 'trans-render/lib/PropertyBag.js';
-import {RenderContext, Transformer} from 'trans-render/lib/types';
+import {RenderContext, Transformer, Scope} from 'trans-render/lib/types';
 import {BeSyndicating} from 'be-syndicating/be-syndicating.js';
 import {ArgMap} from 'be-syndicating/types';
 export class BeCalculating extends BeSyndicating implements Actions{
@@ -79,9 +79,10 @@ export class BeCalculating extends BeSyndicating implements Actions{
         return o;
     }
     async hookUpTransform(pp: PP){
-        const {transform} = pp;
+        const {transform, self, transformScope} = pp;
         const transforms = Array.isArray(transform) ? transform : [transform];
         const {DTR} = await import('trans-render/lib/DTR.js');
+        const {findRealm} = await import('trans-render/lib/findRealm.js');
         for(const t of transforms){
             const ctx: RenderContext = {
                 host: this.syndicate,
@@ -90,7 +91,7 @@ export class BeCalculating extends BeSyndicating implements Actions{
             }
             
             const dtr = new DTR(ctx);
-            const fragment = await this.#getTransformTarget(pp);
+            const fragment = await findRealm(self, transformScope!) as Element;
             await dtr.transform(fragment);
             await dtr.subscribe(true);
         }
@@ -116,28 +117,28 @@ export class BeCalculating extends BeSyndicating implements Actions{
         }
         const calculations = await calculator!(syndicate);
         Object.assign(syndicate, calculations);
-        proxy.resolved
+        proxy.resolved = true;
     }
     
 
 
 
-    async #getTransformTarget({transformScope, self}: PP){
-        let elToTransform: Element | DocumentFragment | null = null;
-        const {parent, rootNode, closest, upSearch: us} = transformScope!;
-        if(us !== undefined){
-            const {upSearch} = await import('trans-render/lib/upSearch.js');
-            elToTransform = upSearch(self, us);
-        }else if(closest !== undefined){
-            elToTransform = self.closest(closest);
-        }else if(rootNode){
-            elToTransform = self.getRootNode() as DocumentFragment;
-        }else{
-            elToTransform = self.parentElement!;
-        }
-        if(elToTransform === null) throw 'bC.404';
-        return elToTransform;
-    }
+    // async #getTransformTarget({transformScope, self}: PP){
+    //     let elToTransform: Element | DocumentFragment | null = null;
+    //     const {parent, rootNode, closest, upSearch: us} = transformScope!;
+    //     if(us !== undefined){
+    //         const {upSearch} = await import('trans-render/lib/upSearch.js');
+    //         elToTransform = upSearch(self, us);
+    //     }else if(closest !== undefined){
+    //         elToTransform = self.closest(closest);
+    //     }else if(rootNode){
+    //         elToTransform = self.getRootNode() as DocumentFragment;
+    //     }else{
+    //         elToTransform = self.parentElement!;
+    //     }
+    //     if(elToTransform === null) throw 'bC.404';
+    //     return elToTransform;
+    // }
 
 
 
@@ -178,9 +179,7 @@ define<Proxy & BeDecoratedProps<Proxy, Actions>, Actions>({
             primaryPropReq: true,
             finale: 'finale',
             proxyPropDefaults:{
-                transformScope: {
-                    upSearch: '*'
-                },
+                transformScope: ['us', '*'] as Scope, //why is as Scope necessary?
                 transform:{
                     '*': 'value'
                 },

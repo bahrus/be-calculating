@@ -1,5 +1,5 @@
 import {PropObserveMap,  WhatToObserve, WhenToAct, GetValConfig} from 'be-observant/types';
-import {Matches, ProxyPropChangeInfo, TransformScope} from 'trans-render/lib/types';
+import {Matches, ProxyPropChangeInfo, Scope} from 'trans-render/lib/types';
 import {EndUserProps as BeSyndicatingEndUserProps, VirtualProps as BeSyndicatingVirtualProps, Actions as BeSyndicatingActions} from 'be-syndicating/types';
 
 export type CalculatingMap<Props = any, Actions = Props, TEvent = Event> = string | PropObserveMap<Props, Actions, TEvent>;
@@ -16,7 +16,7 @@ export interface EndUserProps<Props = any, Actions = Props, TEvent = Event> exte
     /**
      * Outer boundary that transform should act on.
      */
-    transformScope?: TransformScope,
+    transformScope?: Scope,
 }
 
 export interface VirtualProps extends EndUserProps, BeSyndicatingVirtualProps<HTMLScriptElement>{}
