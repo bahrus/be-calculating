@@ -9,7 +9,6 @@ import {ArgMap} from 'be-syndicating/types';
 export class BeCalculating extends BeSyndicating implements Actions{
 
     importSymbols({proxy, importCalculatorFrom, importTransformFrom, self, args}: ProxyProps): void {
-        console.log(import.meta.url);
         const inner = self.innerHTML.trim();
         if(inner.indexOf('=>') === -1){
             const strArgs: string[] = [];
@@ -17,7 +16,6 @@ export class BeCalculating extends BeSyndicating implements Actions{
             const str = `export const ${importCalculatorFrom} = async ({${strArgs.join(',')}}) => ({
                 value: ${inner}
             })`;
-            console.log({str});
             self.innerHTML = str
         }else if(!inner.startsWith(`export const ${importCalculatorFrom} = async `)){
             self.innerHTML = `export const ${importCalculatorFrom} = async ` + inner;
@@ -28,7 +26,6 @@ export class BeCalculating extends BeSyndicating implements Actions{
             Object.assign(proxy, (self as any)._modExport);
         }else{
             self.addEventListener('load', e =>{
-                //Object.assign(proxy, (self as any)._modExport);
                 if(importCalculatorFrom !== undefined){
                     const calculator = (self as any)._modExport[importCalculatorFrom];
                     if(calculator !== undefined){

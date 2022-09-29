@@ -3,7 +3,6 @@ import { register } from "be-hive/register.js";
 import { BeSyndicating } from 'be-syndicating/be-syndicating.js';
 export class BeCalculating extends BeSyndicating {
     importSymbols({ proxy, importCalculatorFrom, importTransformFrom, self, args }) {
-        console.log(import.meta.url);
         const inner = self.innerHTML.trim();
         if (inner.indexOf('=>') === -1) {
             const strArgs = [];
@@ -11,7 +10,6 @@ export class BeCalculating extends BeSyndicating {
             const str = `export const ${importCalculatorFrom} = async ({${strArgs.join(',')}}) => ({
                 value: ${inner}
             })`;
-            console.log({ str });
             self.innerHTML = str;
         }
         else if (!inner.startsWith(`export const ${importCalculatorFrom} = async `)) {
@@ -24,7 +22,6 @@ export class BeCalculating extends BeSyndicating {
         }
         else {
             self.addEventListener('load', e => {
-                //Object.assign(proxy, (self as any)._modExport);
                 if (importCalculatorFrom !== undefined) {
                     const calculator = self._modExport[importCalculatorFrom];
                     if (calculator !== undefined) {
