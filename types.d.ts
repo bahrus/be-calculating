@@ -11,7 +11,7 @@ export interface EndUserProps<Props = any, Actions = Props, TEvent = Event> exte
     get: string | GetValConfig,
     transform?: Matches | Matches[],
     calculator?: (et: EventTarget, ppci?: ProxyPropChangeInfo) => any,
-    importCalculatorFrom?: string,
+    nameOfCalculator?: string,
     importTransformFrom?: string,
     /**
      * Outer boundary that transform should act on.

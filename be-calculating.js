@@ -2,18 +2,18 @@ import { define } from 'be-decorated/be-decorated.js';
 import { register } from "be-hive/register.js";
 import { BeSyndicating } from 'be-syndicating/be-syndicating.js';
 export class BeCalculating extends BeSyndicating {
-    importSymbols({ proxy, importCalculatorFrom, importTransformFrom, self, args }) {
+    importSymbols({ proxy, nameOfCalculator, importTransformFrom, self, args }) {
         const inner = self.innerHTML.trim();
         if (inner.indexOf('=>') === -1) {
             const strArgs = [];
             this.getStringArgs(args, strArgs);
-            const str = `export const ${importCalculatorFrom} = async ({${strArgs.join(',')}}) => ({
+            const str = `export const ${nameOfCalculator} = async ({${strArgs.join(',')}}) => ({
                 value: ${inner}
             })`;
             self.innerHTML = str;
         }
-        else if (!inner.startsWith(`export const ${importCalculatorFrom} = async `)) {
-            self.innerHTML = `export const ${importCalculatorFrom} = async ` + inner;
+        else if (!inner.startsWith(`export const ${nameOfCalculator} = async `)) {
+            self.innerHTML = `export const ${nameOfCalculator} = async ` + inner;
         }
         self.setAttribute('be-exportable', '');
         import('be-exportable/be-exportable.js');
@@ -22,8 +22,8 @@ export class BeCalculating extends BeSyndicating {
         }
         else {
             self.addEventListener('load', e => {
-                if (importCalculatorFrom !== undefined) {
-                    const calculator = self._modExport[importCalculatorFrom];
+                if (nameOfCalculator !== undefined) {
+                    const calculator = self._modExport[nameOfCalculator];
                     if (calculator !== undefined) {
                         proxy.calculator = calculator;
                     }
@@ -148,7 +148,7 @@ define({
             forceVisible: [upgrade],
             virtualProps: [
                 'args', 'calculator', 'transformScope', 'from', 'get', 'on',
-                'transform', 'props', 'importCalculatorFrom', 'importTransformFrom',
+                'transform', 'props', 'nameOfCalculator', 'importTransformFrom',
                 'transformScope'
             ],
             primaryProp: 'args',
@@ -159,7 +159,7 @@ define({
                 transform: {
                     '*': 'value'
                 },
-                importCalculatorFrom: 'calculator',
+                nameOfCalculator: 'calculator',
                 importTransformFrom: 'transform'
             }
         },
@@ -170,7 +170,7 @@ define({
                 ifAllOf: ['props', 'calculator']
             },
             importSymbols: {
-                ifKeyIn: ['importCalculatorFrom', 'importTransformFrom']
+                ifKeyIn: ['nameOfCalculator', 'importTransformFrom']
             }
         }
     },

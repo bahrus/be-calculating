@@ -255,7 +255,7 @@ export const TuringAwardDeservingAlgorithm = ({a, b}) => ({
 ```html
 <script nomodule be-calculating='{
     ...
-    "importCalculatorFrom": "TuringAwardDeservingAlgorithm"
+    "nameOfCalculator": "TuringAwardDeservingAlgorithm"
 }
 ```
 
