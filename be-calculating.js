@@ -155,7 +155,7 @@ define({
             primaryPropReq: true,
             finale: 'finale',
             proxyPropDefaults: {
-                transformScope: ['us', '*'],
+                transformScope: ['us', ':not(script)'],
                 transform: {
                     '*': 'value'
                 },

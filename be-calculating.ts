@@ -177,7 +177,7 @@ define<Proxy & BeDecoratedProps<Proxy, Actions>, Actions>({
             primaryPropReq: true,
             finale: 'finale',
             proxyPropDefaults:{
-                transformScope: ['us', '*'] as Scope, //why is as Scope necessary?
+                transformScope: ['us', ':not(script)'] as Scope, //why is as Scope necessary?
                 transform:{
                     '*': 'value'
                 },
