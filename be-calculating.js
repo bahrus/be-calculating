@@ -20,11 +20,11 @@ export class BeCalculating extends BeSyndicating {
             this.assignScriptToProxy(pp);
         }
         else {
-            self.setAttribute('be-exportable', '');
-            import('be-exportable/be-exportable.js');
             self.addEventListener('load', e => {
                 this.assignScriptToProxy(pp);
             }, { once: true });
+            self.setAttribute('be-exportable', '');
+            import('be-exportable/be-exportable.js');
         }
     }
     assignScriptToProxy({ nameOfCalculator, nameOfTransform, proxy, self }) {

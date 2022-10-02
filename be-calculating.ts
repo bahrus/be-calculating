@@ -24,11 +24,12 @@ export class BeCalculating extends BeSyndicating implements Actions{
         if((self as any)._modExport){
             this.assignScriptToProxy(pp);
         }else{
-            self.setAttribute('be-exportable', '');
-        import('be-exportable/be-exportable.js');
             self.addEventListener('load', e =>{
                 this.assignScriptToProxy(pp);
             }, {once: true});
+            self.setAttribute('be-exportable', '');
+            import('be-exportable/be-exportable.js');
+
         }
     }
 
