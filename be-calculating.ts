@@ -22,8 +22,7 @@ export class BeCalculating extends BeSyndicating implements Actions{
             self.innerHTML = `export const ${nameOfCalculator} = async ` + inner;
         }
         if((self as any)._modExport){
-            this.assignScriptToProxy(pp)
-            Object.assign(proxy, (self as any)._modExport);
+            this.assignScriptToProxy(pp);
         }else{
             self.setAttribute('be-exportable', '');
         import('be-exportable/be-exportable.js');

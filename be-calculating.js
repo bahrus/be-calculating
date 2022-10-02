@@ -18,7 +18,6 @@ export class BeCalculating extends BeSyndicating {
         }
         if (self._modExport) {
             this.assignScriptToProxy(pp);
-            Object.assign(proxy, self._modExport);
         }
         else {
             self.setAttribute('be-exportable', '');
