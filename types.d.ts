@@ -12,7 +12,7 @@ export interface EndUserProps<Props = any, Actions = Props, TEvent = Event> exte
     transform?: Matches | Matches[],
     calculator?: (et: EventTarget, ppci?: ProxyPropChangeInfo) => any,
     nameOfCalculator?: string,
-    importTransformFrom?: string,
+    nameOfTransform?: string,
     /**
      * Outer boundary that transform should act on.
      */

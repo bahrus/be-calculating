@@ -8,7 +8,8 @@ import {BeSyndicating} from 'be-syndicating/be-syndicating.js';
 import {ArgMap} from 'be-syndicating/types';
 export class BeCalculating extends BeSyndicating implements Actions{
 
-    importSymbols({proxy, nameOfCalculator, importTransformFrom, self, args}: ProxyProps): void {
+    importSymbols(pp: ProxyProps): void {
+        const {proxy, nameOfCalculator, self, args} = pp;
         const inner = self.innerHTML.trim();
         if(inner.indexOf('=>') === -1){
             const strArgs: string[] = [];
@@ -23,23 +24,27 @@ export class BeCalculating extends BeSyndicating implements Actions{
         self.setAttribute('be-exportable', '');
         import('be-exportable/be-exportable.js');
         if((self as any)._modExport){
+            this.assignScriptToProxy(pp)
             Object.assign(proxy, (self as any)._modExport);
         }else{
             self.addEventListener('load', e =>{
-                if(nameOfCalculator !== undefined){
-                    const calculator = (self as any)._modExport[nameOfCalculator];
-                    if(calculator !== undefined){
-                        proxy.calculator = calculator;
-                    }
-                }
-                if(importTransformFrom !== undefined){
-                    const transform = (self as any)._modExport[importTransformFrom];
-                    if(transform !== undefined){
-                        proxy.transform = transform;
-                    }
-                }
-                
+                this.assignScriptToProxy(pp);
             }, {once: true});
+        }
+    }
+
+    assignScriptToProxy({nameOfCalculator, nameOfTransform, proxy}: PP){
+        if(nameOfCalculator !== undefined){
+            const calculator = (self as any)._modExport[nameOfCalculator];
+            if(calculator !== undefined){
+                proxy.calculator = calculator;
+            }
+        }
+        if(nameOfTransform !== undefined){
+            const transform = (self as any)._modExport[nameOfTransform];
+            if(transform !== undefined){
+                proxy.transform = transform;
+            }
         }
     }
 
@@ -170,7 +175,7 @@ define<Proxy & BeDecoratedProps<Proxy, Actions>, Actions>({
             forceVisible: [upgrade],
             virtualProps: [
                 'args', 'calculator', 'transformScope', 'from', 'get', 'on', 
-                'transform', 'props', 'nameOfCalculator', 'importTransformFrom',
+                'transform', 'props', 'nameOfCalculator', 'nameOfTransform',
                 'transformScope'
             ],
             primaryProp: 'args',
@@ -182,7 +187,7 @@ define<Proxy & BeDecoratedProps<Proxy, Actions>, Actions>({
                     '*': 'value'
                 },
                 nameOfCalculator: 'calculator',
-                importTransformFrom: 'transform'
+                nameOfTransform: 'transform'
             }
         },
         actions:{
@@ -192,7 +197,7 @@ define<Proxy & BeDecoratedProps<Proxy, Actions>, Actions>({
                 ifAllOf: ['props', 'calculator']
             },
             importSymbols: {
-                ifKeyIn: ['nameOfCalculator', 'importTransformFrom']
+                ifKeyIn: ['nameOfCalculator', 'nameOfTransform']
             }
         }
     },
