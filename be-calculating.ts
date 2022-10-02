@@ -21,19 +21,19 @@ export class BeCalculating extends BeSyndicating implements Actions{
         }else if(!inner.startsWith(`export const ${nameOfCalculator} = async `)){
             self.innerHTML = `export const ${nameOfCalculator} = async ` + inner;
         }
-        self.setAttribute('be-exportable', '');
-        import('be-exportable/be-exportable.js');
         if((self as any)._modExport){
             this.assignScriptToProxy(pp)
             Object.assign(proxy, (self as any)._modExport);
         }else{
+            self.setAttribute('be-exportable', '');
+        import('be-exportable/be-exportable.js');
             self.addEventListener('load', e =>{
                 this.assignScriptToProxy(pp);
             }, {once: true});
         }
     }
 
-    assignScriptToProxy({nameOfCalculator, nameOfTransform, proxy}: PP){
+    assignScriptToProxy({nameOfCalculator, nameOfTransform, proxy, self}: PP){
         if(nameOfCalculator !== undefined){
             const calculator = (self as any)._modExport[nameOfCalculator];
             if(calculator !== undefined){

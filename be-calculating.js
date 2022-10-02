@@ -2,7 +2,8 @@ import { define } from 'be-decorated/be-decorated.js';
 import { register } from "be-hive/register.js";
 import { BeSyndicating } from 'be-syndicating/be-syndicating.js';
 export class BeCalculating extends BeSyndicating {
-    importSymbols({ proxy, nameOfCalculator, importTransformFrom, self, args }) {
+    importSymbols(pp) {
+        const { proxy, nameOfCalculator, self, args } = pp;
         const inner = self.innerHTML.trim();
         if (inner.indexOf('=>') === -1) {
             const strArgs = [];
@@ -15,26 +16,30 @@ export class BeCalculating extends BeSyndicating {
         else if (!inner.startsWith(`export const ${nameOfCalculator} = async `)) {
             self.innerHTML = `export const ${nameOfCalculator} = async ` + inner;
         }
-        self.setAttribute('be-exportable', '');
-        import('be-exportable/be-exportable.js');
         if (self._modExport) {
+            this.assignScriptToProxy(pp);
             Object.assign(proxy, self._modExport);
         }
         else {
+            self.setAttribute('be-exportable', '');
+            import('be-exportable/be-exportable.js');
             self.addEventListener('load', e => {
-                if (nameOfCalculator !== undefined) {
-                    const calculator = self._modExport[nameOfCalculator];
-                    if (calculator !== undefined) {
-                        proxy.calculator = calculator;
-                    }
-                }
-                if (importTransformFrom !== undefined) {
-                    const transform = self._modExport[importTransformFrom];
-                    if (transform !== undefined) {
-                        proxy.transform = transform;
-                    }
-                }
+                this.assignScriptToProxy(pp);
             }, { once: true });
+        }
+    }
+    assignScriptToProxy({ nameOfCalculator, nameOfTransform, proxy, self }) {
+        if (nameOfCalculator !== undefined) {
+            const calculator = self._modExport[nameOfCalculator];
+            if (calculator !== undefined) {
+                proxy.calculator = calculator;
+            }
+        }
+        if (nameOfTransform !== undefined) {
+            const transform = self._modExport[nameOfTransform];
+            if (transform !== undefined) {
+                proxy.transform = transform;
+            }
         }
     }
     getStringArgs(args, acc) {
@@ -148,7 +153,7 @@ define({
             forceVisible: [upgrade],
             virtualProps: [
                 'args', 'calculator', 'transformScope', 'from', 'get', 'on',
-                'transform', 'props', 'nameOfCalculator', 'importTransformFrom',
+                'transform', 'props', 'nameOfCalculator', 'nameOfTransform',
                 'transformScope'
             ],
             primaryProp: 'args',
@@ -160,7 +165,7 @@ define({
                     '*': 'value'
                 },
                 nameOfCalculator: 'calculator',
-                importTransformFrom: 'transform'
+                nameOfTransform: 'transform'
             }
         },
         actions: {
@@ -170,7 +175,7 @@ define({
                 ifAllOf: ['props', 'calculator']
             },
             importSymbols: {
-                ifKeyIn: ['nameOfCalculator', 'importTransformFrom']
+                ifKeyIn: ['nameOfCalculator', 'nameOfTransform']
             }
         }
     },
