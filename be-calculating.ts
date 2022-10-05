@@ -8,18 +8,11 @@ import {BeSyndicating} from 'be-syndicating/be-syndicating.js';
 import {ArgMap} from 'be-syndicating/types';
 export class BeCalculating extends BeSyndicating implements Actions{
 
-    importSymbols(pp: ProxyProps): void {
+    async importSymbols(pp: ProxyProps) {
         const {proxy, nameOfCalculator, self, args} = pp;
-        const inner = self.innerHTML.trim();
-        if(inner.indexOf('=>') === -1){
-            const strArgs: string[] = [];
-            this.getStringArgs(args, strArgs);
-            const str = `export const ${nameOfCalculator} = async ({${strArgs.join(',')}}) => ({
-                value: ${inner}
-            })`;
-            self.innerHTML = str
-        }else if(!inner.startsWith(`export const ${nameOfCalculator} = async `)){
-            self.innerHTML = `export const ${nameOfCalculator} = async ` + inner;
+        if(!self.src){
+            const {rewrite} = await import('./rewrite.js');
+            rewrite(pp, this);
         }
         if((self as any)._modExport){
             this.assignScriptToProxy(pp);
