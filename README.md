@@ -165,7 +165,7 @@ Because now, with a little more tender loving care, we can start to see that we 
 
 So there are lots of equally good ways to approach this -- separate scripts tags is one way.  But let's see what this looks like sticking to a single script tag.
 
-In this scenario, we need to ask the developer to do something that is always a bit emotionally draining:  Coming up with names for that thing you get when you add two numbers together, and that other thing when you multiple two numbers together.  We also need to start providing a little more context, indicating we are using an arrow function:
+In this scenario, we need to ask the developer to do something that is always a bit emotionally draining:  Coming up with names for that thing you get when you add two numbers together, and that other thing when you multiply two numbers together.  We also need to start providing a little more context, indicating we are using an arrow function:
 
 
 ## Example 3:
@@ -300,15 +300,15 @@ export type Scope =
     */
     'p' |
     /**
-     * Use the element itslef as the boundary
+     * Use the element itself as the boundary
      */ 
     'self' | 
     /**
-     * Use the element itslef as the boundary
+     * abbrev for self
      */ 
     's' |
     /**
-     * abbrev for self
+     * Use the native closest function to get the boundary
      */
     ['closest', string] |
     /**

@@ -184,7 +184,9 @@ define<Proxy & BeDecoratedProps<Proxy, Actions>, Actions>({
             }
         },
         actions:{
-            hookUpTransform: 'transform',
+            hookUpTransform: {
+                ifAllOf:['transform', 'props', 'calculator']
+            },
             listen: 'args',
             hookupCalc: {
                 ifAllOf: ['props', 'calculator']
