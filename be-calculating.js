@@ -96,11 +96,13 @@ export class BeCalculating extends BeSyndicating {
             this.syndicate.addEventListener(key, async (e) => {
                 const calculations = await calculator(syndicate, e.detail);
                 Object.assign(syndicate, calculations);
+                proxy.calcCount++;
             }, { signal: ac.signal });
             this.#proxyControllers.push(ac);
         }
         const calculations = await calculator(syndicate);
         Object.assign(syndicate, calculations);
+        proxy.calcCount++;
         proxy.resolved = true;
     }
     // async #getTransformTarget({transformScope, self}: PP){
@@ -145,7 +147,7 @@ define({
             virtualProps: [
                 'args', 'calculator', 'transformScope', 'from', 'get', 'on',
                 'transform', 'props', 'nameOfCalculator', 'nameOfTransform',
-                'transformScope'
+                'transformScope', 'calcCount'
             ],
             primaryProp: 'args',
             primaryPropReq: true,
@@ -156,12 +158,13 @@ define({
                     '*': 'value'
                 },
                 nameOfCalculator: 'calculator',
-                nameOfTransform: 'transform'
+                nameOfTransform: 'transform',
+                calcCount: 0,
             }
         },
         actions: {
             hookUpTransform: {
-                ifAllOf: ['transform', 'props', 'calculator']
+                ifAllOf: ['transform', 'props', 'calculator', 'calcCount']
             },
             listen: 'args',
             hookupCalc: {

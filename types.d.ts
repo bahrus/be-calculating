@@ -17,9 +17,12 @@ export interface EndUserProps<Props = any, Actions = Props, TEvent = Event> exte
      * Outer boundary that transform should act on.
      */
     transformScope?: Scope,
+    
 }
 
-export interface VirtualProps extends EndUserProps, BeSyndicatingVirtualProps<HTMLScriptElement>{}
+export interface VirtualProps extends EndUserProps, BeSyndicatingVirtualProps<HTMLScriptElement>{
+    calcCount: number;
+}
 
 export type Proxy = HTMLScriptElement & VirtualProps;
 

@@ -108,11 +108,13 @@ export class BeCalculating extends BeSyndicating implements Actions{
             this.syndicate.addEventListener(key, async e => {
                 const calculations = await calculator!(syndicate, (e as CustomEvent).detail);
                 Object.assign(syndicate, calculations);
+                proxy.calcCount++;
             }, {signal: ac.signal});
             this.#proxyControllers.push(ac);
         }
         const calculations = await calculator!(syndicate);
         Object.assign(syndicate, calculations);
+        proxy.calcCount++;
         proxy.resolved = true;
     }
     
@@ -169,7 +171,7 @@ define<Proxy & BeDecoratedProps<Proxy, Actions>, Actions>({
             virtualProps: [
                 'args', 'calculator', 'transformScope', 'from', 'get', 'on', 
                 'transform', 'props', 'nameOfCalculator', 'nameOfTransform',
-                'transformScope'
+                'transformScope', 'calcCount'
             ],
             primaryProp: 'args',
             primaryPropReq: true,
@@ -180,12 +182,13 @@ define<Proxy & BeDecoratedProps<Proxy, Actions>, Actions>({
                     '*': 'value'
                 },
                 nameOfCalculator: 'calculator',
-                nameOfTransform: 'transform'
+                nameOfTransform: 'transform',
+                calcCount: 0,
             }
         },
         actions:{
             hookUpTransform: {
-                ifAllOf:['transform', 'props', 'calculator']
+                ifAllOf:['transform', 'props', 'calculator', 'calcCount']
             },
             listen: 'args',
             hookupCalc: {
