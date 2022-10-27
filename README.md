@@ -164,7 +164,7 @@ If we want to share our calculating code with the world, we might package it as 
 
 But as things stand, we will need to specify the name of the calculator thusly:
 
-### Example 4
+### Example 3
 
 ```JavaScript
 //file calculator.js
