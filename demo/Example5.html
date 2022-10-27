@@ -14,19 +14,22 @@
         <p aria-live=polite>
             Yes, and did you also know that <span part='augend'></span> * <span part='addend'></span> = <span part='by-product'></span>
         </p>
-        <script nomodule src='TuringAwardDeservingAlgorithm.js' be-calculating='{
+        <script nomodule be-calculating='{
             "args": ["a", "b"],
-            "get": "valueAsNumber",
             "transform": {
                 "xN": "sum",
                 "augendP": "a",
                 "addendP": "b",
                 "byProductP": "product"
             },
-            "transformScope":"parent",
-            "nameOfCalculator": "TuringAwardDeservingAlgorithm"
-            
-        }'></script>
+            "transformScope":"parent"
+        }'>
+            ({a, b, self}) => {
+                console.log(self);
+                self.sum = a + b;
+                self.product = a * b;
+            }
+        </script>
     </form>
     <script type=importmap>
         {
