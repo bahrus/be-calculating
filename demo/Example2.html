@@ -11,11 +11,23 @@
         <input type="range" name="a" value="50">
         +<input type="number" name="b" value="25">
         =<output name="x"></output>
+        <p aria-live=polite>
+            Yes, and did you also know that <span part='augend'></span> * <span part='addend'></span> = <span part='by-product'></span>
+        </p>
         <script nomodule be-calculating='{
             "args": ["a", "b"],
-            "get": "valueAsNumber"
+            "transform": {
+                "xN": "sum",
+                "augendP": "a",
+                "addendP": "b",
+                "byProductP": "product"
+            },
+            "transformScope": "parent"
         }'>
-            a + b
+            ({a, b}) => ({
+                sum: a + b,
+                product: a*b
+            });
         </script>
     </form>
     <script type=importmap>

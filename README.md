@@ -50,7 +50,7 @@ The most exact equivalent to what the code above is doing, but with the help of 
 </script>
 ```
 
-But this isn't really playing to *be-calculating*'s strengths.  Both examples above recalculate and rebind the value of the sum any time any form element inside is modified by the user.
+But this isn't really playing to *be-calculating*'s strengths.  Both examples above recalculate and rebind the value of the sum anytime any form element inside is modified by the user.
 
 That means if the form has 8 more input elements, the sum will be recalculated, and the value passed to output, even when editing the 8 input elements that aren't part of the sum.
 
@@ -66,14 +66,20 @@ So what *be-calculating* is wanting to do with this example is shown below:
     +<input type="number" name="b" value="25">
     =<output name="x"></output>
     <script nomodule be-calculating='["a", "b"]'>
-        Number(a) + Number(b)
+        a + b
     </script>
 </form>
 ```
 
 Basically, *be-calculating* is picking and choosing only those pieces of the form that are relevant to the sum.
 
-This is shorthand for:
+Think of what we've accomplished here!  We have now purified the JavaScript's domain to be independent of the UI.  
+
+Code that we can patent and earn Turing Awards with!
+
+Because now, with a little more tender loving care (described below), we can start to see that we can create a reusable function that can be used in multiple contexts -- anywhere we need to add two numbers together. We've been showing inline examples, but the code can be imported via ESM modules, which is discussed below.
+
+The example above is shorthand for:
 
 ```html
 <form>
@@ -85,23 +91,25 @@ This is shorthand for:
             "a": {
                 "observeName": "a",
                 "on": "input",
-                "vft": "value"
+                "valueFromTarget": "valueAsNumber"
             },
             "b": {
                 "observeName": "b",
                 "on": "input",
-                "vft": "value"
+                "vft": "valueAsNumber"
             }
         },
         "transformScope": ["upSearch", "*"],
         "transform":{"*": "value"}
     }'>        
         export const calculator = async ({a, b}) => ({
-            value: Number(a) + Number(b)
+            value: a + b
         });
     </script>
 </form>
 ```
+
+
 
 It leverages the robust syntax options provided by [be-observant](https://github.com/bahrus/be-observant), and the transform relies on [declarative trans-rendering (DTR)](https://github.com/bahrus/trans-render).
 
@@ -109,55 +117,6 @@ If editing JSON inside HTML attributes feels weird, the [json-in-html](https://m
 
 And the [may-it-be](https://github.com/bahrus/may-it-be) package allows us to benefit from TypeScript tooling, and compiles to an HTML file.
 
-## Example 2:  Use the platform
-
-```html
-<form>
-    <input type="range" name="a" value="50">
-    +<input type="number" name="b" value="25">
-    =<output name="x"></output>
-    <script nomodule be-calculating='{
-        "args": ["a", "b"],
-        "get": "valueAsNumber",
-    }'>
-        a + b
-    </script>
-</form>
-```
-
-<details>
-    <summary>More about the get parameter</summary>
-The "get" parameter can also be an object, where we can specify lots of options:
-
-```TypeScript
-export interface GetValConfig<Props = any> {
-    /**
-     * The path to the (sub) property of the element being observed.
-     * 
-     */
-    valFromTarget?: string,
-    /**
-     * Abbreviation for valFromTarget.  Does the same thing
-     */
-    vft?: keyof Props & string,
-    /**
-     * The path to the place in the event we want to use as the value to set.  
-     * For example:  detail.value
-     */
-    valFromEvent?: string,
-    /**
-     * Abbreviation for valFromEvent.  Does the same thing.
-     */
-    vfe?: string,
-}
-```
-</details>
-
-Think of what we've accomplished here!  We have now purified the JavaScript's domain to be independent of the UI.  
-
-Code that we can patent and earn Turing Awards with!
-
-Because now, with a little more tender loving care, we can start to see that we can create a reusable function that can be used in multiple contexts -- anywhere we need to add two numbers together. We've been showing inline examples, but the code can be imported via ESM modules, which is discussed below.
 
 ## Yeah, but can your framework do this?
 
@@ -183,7 +142,6 @@ In this scenario, we need to ask the developer to do something that is always a 
     </p>
     <script nomodule be-calculating='{
         "args": ["a", "b"],
-        "get": "valueAsNumber",
         "transform": {
             "xN": "sum",
             "augendI": "a",

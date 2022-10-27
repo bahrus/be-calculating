@@ -157,6 +157,7 @@ define({
                 transform: {
                     '*': 'value'
                 },
+                get: 'valueAsNumber',
                 nameOfCalculator: 'calculator',
                 nameOfTransform: 'transform',
                 calcCount: 0,
