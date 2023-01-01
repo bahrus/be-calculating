@@ -1,5 +1,5 @@
 import {define, BeDecoratedProps} from 'be-decorated/DE.js';
-import {Actions, VirtualProps, PP, Proxy, ProxyProps} from './types';
+import {Actions, VirtualProps, PP, Proxy, ProxyProps, PPE} from './types';
 import {register} from "be-hive/register.js";
 import { IObserve, GetValConfig } from '../be-observant/types';
 import {PropertyBag} from 'trans-render/lib/PropertyBag.js';
@@ -15,15 +15,14 @@ export class BeCalculating extends BeSyndicating implements Actions{
             rewrite(pp, this);
         }
         if((self as any)._modExport){
-            this.assignScriptToProxy(pp);
-        }else{
-            self.addEventListener('load', e =>{
-                this.assignScriptToProxy(pp);
-            }, {once: true});
-            self.setAttribute('be-exportable', '');
-            import('be-exportable/be-exportable.js');
-
-        }
+            //this.assignScriptToProxy(pp);
+            return [{},{assignScriptToProxy: true}] as PPE;
+        }//else{
+        self.setAttribute('be-exportable', '');
+        import('be-exportable/be-exportable.js');
+        return [{}, {
+            assignScriptToProxy: {on: 'load', of: self, options: {once: true}}
+        }] as PPE;
     }
 
     assignScriptToProxy({nameOfCalculator, nameOfTransform, proxy, self}: PP){

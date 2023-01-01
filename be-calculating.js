@@ -9,15 +9,14 @@ export class BeCalculating extends BeSyndicating {
             rewrite(pp, this);
         }
         if (self._modExport) {
-            this.assignScriptToProxy(pp);
-        }
-        else {
-            self.addEventListener('load', e => {
-                this.assignScriptToProxy(pp);
-            }, { once: true });
-            self.setAttribute('be-exportable', '');
-            import('be-exportable/be-exportable.js');
-        }
+            //this.assignScriptToProxy(pp);
+            return [{}, { assignScriptToProxy: true }];
+        } //else{
+        self.setAttribute('be-exportable', '');
+        import('be-exportable/be-exportable.js');
+        return [{}, {
+                assignScriptToProxy: { on: 'load', of: self, options: { once: true } }
+            }];
     }
     assignScriptToProxy({ nameOfCalculator, nameOfTransform, proxy, self }) {
         if (nameOfCalculator !== undefined) {
