@@ -54,10 +54,10 @@ So what *be-calculating* is wanting to do with this example is shown below:
 <form>
     <input type="range" id=a value="50">
     +<input type="number" id=b value="25">
-    =<output for="a b" be-calculating></output>
-    <script nomodule>
+    =<script nomodule>
         a + b
-    </script>
+    </script><output for="a b" be-calculating></output>
+
     
 </form>
 ```
@@ -69,13 +69,36 @@ This is shorthand for:
     <input type="range" id=a value="50">
     +<input type="number" id=b value="25">
     =<output for="a b" be-calculating='{
-        "identifierAttribute": "for",
+        "forAttribute": "for",
         "propertyToSet": "value",
-        "searchBy": "[id=%0]"
+        "searchBy": "[id=%0]",
+        "scriptRef": "previousElementSibling"
     }'></output>
     <script nomodule>
         a + b
     </script>
+    
+</form>
+```
+
+## Sharing calculated values
+
+We may want to display the sum in various places.
+
+```html
+<form itemscope be-sharing='
+    Share sum from scope.
+'>
+    <input type="range" id=a value="50">
+    +<input type="number" id=b value="25">
+    =<script nomodule>
+        a + b
+    </script><output name=sum for="a b" be-calculating='
+    Notify scope.
+    '></output>
+        
+    <data itemprop=sum><span itemprop=sum></span></data>
+
     
 </form>
 ```
