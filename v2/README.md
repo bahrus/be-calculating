@@ -54,7 +54,25 @@ So what *be-calculating* is wanting to do with this example is shown below:
 <form>
     <input type="range" id=a value="50">
     +<input type="number" id=b value="25">
-    =<output for="a b"></output>
+    =<output for="a b" be-calculating></output>
+    <script nomodule>
+        a + b
+    </script>
+    
+</form>
+```
+
+This is shorthand for:
+
+```html
+<form>
+    <input type="range" id=a value="50">
+    +<input type="number" id=b value="25">
+    =<output for="a b" be-calculating='{
+        "identifierAttribute": "for",
+        "propertyToSet": "value",
+        "searchBy": "[id=%0]"
+    }'></output>
     <script nomodule>
         a + b
     </script>
