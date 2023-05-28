@@ -10,7 +10,7 @@
 
 <a href="https://nodei.co/npm/be-calculating/"><img src="https://nodei.co/npm/be-calculating.png"></a>
 
-*be-calculating* is an element decorator / behavior equivalent of web component [aggregator-fn](https://github.com/bahrus/aggregator-fn).
+*be-calculating* is a custom enhancement equivalent of web component [aggregator-fn](https://github.com/bahrus/aggregator-fn).
 
 *be-calculating* can't help but admire the brevity and sorcery on [display here](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/output):
 
