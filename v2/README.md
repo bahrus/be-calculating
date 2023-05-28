@@ -94,7 +94,7 @@ We may want to display the sum in various places.
     =<script nomodule>
         a + b
     </script><output name=sum for="a b" be-calculating='
-    Notify scope.
+        {"notify": "scope"}
     '></output>
         
     <data itemprop=sum><span itemprop=sum></span></data>
