@@ -8,18 +8,14 @@
 </head>
 <body>
     <form>
-        <input type="range" name="a" value="50">
-        +<input type="number" name="b" value="25">
-        =<output name="x"></output>
-        <script nomodule be-calculating='{
-            "args": ["a", "b"],
-            "get": "valueAsNumber"   
-        }'>
+        <input type="range" id="a" value="50">
+        +<input type="number" id="b" value="25">
+        =<script nomodule>
             a + b
-        </script>
+        </script><output for="a b" be-calculating></output>
     </form>
     <script type=module crossorigin='anonymous'>
-        import 'https://esm.run/be-calculating@0.0.16'
+        import 'https://esm.run/be-calculating@0.0.21'
     </script>
 
 </body>
