@@ -67,7 +67,7 @@ This is shorthand for:
 
 These default settings will be discussed in more detail below [TODO].
 
-## Sharing calculated values [TODO]
+## Sharing calculated values
 
 We may want to display the sum in various places.
 
