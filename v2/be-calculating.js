@@ -58,12 +58,15 @@ export class BeCalculating extends BE {
         for (const arg of args) {
             const ac = new AbortController();
             propertyBag.addEventListener(arg, async (e) => {
-                self.value = await calculator(propertyBag, e.detail);
+                const result = await calculator(propertyBag, e.detail);
+                Object.assign(self, result);
             }, { signal: ac.signal });
             this.#controllers.push(ac);
         }
+        const result = await calculator(propertyBag);
+        Object.assign(self, result);
         return {
-            value: await calculator(propertyBag),
+            //value: await calculator!(propertyBag!),
             resolved: true,
         };
     }
@@ -92,6 +95,8 @@ export class BeCalculating extends BE {
         };
     }
     onValue(self) {
+        const { enhancedElement, value, propertyToSet } = self;
+        enhancedElement[propertyToSet] = value;
     }
 }
 const tagName = 'be-calculating';
@@ -126,7 +131,7 @@ const xe = new XE({
                 ifAllOf: ['calculator', 'args']
             },
             onValue: {
-                ifKeyIn: ['value'],
+                ifAllOf: ['propertyToSet', 'value'],
             }
         }
     },
