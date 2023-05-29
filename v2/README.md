@@ -72,7 +72,9 @@ This is shorthand for:
         "forAttribute": "for",
         "propertyToSet": "value",
         "searchBy": "[id=%0]",
-        "scriptRef": "previousElementSibling"
+        "scriptRef": "previousElementSibling",
+        "scope":  ["closestOrRootNode", "form"],
+        "reCalculateOn": "change"
     }'></output>
     <script nomodule>
         a + b
