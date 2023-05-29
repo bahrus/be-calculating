@@ -1,4 +1,4 @@
-# be-calculating [WIP]
+# be-calculating 
 
 [![Playwright Tests](https://github.com/bahrus/be-calculating/actions/workflows/CI.yml/badge.svg?branch=baseline)](https://github.com/bahrus/be-calculating/actions/workflows/CI.yml)
 [![How big is this package in your project?](https://img.shields.io/bundlephobia/minzip/be-calculating?style=for-the-badge)](https://bundlephobia.com/result?p=be-calculating)
@@ -61,15 +61,17 @@ This is shorthand for:
         "forAttribute": "for",
         "propertyToSet": "value",
         "searchBy": "id",
-        "searchScope":  ["closestOrRootNode", "form"],
+        "searchScope":  ["closestOrHost", "form"],
         "scriptRef": "previousElementSibling",
-        "reCalculateOn": "change",
+        "recalculateOn": "change",
         "nameOfCalculator": "calculator"
     }'></output>
 
     
 </form>
 ```
+
+What this means is we aren't limited to adorning the output element.  But if using some element other than output, the developer will need to override the default settings shown above, depending on the particular scenario.
 
 If editing JSON inside HTML attributes feels weird, the [json-in-html](https://marketplace.visualstudio.com/items?itemName=andersonbruceb.json-in-html) vs-code extension makes it feel much more natural, even when editing README files.  Because of the declarative, side-effect-free nature of the extension, it can be used with the web version of VSCode as well.
 
@@ -91,9 +93,92 @@ We may want to display the sum in various places.  One way to do this is shown b
         {"notify": "scope"}
     '></output>
         
-    <data itemprop=sum></data>
+    <data itemprop=sum aria-live=polite></data>
 
     
 </form>
+```
+
+## External Module Renaming
+
+If we want to share our calculating code with the world, we might package it as an npm package.  Note that the code is library neutral, so doesn't need to be accompanied by 17 black-hole-o-grams of dependencies, and a cottage industry of boot camps to master.  Just saying.
+
+But as things stand, we will need to specify the name of the calculator thusly:
+
+### Example 3
+
+```JavaScript
+//file calculator.js
+export const calculator = ({a, b}) => ({
+    value: a + b
+});
+```
+
+```html
+    <form itemscope be-sharing='
+      Share sum from scope.
+    '>
+        <input type="range" id="a" value="23">
+        +<input type="number" id="b" value="252334">
+        =<script nomodule src="./calculator.js"></script><output name="sum" for="a b" be-calculating='
+            {"notify": "scope"}
+        '></output>
+
+        <data itemprop=sum></data>
+    </form>
+```
+
+If we wish to give it a different name, *be-calculating* needs to know about that:
+
+### Example 4
+
+```JavaScript
+//file TuringAwardDeservingAlgorithm.js
+export const TuringAwardDeservingAlgorithm = ({a, b}) => ({
+    value: a + b
+});
+```
+
+```html
+<form itemscope be-sharing='
+    Share sum from scope.
+'>
+    <input type="range" id="a" value="23">
+    +<input type="number" id="b" value="252334">
+    =<script nomodule src="./TuringAwardDeservingAlgorithm.js"></script><output name="sum" for="a b" be-calculating='{
+        "notify": "scope",
+        "nameOfCalculator": "TuringAwardDeservingAlgorithm"
+        
+    }'></output>
+
+    <data itemprop=sum></data>
+</form>
+```
+
+## [Demo](https://codepen.io/bahrus/pen/NWMjxYV)
+
+## Viewing Locally
+
+1.  Install git.
+2.  Fork/clone this repo.
+3.  Install node.
+4.  Open command window to folder where you cloned this repo.
+5.  > npm install
+6.  > npm run serve
+7.  Open http://localhost:3030/demo in a modern browser.
+
+## Importing in ES Modules:
+
+```JavaScript
+import 'be-calculating/be-calculating.js';
+
+```
+
+## Using from CDN:
+
+```html
+<script type=module crossorigin=anonymous>
+    import 'https://esm.run/be-calculating';
+</script>
 ```
 

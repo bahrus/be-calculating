@@ -7,39 +7,34 @@
     <title>Document</title>
 </head>
 <body>
-    <form>
-        <input type="range" name="a" value="50">
-        +<input type="number" name="b" value="25">
-        =<output name="x"></output>
-        <p aria-live=polite itemscope>
-            Yes, and did you also know that <span itemprop='augend'></span> * <span itemprop='addend'></span> = <span itemprop='by-product'></span>
-        </p>
-        <script nomodule src='calculator.js' be-calculating='{
-            "args": ["a", "b"],
-            "transform": {
-                "xN": "sum",
-                "augendI": "a",
-                "addendI": "b",
-                "byProductI": "product"
-            },
-            "transformScope": "parent"
-        }'></script>
+    <form itemscope be-sharing='
+      Share sum from scope.
+    '>
+        <input type="range" id="a" value="23">
+        +<input type="number" id="b" value="252334">
+        =<script nomodule src="./calculator.js"></script><output name="sum" for="a b" be-calculating='
+            {"notify": "scope"}
+        '></output>
+
+        <data itemprop=sum></data>
     </form>
     <script type=importmap>
         {
             "imports": {
-                "trans-render/": "../node_modules/trans-render/",
-                "xtal-element/": "../node_modules/xtal-element/",
-                "be-decorated/": "../node_modules/be-decorated/",
+                "be-enhanced/": "../node_modules/be-enhanced/",
                 "be-exportable/": "../node_modules/be-exportable/",
                 "be-hive/":  "../node_modules/be-hive/",
-                "be-observant/": "../node_modules/be-observant/",
-                "be-syndicating/": "../node_modules/be-syndicating/"
+                "be-linked/": "../node_modules/be-linked/",
+                "be-sharing/": "../node_modules/be-sharing/",
+                "be-scoped/": "../node_modules/be-scoped/",
+                "trans-render/": "../node_modules/trans-render/",
+                "xtal-element/": "../node_modules/xtal-element/"
             }
         }
     </script>
     <script type=module>
-        import '../be-calculating.js'
+        import '../be-calculating.js';
+        import 'be-sharing/be-sharing.js';
     </script>
 
 </body>
