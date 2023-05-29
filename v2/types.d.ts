@@ -31,4 +31,5 @@ export interface Actions{
     getArgs(self: this): PAP;
     observe(self: this): ProPAP;
     importSymbols(self: this): ProPAP;
+    onValue(self: this): void;
 }

@@ -71,10 +71,11 @@ This is shorthand for:
     =<output for="a b" be-calculating='{
         "forAttribute": "for",
         "propertyToSet": "value",
-        "searchBy": "[id=%0]",
+        "searchBy": "id",
         "scriptRef": "previousElementSibling",
         "scope":  ["closestOrRootNode", "form"],
-        "reCalculateOn": "change"
+        "reCalculateOn": "change",
+        "nameOfCalculator": "calculator"
     }'></output>
     <script nomodule>
         a + b
@@ -82,6 +83,8 @@ This is shorthand for:
     
 </form>
 ```
+
+These default settings will be discussed in more detail below [TODO].
 
 ## Sharing calculated values
 

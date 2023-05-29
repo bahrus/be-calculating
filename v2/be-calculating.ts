@@ -36,7 +36,7 @@ export class BeCalculating extends BE<AP, Actions> implements Actions{
             const {rewrite} = await import('../rewrite.js');
             rewrite(self, target);
         }
-        const exportable = await (<any>enhancedElement).beEnhanced.whenResolved('be-exportable') as BeExportableAllProps;
+        const exportable = await (<any>target).beEnhanced.whenResolved('be-exportable') as BeExportableAllProps;
         return {
             calculator: exportable.exports[nameOfCalculator!]
         }
@@ -66,14 +66,12 @@ export class BeCalculating extends BE<AP, Actions> implements Actions{
         for(const arg of args!){
             const ac = new AbortController();
             propertyBag!.addEventListener(arg, async e => {
-                const calculations = await calculator!(propertyBag!, (e as CustomEvent).detail);
-                Object.assign(propertyBag!, calculations);
-
+                self.value = await calculator!(propertyBag!, (e as CustomEvent).detail);
             }, {signal: ac.signal});
             this.#controllers.push(ac);
         }
         return {
-            
+            value: await calculator!(propertyBag!),
             resolved: true,
         } as PAP;
     }
@@ -95,7 +93,7 @@ export class BeCalculating extends BE<AP, Actions> implements Actions{
     getArgs(self: this): PAP {
         const {for: forString} = self;
         let forS: string | null | undefined = forString;
-        if(forS === undefined){
+        if(!forS){
             const {forAttribute, enhancedElement} = self;
             forS = enhancedElement.getAttribute(forAttribute!);
         }
@@ -103,6 +101,10 @@ export class BeCalculating extends BE<AP, Actions> implements Actions{
         return {
             args: forS.split(' ')
         };
+    }
+
+    onValue(self: this): void {
+        
     }
 }
 
@@ -117,13 +119,32 @@ const xe = new XE<AP, Actions>({
         tagName,
         propDefaults: {
             ...propDefaults,
-            scope: ['closestOrRootNode', 'form']
+            scope: ['closestOrRootNode', 'form'],
+            propertyToSet: 'value',
+            searchBy: 'id',
+            scriptRef: 'previousElementSibling',
+            recalculateOn: 'change',
+            nameOfCalculator: 'calculator'
         },
         propInfo: {
             ...propInfo,
         },
         actions: {
-
+            getDefaultForAttribute:{
+                ifNoneOf: ['forAttribute', 'for', 'args']
+            },
+            getArgs:{
+                ifAtLeastOneOf: ['forAttribute', 'for']
+            },
+            importSymbols: {
+                ifAllOf: ['scriptRef', 'nameOfCalculator']
+            },
+            observe:{
+                ifAllOf: ['calculator', 'args']
+            },
+            onValue: {
+                ifKeyIn: ['value'],
+            }
         }
     },
     superclass: BeCalculating
