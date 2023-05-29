@@ -9,7 +9,7 @@ export interface EndUserProps extends IBE{
     searchBy?: string,
     scriptRef?: Target,
     notify?: 'scope' | 'elementProps',
-    scope?: Scope,
+    searchScope?: Scope,
     recalculateOn?: string,
     nameOfCalculator?: string,
 }

@@ -37,7 +37,7 @@ export class BeCalculating extends BE {
     }
     #controllers;
     async observe(self) {
-        const { args, searchBy, scope, recalculateOn } = self;
+        const { args, searchBy, searchScope, recalculateOn } = self;
         const defaultLink = {
             localInstance: 'local',
             enhancement: 'beCalculating',
@@ -46,7 +46,7 @@ export class BeCalculating extends BE {
                 attr: searchBy,
                 isFormElement: true,
                 names: args,
-                scope,
+                scope: searchScope,
                 on: recalculateOn
             }
         };
@@ -94,9 +94,13 @@ export class BeCalculating extends BE {
             args: forS.split(' ')
         };
     }
-    onValue(self) {
-        const { enhancedElement, value, propertyToSet } = self;
+    async onValue(self) {
+        const { enhancedElement, value, propertyToSet, notify } = self;
         enhancedElement[propertyToSet] = value;
+        if (notify !== undefined) {
+            const { doNotify } = await import('./doNotify.js');
+            await doNotify(self);
+        }
     }
 }
 const tagName = 'be-calculating';
@@ -107,7 +111,7 @@ const xe = new XE({
         tagName,
         propDefaults: {
             ...propDefaults,
-            scope: ['closestOrRootNode', 'form'],
+            searchScope: ['closestOrRootNode', 'form'],
             propertyToSet: 'value',
             searchBy: 'id',
             scriptRef: 'previousElementSibling',

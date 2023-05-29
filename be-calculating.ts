@@ -45,7 +45,7 @@ export class BeCalculating extends BE<AP, Actions> implements Actions{
     }
     #controllers : AbortController[] | undefined;
     async observe(self: this): ProPAP {
-        const {args, searchBy, scope, recalculateOn} = self;
+        const {args, searchBy, searchScope, recalculateOn} = self;
         const defaultLink = {
             localInstance: 'local',
             enhancement: 'beCalculating',
@@ -54,7 +54,7 @@ export class BeCalculating extends BE<AP, Actions> implements Actions{
                 attr: searchBy,
                 isFormElement: true,
                 names: args,
-                scope,
+                scope: searchScope,
                 on: recalculateOn
             }
         } as Link;
@@ -106,9 +106,13 @@ export class BeCalculating extends BE<AP, Actions> implements Actions{
         };
     }
 
-    onValue(self: this): void {
-        const {enhancedElement, value, propertyToSet} = self;
+    async onValue(self: this){
+        const {enhancedElement, value, propertyToSet, notify} = self;
         (<any>enhancedElement)[propertyToSet!] = value;
+        if(notify !== undefined){
+            const {doNotify} = await import('./doNotify.js');
+            await doNotify(self);
+        }
     }
 }
 
@@ -123,7 +127,7 @@ const xe = new XE<AP, Actions>({
         tagName,
         propDefaults: {
             ...propDefaults,
-            scope: ['closestOrRootNode', 'form'],
+            searchScope: ['closestOrRootNode', 'form'],
             propertyToSet: 'value',
             searchBy: 'id',
             scriptRef: 'previousElementSibling',
