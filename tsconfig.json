@@ -9,7 +9,7 @@
 		"strict": true,
 	},
 	"files":[
-		"v2/be-calculating.ts"
+		"be-calculating.ts"
 	],
 	"exclude":[
 		"node_modules"

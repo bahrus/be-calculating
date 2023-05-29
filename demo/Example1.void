@@ -8,23 +8,23 @@
 </head>
 <body>
     <form>
-        <input type="range" id="a" value="50">
-        +<input type="number" id="b" value="25">
-        =<script nomodule>
+        <input type="range" name="a" value="50">
+        +<input type="number" name="b" value="25">
+        =<output name="x"></output>
+        <script nomodule be-calculating='["a", "b"]'>
             a + b
-        </script><output for="a b" be-calculating></output>
-
+        </script>
     </form>
     <script type=importmap>
         {
             "imports": {
-                
-                "be-enhanced/": "../node_modules/be-enhanced/",
+                "trans-render/": "../node_modules/trans-render/",
+                "xtal-element/": "../node_modules/xtal-element/",
+                "be-decorated/": "../node_modules/be-decorated/",
                 "be-exportable/": "../node_modules/be-exportable/",
                 "be-hive/":  "../node_modules/be-hive/",
-                "be-linked/": "../node_modules/be-linked/",
-                "trans-render/": "../node_modules/trans-render/",
-                "xtal-element/": "../node_modules/xtal-element/"
+                "be-observant/": "../node_modules/be-observant/",
+                "be-syndicating/": "../node_modules/be-syndicating/"
             }
         }
     </script>

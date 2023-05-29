@@ -1,207 +1,157 @@
-import {define, BeDecoratedProps} from 'be-decorated/DE.js';
-import {Actions, VirtualProps, PP, Proxy, ProxyProps, PPE} from './types';
-import {register} from "be-hive/register.js";
-import { IObserve, GetValConfig } from '../be-observant/types';
-import {PropertyBag} from 'trans-render/lib/PropertyBag.js';
-import {RenderContext, Transformer, Scope} from 'trans-render/lib/types';
-import {BeSyndicating} from 'be-syndicating/be-syndicating.js';
-import {ArgMap} from 'be-syndicating/types';
-export class BeCalculating extends BeSyndicating implements Actions{
+import {BE, propDefaults, propInfo} from 'be-enhanced/BE.js';
+import {BEConfig} from 'be-enhanced/types';
+import {XE} from 'xtal-element/XE.js';
+import {Actions, AllProps, AP, PAP, ProPAP} from './types';
+import {register} from 'be-hive/register.js';
+import {Link} from 'be-linked/types';
+import {AllProps as BeExportableAllProps} from 'be-exportable/types';
 
-    async importSymbols(pp: ProxyProps) {
-        const {proxy, nameOfCalculator, self, args} = pp;
-        if(!self.src){
-            const {rewrite} = await import('./rewrite.js');
-            rewrite(pp, this);
+export class BeCalculating extends BE<AP, Actions> implements Actions{
+    static  override get beConfig(){
+        return {
+            parse: true,
+            primaryProp: 'for'
+        } as BEConfig
+    }
+
+    getDefaultForAttribute(self: this): PAP {
+        const {enhancedElement} = self;
+        switch(enhancedElement.localName){
+            case 'output':
+                return {
+                    forAttribute: 'for'
+                } as PAP;
+            default:
+                throw "Need list of id's"
         }
-        if((self as any)._modExport){
-            //this.assignScriptToProxy(pp);
-            return [{},{assignScriptToProxy: true}] as PPE;
-        }//else{
-        self.setAttribute('be-exportable', '');
+    }
+
+    async importSymbols(self: this): ProPAP {
         import('be-exportable/be-exportable.js');
-        return [{}, {
-            assignScriptToProxy: {on: 'load', of: self, options: {once: true}}
-        }] as PPE;
-    }
-
-    assignScriptToProxy({nameOfCalculator, nameOfTransform, proxy, self}: PP){
-        if(nameOfCalculator !== undefined){
-            const calculator = (self as any)._modExport[nameOfCalculator];
-            if(calculator !== undefined){
-                proxy.calculator = calculator;
-            }
-        }
-        if(nameOfTransform !== undefined){
-            const transform = (self as any)._modExport[nameOfTransform];
-            if(transform !== undefined){
-                proxy.transform = transform;
-            }
-        }
-    }
-
-    getStringArgs(args: ArgMap | ArgMap[], acc: string[]){
-        if(Array.isArray(args)){
-            for(const arg of args){
-                this.getStringArgs(arg, acc);
-            }
-            return;
-        }
-        if(typeof args === 'string'){
-            acc.push(args);
-        }else{
-            for(const key in args){
-                acc.push(key);
-            }
-        }
-    }
-    
-
-    strArgToIObs({from, get, on}: ProxyProps, arg: string): IObserve {
-        const getConfig: GetValConfig = typeof(get) === 'string' ? {
-            vft: get
-        } as GetValConfig : get;
-        const o: IObserve = {...from, ...getConfig, ...on};
-        if(from === undefined){
-            o.observeName = arg;
-        }
-        if(get === undefined){
-            o.vft = 'value';
-        }
-        if(on === undefined){
-            o.on = 'input';
-        }
-        return o;
-    }
-    async hookUpTransform(pp: PP){
-        const {transform, self, transformScope} = pp;
-        const transforms = Array.isArray(transform) ? transform : [transform];
-        const {DTR} = await import('trans-render/lib/DTR.js');
+        const {scriptRef, enhancedElement, nameOfCalculator} = self;
         const {findRealm} = await import('trans-render/lib/findRealm.js');
-        for(const t of transforms){
-            const ctx: RenderContext = {
-                host: this.syndicate,
-                match: t,
-                //[TODO]: plugins: transformPlugins,
+        const target = await findRealm(enhancedElement, scriptRef!) as HTMLScriptElement | null;
+        if(target === null) throw 404;
+        if(!target.src){
+            const {rewrite} = await import('./rewrite.js');
+            rewrite(self, target);
+        }
+        const exportable = await (<any>target).beEnhanced.whenResolved('be-exportable') as BeExportableAllProps;
+        return {
+            calculator: exportable.exports[nameOfCalculator!]
+        }
+
+
+    }
+    #controllers : AbortController[] | undefined;
+    async observe(self: this): ProPAP {
+        const {args, searchBy, scope, recalculateOn} = self;
+        const defaultLink = {
+            localInstance: 'local',
+            enhancement: 'beCalculating',
+            downstreamPropName: 'propertyBag',
+            observe: {
+                attr: searchBy,
+                isFormElement: true,
+                names: args,
+                scope,
+                on: recalculateOn
             }
-            
-            const dtr = new DTR(ctx);
-            const fragment = await findRealm(self, transformScope!) as Element;
-            await dtr.transform(fragment);
-            await dtr.subscribe(true);
-        }
-    }
-
-
-    #proxyControllers: AbortController[] | undefined;
-    async hookupCalc({calculator, props, proxy}: PP) {
-        this.#disconnectProxyListeners();
-        this.#proxyControllers = [];
-        const keys = Array.from(props!);
-        const syndicate = this.syndicate;
-        if((<any>syndicate).self === undefined){
-            (<any>syndicate).self = syndicate; //should this be done in PropertyBag?
-        }
-        for(const key of keys){
+        } as Link;
+        const {observe} = await import('be-linked/observe.js');
+        await observe(self, defaultLink);
+        const {propertyBag, calculator} = self;
+        this.#disconnect();
+        this.#controllers = [];
+        for(const arg of args!){
             const ac = new AbortController();
-            this.syndicate.addEventListener(key, async e => {
-                const calculations = await calculator!(syndicate, (e as CustomEvent).detail);
-                Object.assign(syndicate, calculations);
-                proxy.calcCount++;
+            propertyBag!.addEventListener(arg, async e => {
+                const result = await calculator!(propertyBag!, (e as CustomEvent).detail);
+                Object.assign(self, result);
             }, {signal: ac.signal});
-            this.#proxyControllers.push(ac);
+            this.#controllers.push(ac);
         }
-        const calculations = await calculator!(syndicate);
-        Object.assign(syndicate, calculations);
-        proxy.calcCount++;
-        proxy.resolved = true;
+        const result = await calculator!(propertyBag!);
+        Object.assign(self, result);
+        return {
+            //value: await calculator!(propertyBag!),
+            resolved: true,
+        } as PAP;
     }
+
     
-
-
-
-    // async #getTransformTarget({transformScope, self}: PP){
-    //     let elToTransform: Element | DocumentFragment | null = null;
-    //     const {parent, rootNode, closest, upSearch: us} = transformScope!;
-    //     if(us !== undefined){
-    //         const {upSearch} = await import('trans-render/lib/upSearch.js');
-    //         elToTransform = upSearch(self, us);
-    //     }else if(closest !== undefined){
-    //         elToTransform = self.closest(closest);
-    //     }else if(rootNode){
-    //         elToTransform = self.getRootNode() as DocumentFragment;
-    //     }else{
-    //         elToTransform = self.parentElement!;
-    //     }
-    //     if(elToTransform === null) throw 'bC.404';
-    //     return elToTransform;
-    // }
-
-
-
-    #disconnectProxyListeners(){
-        if(this.#proxyControllers !== undefined){
-            for(const ac of this.#proxyControllers){
+    #disconnect(){
+        if(this.#controllers !== undefined){
+            for(const ac of this.#controllers){
                 ac.abort();
             }
-            this.#proxyControllers = undefined;
+            this.#controllers = undefined;
         }
     }
 
-    override finale(): void {
-        this.#disconnectProxyListeners();
-        super.finale();
+    override detach(detachedElement: Element): void {
+        this.#disconnect();
+    }
+
+    getArgs(self: this): PAP {
+        const {for: forString} = self;
+        let forS: string | null | undefined = forString;
+        if(!forS){
+            const {forAttribute, enhancedElement} = self;
+            forS = enhancedElement.getAttribute(forAttribute!);
+        }
+        if(!forS) throw 404;
+        return {
+            args: forS.split(' ')
+        };
+    }
+
+    onValue(self: this): void {
+        const {enhancedElement, value, propertyToSet} = self;
+        (<any>enhancedElement)[propertyToSet!] = value;
     }
 }
 
+export interface BeCalculating extends AllProps{}
+
 const tagName = 'be-calculating';
-
 const ifWantsToBe = 'calculating';
+const upgrade = '*';
 
-const upgrade = 'script';
-
-define<Proxy & BeDecoratedProps<Proxy, Actions>, Actions>({
-    config:{
+const xe = new XE<AP, Actions>({
+    config: {
         tagName,
-        propDefaults:{
-            upgrade,
-            ifWantsToBe,
-            forceVisible: [upgrade],
-            virtualProps: [
-                'args', 'calculator', 'transformScope', 'from', 'get', 'on', 
-                'transform', 'props', 'nameOfCalculator', 'nameOfTransform',
-                'transformScope', 'calcCount'
-            ],
-            primaryProp: 'args',
-            primaryPropReq: true,
-            finale: 'finale',
-            proxyPropDefaults:{
-                transformScope: ['us', ':not(script)'] as Scope, //why is as Scope necessary?
-                transform:{
-                    '*': 'value'
-                },
-                get: 'valueAsNumber',
-                nameOfCalculator: 'calculator',
-                nameOfTransform: 'transform',
-                calcCount: 0,
-            }
+        propDefaults: {
+            ...propDefaults,
+            scope: ['closestOrRootNode', 'form'],
+            propertyToSet: 'value',
+            searchBy: 'id',
+            scriptRef: 'previousElementSibling',
+            recalculateOn: 'change',
+            nameOfCalculator: 'calculator'
         },
-        actions:{
-            hookUpTransform: {
-                ifAllOf:['transform', 'props', 'calculator', 'calcCount']
+        propInfo: {
+            ...propInfo,
+        },
+        actions: {
+            getDefaultForAttribute:{
+                ifNoneOf: ['forAttribute', 'for', 'args']
             },
-            listen: 'args',
-            hookupCalc: {
-                ifAllOf: ['props', 'calculator']
+            getArgs:{
+                ifAtLeastOneOf: ['forAttribute', 'for']
             },
             importSymbols: {
-                ifKeyIn: ['nameOfCalculator', 'nameOfTransform']
+                ifAllOf: ['scriptRef', 'nameOfCalculator']
+            },
+            observe:{
+                ifAllOf: ['calculator', 'args']
+            },
+            onValue: {
+                ifAllOf: ['propertyToSet', 'value'],
             }
         }
     },
-    complexPropDefaults:{
-        controller: BeCalculating
-    }
+    superclass: BeCalculating
 });
 
 register(ifWantsToBe, upgrade, tagName);

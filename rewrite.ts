@@ -1,4 +1,4 @@
-import {AP} from './v2/types';
+import {AP} from './types';
 import {BeCalculating} from './be-calculating.js';
 
 export function rewrite({enhancedElement, nameOfCalculator, args}: AP, scriptEl: HTMLScriptElement){

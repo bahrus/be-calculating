@@ -1,182 +1,140 @@
-import { define } from 'be-decorated/DE.js';
-import { register } from "be-hive/register.js";
-import { BeSyndicating } from 'be-syndicating/be-syndicating.js';
-export class BeCalculating extends BeSyndicating {
-    async importSymbols(pp) {
-        const { proxy, nameOfCalculator, self, args } = pp;
-        if (!self.src) {
-            const { rewrite } = await import('./rewrite.js');
-            rewrite(pp, this);
+import { BE, propDefaults, propInfo } from 'be-enhanced/BE.js';
+import { XE } from 'xtal-element/XE.js';
+import { register } from 'be-hive/register.js';
+export class BeCalculating extends BE {
+    static get beConfig() {
+        return {
+            parse: true,
+            primaryProp: 'for'
+        };
+    }
+    getDefaultForAttribute(self) {
+        const { enhancedElement } = self;
+        switch (enhancedElement.localName) {
+            case 'output':
+                return {
+                    forAttribute: 'for'
+                };
+            default:
+                throw "Need list of id's";
         }
-        if (self._modExport) {
-            //this.assignScriptToProxy(pp);
-            return [{}, { assignScriptToProxy: true }];
-        } //else{
-        self.setAttribute('be-exportable', '');
+    }
+    async importSymbols(self) {
         import('be-exportable/be-exportable.js');
-        return [{}, {
-                assignScriptToProxy: { on: 'load', of: self, options: { once: true } }
-            }];
-    }
-    assignScriptToProxy({ nameOfCalculator, nameOfTransform, proxy, self }) {
-        if (nameOfCalculator !== undefined) {
-            const calculator = self._modExport[nameOfCalculator];
-            if (calculator !== undefined) {
-                proxy.calculator = calculator;
-            }
-        }
-        if (nameOfTransform !== undefined) {
-            const transform = self._modExport[nameOfTransform];
-            if (transform !== undefined) {
-                proxy.transform = transform;
-            }
-        }
-    }
-    getStringArgs(args, acc) {
-        if (Array.isArray(args)) {
-            for (const arg of args) {
-                this.getStringArgs(arg, acc);
-            }
-            return;
-        }
-        if (typeof args === 'string') {
-            acc.push(args);
-        }
-        else {
-            for (const key in args) {
-                acc.push(key);
-            }
-        }
-    }
-    strArgToIObs({ from, get, on }, arg) {
-        const getConfig = typeof (get) === 'string' ? {
-            vft: get
-        } : get;
-        const o = { ...from, ...getConfig, ...on };
-        if (from === undefined) {
-            o.observeName = arg;
-        }
-        if (get === undefined) {
-            o.vft = 'value';
-        }
-        if (on === undefined) {
-            o.on = 'input';
-        }
-        return o;
-    }
-    async hookUpTransform(pp) {
-        const { transform, self, transformScope } = pp;
-        const transforms = Array.isArray(transform) ? transform : [transform];
-        const { DTR } = await import('trans-render/lib/DTR.js');
+        const { scriptRef, enhancedElement, nameOfCalculator } = self;
         const { findRealm } = await import('trans-render/lib/findRealm.js');
-        for (const t of transforms) {
-            const ctx = {
-                host: this.syndicate,
-                match: t,
-                //[TODO]: plugins: transformPlugins,
-            };
-            const dtr = new DTR(ctx);
-            const fragment = await findRealm(self, transformScope);
-            await dtr.transform(fragment);
-            await dtr.subscribe(true);
+        const target = await findRealm(enhancedElement, scriptRef);
+        if (target === null)
+            throw 404;
+        if (!target.src) {
+            const { rewrite } = await import('./rewrite.js');
+            rewrite(self, target);
         }
+        const exportable = await target.beEnhanced.whenResolved('be-exportable');
+        return {
+            calculator: exportable.exports[nameOfCalculator]
+        };
     }
-    #proxyControllers;
-    async hookupCalc({ calculator, props, proxy }) {
-        this.#disconnectProxyListeners();
-        this.#proxyControllers = [];
-        const keys = Array.from(props);
-        const syndicate = this.syndicate;
-        if (syndicate.self === undefined) {
-            syndicate.self = syndicate; //should this be done in PropertyBag?
-        }
-        for (const key of keys) {
+    #controllers;
+    async observe(self) {
+        const { args, searchBy, scope, recalculateOn } = self;
+        const defaultLink = {
+            localInstance: 'local',
+            enhancement: 'beCalculating',
+            downstreamPropName: 'propertyBag',
+            observe: {
+                attr: searchBy,
+                isFormElement: true,
+                names: args,
+                scope,
+                on: recalculateOn
+            }
+        };
+        const { observe } = await import('be-linked/observe.js');
+        await observe(self, defaultLink);
+        const { propertyBag, calculator } = self;
+        this.#disconnect();
+        this.#controllers = [];
+        for (const arg of args) {
             const ac = new AbortController();
-            this.syndicate.addEventListener(key, async (e) => {
-                const calculations = await calculator(syndicate, e.detail);
-                Object.assign(syndicate, calculations);
-                proxy.calcCount++;
+            propertyBag.addEventListener(arg, async (e) => {
+                const result = await calculator(propertyBag, e.detail);
+                Object.assign(self, result);
             }, { signal: ac.signal });
-            this.#proxyControllers.push(ac);
+            this.#controllers.push(ac);
         }
-        const calculations = await calculator(syndicate);
-        Object.assign(syndicate, calculations);
-        proxy.calcCount++;
-        proxy.resolved = true;
+        const result = await calculator(propertyBag);
+        Object.assign(self, result);
+        return {
+            //value: await calculator!(propertyBag!),
+            resolved: true,
+        };
     }
-    // async #getTransformTarget({transformScope, self}: PP){
-    //     let elToTransform: Element | DocumentFragment | null = null;
-    //     const {parent, rootNode, closest, upSearch: us} = transformScope!;
-    //     if(us !== undefined){
-    //         const {upSearch} = await import('trans-render/lib/upSearch.js');
-    //         elToTransform = upSearch(self, us);
-    //     }else if(closest !== undefined){
-    //         elToTransform = self.closest(closest);
-    //     }else if(rootNode){
-    //         elToTransform = self.getRootNode() as DocumentFragment;
-    //     }else{
-    //         elToTransform = self.parentElement!;
-    //     }
-    //     if(elToTransform === null) throw 'bC.404';
-    //     return elToTransform;
-    // }
-    #disconnectProxyListeners() {
-        if (this.#proxyControllers !== undefined) {
-            for (const ac of this.#proxyControllers) {
+    #disconnect() {
+        if (this.#controllers !== undefined) {
+            for (const ac of this.#controllers) {
                 ac.abort();
             }
-            this.#proxyControllers = undefined;
+            this.#controllers = undefined;
         }
     }
-    finale() {
-        this.#disconnectProxyListeners();
-        super.finale();
+    detach(detachedElement) {
+        this.#disconnect();
+    }
+    getArgs(self) {
+        const { for: forString } = self;
+        let forS = forString;
+        if (!forS) {
+            const { forAttribute, enhancedElement } = self;
+            forS = enhancedElement.getAttribute(forAttribute);
+        }
+        if (!forS)
+            throw 404;
+        return {
+            args: forS.split(' ')
+        };
+    }
+    onValue(self) {
+        const { enhancedElement, value, propertyToSet } = self;
+        enhancedElement[propertyToSet] = value;
     }
 }
 const tagName = 'be-calculating';
 const ifWantsToBe = 'calculating';
-const upgrade = 'script';
-define({
+const upgrade = '*';
+const xe = new XE({
     config: {
         tagName,
         propDefaults: {
-            upgrade,
-            ifWantsToBe,
-            forceVisible: [upgrade],
-            virtualProps: [
-                'args', 'calculator', 'transformScope', 'from', 'get', 'on',
-                'transform', 'props', 'nameOfCalculator', 'nameOfTransform',
-                'transformScope', 'calcCount'
-            ],
-            primaryProp: 'args',
-            primaryPropReq: true,
-            finale: 'finale',
-            proxyPropDefaults: {
-                transformScope: ['us', ':not(script)'],
-                transform: {
-                    '*': 'value'
-                },
-                get: 'valueAsNumber',
-                nameOfCalculator: 'calculator',
-                nameOfTransform: 'transform',
-                calcCount: 0,
-            }
+            ...propDefaults,
+            scope: ['closestOrRootNode', 'form'],
+            propertyToSet: 'value',
+            searchBy: 'id',
+            scriptRef: 'previousElementSibling',
+            recalculateOn: 'change',
+            nameOfCalculator: 'calculator'
+        },
+        propInfo: {
+            ...propInfo,
         },
         actions: {
-            hookUpTransform: {
-                ifAllOf: ['transform', 'props', 'calculator', 'calcCount']
+            getDefaultForAttribute: {
+                ifNoneOf: ['forAttribute', 'for', 'args']
             },
-            listen: 'args',
-            hookupCalc: {
-                ifAllOf: ['props', 'calculator']
+            getArgs: {
+                ifAtLeastOneOf: ['forAttribute', 'for']
             },
             importSymbols: {
-                ifKeyIn: ['nameOfCalculator', 'nameOfTransform']
+                ifAllOf: ['scriptRef', 'nameOfCalculator']
+            },
+            observe: {
+                ifAllOf: ['calculator', 'args']
+            },
+            onValue: {
+                ifAllOf: ['propertyToSet', 'value'],
             }
         }
     },
-    complexPropDefaults: {
-        controller: BeCalculating
-    }
+    superclass: BeCalculating
 });
 register(ifWantsToBe, upgrade, tagName);
