@@ -43,13 +43,19 @@ So what *be-calculating* is wanting to do with this example is shown below:
 </form>
 ```
 
+Think of what we've accomplished here!  We have now purified the JavaScript's domain to be independent of the UI.  
+
+Code that we can patent and earn Turing Awards with!
+
+Because now, with a little more tender loving care (described below), we can start to see that we can create a reusable function that can be used in multiple contexts -- anywhere we need to add two numbers together. We've been showing inline examples, but the code can be imported via ESM modules, which is discussed below.
+
 This is shorthand for:
 
 ```html
 <form>
     <input type="range" id=a value="50">
     +<input type="number" id=b value="25">
-    =    <script nomodule>
+    =<script nomodule>
         a + b
     </script><output for="a b" be-calculating='{
         "forAttribute": "for",
@@ -65,11 +71,13 @@ This is shorthand for:
 </form>
 ```
 
-These default settings will be discussed in more detail below [TODO].
+If editing JSON inside HTML attributes feels weird, the [json-in-html](https://marketplace.visualstudio.com/items?itemName=andersonbruceb.json-in-html) vs-code extension makes it feel much more natural, even when editing README files.  Because of the declarative, side-effect-free nature of the extension, it can be used with the web version of VSCode as well.
+
+And the [may-it-be](https://github.com/bahrus/may-it-be) package allows us to benefit from TypeScript tooling, and compiles to an HTML file.
 
 ## Sharing calculated values
 
-We may want to display the sum in various places.
+We may want to display the sum in various places.  One way to do this is shown below:
 
 ```html
 <form itemscope be-sharing='
