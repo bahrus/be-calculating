@@ -18,6 +18,7 @@ export interface AllProps extends EndUserProps{
     propertyBag?: EventTarget;
     calculator?: (et: EventTarget, ppci?: ProxyPropChangeInfo) => any,
     value: any;
+    isParsed: boolean;
 }
 
 export type AP = AllProps;

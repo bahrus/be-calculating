@@ -24,23 +24,24 @@
     "url": "git+https://github.com/bahrus/be-calculating.git"
   },
   "dependencies": {
-    "be-enhanced": "0.0.21",
-    "be-exportable": "0.0.74",
-    "be-hive": "0.0.95",
-    "be-linked": "0.0.11",
-    "be-scoped": "0.0.10",
-    "trans-render": "0.0.682",
-    "xtal-element": "0.0.562"
+    "be-enhanced": "0.0.48",
+    "be-exportable": "0.0.88",
+    "be-hive": "0.0.119",
+    "be-linked": "0.0.42",
+    "be-scoped": "0.0.17",
+    "trans-render": "0.0.705",
+    "xtal-element": "0.0.577"
   },
   "devDependencies": {
-    "be-sharing": "0.0.4",
+    "be-sharing": "0.0.5",
     "may-it-serve": "0.0.5",
-    "@playwright/test": "1.34.3"
+    "@playwright/test": "1.37.1"
   },
   "scripts": {
     "test": "playwright test",
     "serve": "node node_modules/may-it-serve/serve.js",
-    "safari": "npx playwright wk http://localhost:3030"
+    "safari": "npx playwright wk http://localhost:3030",
+    "update": "ncu -u && npm install"
   },
   "author": "Bruce B. Anderson <anderson.bruce.b@gmail.com>",
   "license": "MIT",

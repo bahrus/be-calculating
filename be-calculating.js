@@ -5,7 +5,8 @@ export class BeCalculating extends BE {
     static get beConfig() {
         return {
             parse: true,
-            primaryProp: 'for'
+            primaryProp: 'for',
+            isParsedProp: 'isParsed'
         };
     }
     getDefaultForAttribute(self) {
@@ -123,13 +124,14 @@ const xe = new XE({
         },
         actions: {
             getDefaultForAttribute: {
+                ifAllOf: ['isParsed'],
                 ifNoneOf: ['forAttribute', 'for', 'args']
             },
             getArgs: {
                 ifAtLeastOneOf: ['forAttribute', 'for']
             },
             importSymbols: {
-                ifAllOf: ['scriptRef', 'nameOfCalculator']
+                ifAllOf: ['scriptRef', 'nameOfCalculator', 'args']
             },
             observe: {
                 ifAllOf: ['calculator', 'args']
