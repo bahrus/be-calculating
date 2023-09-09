@@ -8,8 +8,6 @@
 [![NPM version](https://badge.fury.io/js/be-calculating.png)](http://badge.fury.io/js/be-calculating)
 
 
-*be-calculating* is a custom enhancement equivalent of web component [aggregator-fn](https://github.com/bahrus/aggregator-fn).
-
 *be-calculating* can't help but admire the brevity and sorcery on [display here](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/output):
 
 ```html
@@ -61,6 +59,7 @@ This is shorthand for:
         a + b
     </script><output for="a b" be-calculating='{
         "forAttribute": "for",
+        "args": ["a", "b"],
         "propertyToSet": "value",
         "searchBy": "id",
         "searchScope":  ["closestOrHost", "form"],
