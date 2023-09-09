@@ -161,6 +161,8 @@ export const TuringAwardDeservingAlgorithm = ({a, b}) => ({
 
 ## Viewing Locally
 
+Any web server that serves static files will do but...
+
 1.  Install git.
 2.  Fork/clone this repo.
 3.  Install node.
