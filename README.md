@@ -1,4 +1,4 @@
-# be-calculating 
+# be-calculating [WIP]
 
 [![The Plan](https://www.berfrois.com/uploads/2011/06/rr3.jpg)](https://www.berfrois.com/2011/06/wile-e-coyote-pursues-road-runner/)
 
@@ -34,15 +34,27 @@ And what if we want to pass the sum to multiple places?  be-calculating can do t
 
 So what *be-calculating* is wanting to do with this example is shown below:
 
-## Example 1a [TODO]
+## Example 1a -- The most compact notation [TODO]
 
 ```html
 <form>
     <input type="range" id=a value="50">
     +<input type="number" id=b value="25">
-    =<output for="a b" be-calculating oninput="a+b"></output>
+    =<output for="a b" be-calculating onchange="a+b"></output>
 </form>
 ```
+
+Here, we are "commandeering" the onchange built-in attribute.  
+
+Why?
+
+We consider it safe to include free-ranging JavaScript expressions inside such attributes, having confidence that sanitizing algorithms will strip such attributes if not explicitly permitted by parties who should have such a say-so.
+
+The danger of using this approach is the developer needs to make sure nothing will cause the output's onchange event to fire (including inner content).  That seems like a fairly safe assumption with the output element.
+
+To avoid that last wrinkle, at the expense of sightly ore verbose notation, we can do the following:
+
+## Example 1b -- using the script/nomodule element
 
 ```html
 <form>
@@ -83,11 +95,29 @@ This is shorthand for:
 </form>
 ```
 
+
+
 What this means is we aren't limited to adorning the output element.  But if using some element other than output, the developer will need to override the default settings shown above, depending on the particular scenario.
+
+So to specify to act on the input event, we can edit the JSON above, overriding only those values that need to deviate from the default (recalculateOn: change)
 
 If editing JSON inside HTML attributes feels weird, the [json-in-html](https://marketplace.visualstudio.com/items?itemName=andersonbruceb.json-in-html) vs-code extension makes it feel much more natural, even when editing README files.  Because of the declarative, side-effect-free nature of the extension, it can be used with the web version of VSCode as well.
 
 And the [may-it-be](https://github.com/bahrus/may-it-be) package allows us to benefit from TypeScript tooling, and compiles to an HTML file.
+
+be-calculating supports specific syntax for switching to the input element:
+
+## Example 1c [TODO]
+
+```html
+<form>
+    <input type="range" id=a value="50">
+    +<input type="number" id=b value="25">
+    =<script nomodule>
+        a + b
+    </script><output for="a b" be-calculating oninput></output>
+</form>
+```
 
 ## Sharing calculated values
 
