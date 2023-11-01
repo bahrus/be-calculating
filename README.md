@@ -141,6 +141,8 @@ We may want to display the sum in various places.  One way to do this is shown b
 </form>
 ```
 
+[TODO]  Bring back transform option
+
 ## External Module Renaming
 
 If we want to share our calculating code with the world, we might package it as an npm package.  Note that the code is library neutral, so doesn't need to be accompanied by 17 black-hole-o-grams of dependencies, and a cottage industry of boot camps to master.  Just saying.
