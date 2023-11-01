@@ -34,6 +34,16 @@ And what if we want to pass the sum to multiple places?  be-calculating can do t
 
 So what *be-calculating* is wanting to do with this example is shown below:
 
+## Example 1a [TODO]
+
+```html
+<form>
+    <input type="range" id=a value="50">
+    +<input type="number" id=b value="25">
+    =<output for="a b" be-calculating oninput="a+b"></output>
+</form>
+```
+
 ```html
 <form>
     <input type="range" id=a value="50">
