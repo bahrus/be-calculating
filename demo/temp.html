@@ -8,11 +8,16 @@
 </head>
 <body>
   <form>
-    <output>
-      <script nomodule>
-        a+b
-      </script>
-    </output>
+    <button onclick="initialize()">initialize</button>
+    <output contenteditable onchange="test()" oninput="test()">starting value</output>
   </form>
+  <script>
+    function initialize(){
+      document.querySelector('output').value = 'hello';
+    }
+    function test(){
+      console.log('iah');
+    }
+  </script>
 </body>
 </html>
