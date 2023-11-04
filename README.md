@@ -40,7 +40,7 @@ So what *be-calculating* is wanting to do with this example is shown below:
 <form>
     <input type="range" id=a value="50">
     +<input type="number" id=b value="25">
-    =<output for="a b" be-calculating onchange="a+b"></output>
+    =<output for="a b" be-calculating onCueChange="a+b"></output>
 </form>
 ```
 
