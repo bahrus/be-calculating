@@ -7,7 +7,7 @@
 <img src="http://img.badgesize.io/https://cdn.jsdelivr.net/npm/be-calculating?compression=gzip">
 [![NPM version](https://badge.fury.io/js/be-calculating.png)](http://badge.fury.io/js/be-calculating)
 
-Calculate value of output element from peer input elements.
+Calculate value of the output element from peer input elements.
 
 *be-calculating* can't help but admire the brevity and sorcery on [display here](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/output):
 
@@ -40,19 +40,17 @@ So what *be-calculating* is wanting to do with this example is shown below:
 <form>
     <input type="range" id=a value="50">
     +<input type="number" id=b value="25">
-    =<output for="a b" be-calculating onCueChange="a+b"></output>
+    =<output for="a b" be-calculating="from onload expression" onload="a+b"></output>
 </form>
 ```
 
-Here, we are "commandeering" the onchange built-in attribute.  
+Here, we are "commandeering" the onload built-in attribute (which isn't applicable to the output element anyway).  
 
 Why?
 
 We consider it safe to include free-ranging JavaScript expressions inside such attributes, having confidence that sanitizing algorithms will strip such attributes if not explicitly permitted by parties who should have such a say-so.
 
-The danger of using this approach is the developer needs to make sure nothing will cause the output's onchange event to fire (including inner content).  That seems like a fairly safe assumption with the output element.
-
-To avoid that last wrinkle, at the expense of sightly ore verbose notation, we can do the following:
+If the expression is difficult to encode inside an HTML attribute, use a script element preceding the output element:
 
 ## Example 1b -- using the script/nomodule element
 
@@ -200,6 +198,8 @@ export const TuringAwardDeservingAlgorithm = ({a, b}) => ({
 ```
 
 ## [Demo](https://codepen.io/bahrus/pen/NWMjxYV)
+
+Obscure note (ignore if it not understanding the context):  This behavior probably doesn't make sense to be used where it makes sense to use the [trans-render](https://github.com/bahrus/trans-render?tab=readme-ov-file#part-10----trans-render-the-web-component) web component.  For that reason, not separating the be-hive registration from the be-computed class.
 
 ## Viewing Locally
 

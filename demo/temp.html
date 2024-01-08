@@ -9,8 +9,19 @@
 <body>
   <form>
     <button onclick="initialize()">initialize</button>
-    <output contenteditable onchange="test()" oninput="test()">starting value</output>
+    <output test='hello' contenteditable onchange="test()" oninput="
+      (async () => {
+          console.log(getAttribute('test'));
+          const {calculator} = await import('./calculator.js');
+          console.log(calculator({a: 2, b: 4}));
+          test()
+      })()
+      
+      ">starting value</output>
   </form>
+
+    <button be-overloading onclick="textContent = 'Try to come to life';"
+    >Tumble out of bed</button>
   <script>
     function initialize(){
       document.querySelector('output').value = 'hello';
