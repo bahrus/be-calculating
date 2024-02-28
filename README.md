@@ -19,7 +19,6 @@ Calculate value of the output element from peer input elements.
 </form>
 ```
 
-
 It is unclear how to leverage that magic outside the confines of this example. How does the context of the names get passed so elegantly into the expression?
 
 Anyway, be-calculating hopes to at least come close when it comes to brevity, while also providing more flexible options.
@@ -40,11 +39,11 @@ So what *be-calculating* is wanting to do with this example is shown below:
 <form>
     <input type="range" id=a value="50">
     +<input type="number" id=b value="25">
-    =<output for="a b" be-calculating="from onload expression" onload="a+b"></output>
+    =<output for="a b" be-calculating onchange="a+b"></output>
 </form>
 ```
 
-Here, we are "commandeering" the onload built-in attribute (which isn't applicable to the output element anyway).  
+Here, we are "commandeering" the onchange built-in attribute (which isn't applicable to the output element anyway).  
 
 Why?
 
@@ -60,7 +59,7 @@ If the expression is difficult to encode inside an HTML attribute, use a script 
     +<input type="number" id=b value="25">
     =<script nomodule>
         a + b
-    </script><output for="a b" be-calculating></output>
+    </script><output for="a b" be-calculating onchange></output>
 </form>
 ```
 

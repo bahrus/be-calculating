@@ -2,33 +2,12 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Document</title>
 </head>
 <body>
-  <form>
-    <button onclick="initialize()">initialize</button>
-    <output test='hello' contenteditable onchange="test()" oninput="
-      (async () => {
-          console.log(getAttribute('test'));
-          const {calculator} = await import('./calculator.js');
-          console.log(calculator({a: 2, b: 4}));
-          test()
-      })()
-      
-      ">starting value</output>
-  </form>
-
-    <button be-overloading onclick="textContent = 'Try to come to life';"
-    >Tumble out of bed</button>
-  <script>
-    function initialize(){
-      document.querySelector('output').value = 'hello';
-    }
-    function test(){
-      console.log('iah');
-    }
-  </script>
+  <output onchange="hello()" oninput="goodbye()">
+    <input>
+  </output>
 </body>
 </html>

@@ -19,6 +19,8 @@ export interface AllProps extends EndUserProps{
     calculator?: (et: EventTarget, ppci?: ProxyPropChangeInfo) => any,
     value: any;
     isParsed: boolean;
+    attrExpr?: string | null;
+    scriptEl?: HTMLScriptElement;
 }
 
 export type AP = AllProps;
@@ -29,6 +31,9 @@ export type ProPAP = Promise<PAP>
 
 export interface Actions{
     getDefaultForAttribute(self: this): PAP;
+    getAttrExpr(self: this): PAP;
+    onAttrExpr(self: this): PAP;
+    findScriptEl(self: this): ProPAP;
     getArgs(self: this): PAP;
     observe(self: this): ProPAP;
     importSymbols(self: this): ProPAP;

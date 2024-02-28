@@ -27,17 +27,44 @@ export class BeCalculating extends BE<AP, Actions> implements Actions{
         }
     }
 
-    async importSymbols(self: this): ProPAP {
-        import('be-exportable/be-exportable.js');
-        const {scriptRef, enhancedElement, nameOfCalculator} = self;
-        const {findRealm} = await import('trans-render/lib/findRealm.js');
-        const target = await findRealm(enhancedElement, scriptRef!) as HTMLScriptElement | null;
-        if(target === null) throw 404;
-        if(!target.src){
-            const {rewrite} = await import('./rewrite.js');
-            rewrite(self, target);
+    getAttrExpr(self: this): PAP {
+        const {enhancedElement} = self;
+        const attrExpr = enhancedElement.getAttribute('oninput') || enhancedElement.getAttribute('onchange');
+        return {
+            attrExpr
+        };
+    }
+
+    onAttrExpr(self: this): PAP {
+        const {attrExpr} = self;
+        console.log({attrExpr});
+        //TODO optimize
+        const scriptEl = document.createElement('script');
+        scriptEl.innerHTML = attrExpr!;
+        return {
+            scriptEl
         }
-        const exportable = await (<any>target).beEnhanced.whenResolved('be-exportable') as BeExportableAllProps;
+    }
+
+    async findScriptEl(self: this): ProPAP {
+        const {scriptRef, enhancedElement} = self;
+        const {findRealm} = await import('trans-render/lib/findRealm.js');
+        const scriptEl = await findRealm(enhancedElement, scriptRef!) as HTMLScriptElement | null;
+        if(scriptEl === null) throw 404;
+        return {
+            scriptEl
+        }
+    }
+
+    async importSymbols(self: this): ProPAP {
+        const {scriptEl, nameOfCalculator} = self;
+        import('be-exportable/be-exportable.js');
+        
+        if(!scriptEl!.src){
+            const {rewrite} = await import('./rewrite.js');
+            rewrite(self, scriptEl!);
+        }
+        const exportable = await (<any>scriptEl).beEnhanced.whenResolved('be-exportable') as BeExportableAllProps;
         return {
             calculator: exportable.exports[nameOfCalculator!]
         }
@@ -132,8 +159,8 @@ const xe = new XE<AP, Actions>({
             searchScope: ['closestOrRootNode', 'form'],
             propertyToSet: 'value',
             searchBy: 'id',
-            scriptRef: 'previousElementSibling',
-            recalculateOn: 'change',
+            //scriptRef: 'previousElementSibling',
+            //recalculateOn: 'change',
             nameOfCalculator: 'calculator'
         },
         propInfo: {
@@ -144,11 +171,16 @@ const xe = new XE<AP, Actions>({
                 ifAllOf: ['isParsed'],
                 ifNoneOf: ['forAttribute', 'for', 'args']
             },
+            getAttrExpr:{
+                ifAllOf: ['isParsed']
+            },
+            onAttrExpr: 'attrExpr',
             getArgs:{
                 ifAtLeastOneOf: ['forAttribute', 'for']
             },
+            findScriptEl: 'scriptRef',
             importSymbols: {
-                ifAllOf: ['scriptRef', 'nameOfCalculator', 'args']
+                ifAllOf: ['scriptEl', 'nameOfCalculator', 'args']
             },
             observe:{
                 ifAllOf: ['calculator', 'args']
