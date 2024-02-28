@@ -33,7 +33,7 @@ And what if we want to pass the sum to multiple places?  be-calculating can do t
 
 So what *be-calculating* is wanting to do with this example is shown below:
 
-## Example 1a -- The most compact notation [TODO]
+## Example 1a -- The most compact notation
 
 ```html
 <form>

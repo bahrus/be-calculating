@@ -28,10 +28,13 @@ export class BeCalculating extends BE<AP, Actions> implements Actions{
     }
 
     getAttrExpr(self: this): PAP {
-        const {enhancedElement} = self;
+        const {enhancedElement, recalculateOn: r} = self;
+        const recalculateOn = enhancedElement.hasAttribute('oninput') ?
+            'input': enhancedElement.hasAttribute('onchange') ? 'change' : r;
         const attrExpr = enhancedElement.getAttribute('oninput') || enhancedElement.getAttribute('onchange');
         return {
-            attrExpr
+            attrExpr,
+            recalculateOn
         };
     }
 
