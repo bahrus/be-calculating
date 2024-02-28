@@ -25,14 +25,15 @@ export class BeCalculating extends BE {
         const recalculateOn = enhancedElement.hasAttribute('oninput') ?
             'input' : enhancedElement.hasAttribute('onchange') ? 'change' : r;
         const attrExpr = enhancedElement.getAttribute('oninput') || enhancedElement.getAttribute('onchange');
+        const scriptRef = attrExpr ? undefined : 'previousElementSibling';
         return {
             attrExpr,
-            recalculateOn
+            recalculateOn,
+            scriptRef,
         };
     }
     onAttrExpr(self) {
         const { attrExpr } = self;
-        console.log({ attrExpr });
         //TODO optimize
         const scriptEl = document.createElement('script');
         scriptEl.innerHTML = attrExpr;
