@@ -22,8 +22,7 @@ export class BeCalculating extends BE {
     }
     getAttrExpr(self) {
         const { enhancedElement, recalculateOn: r } = self;
-        const recalculateOn = enhancedElement.hasAttribute('oninput') ?
-            'input' : enhancedElement.hasAttribute('onchange') ? 'change' : r;
+        const recalculateOn = enhancedElement.hasAttribute('oninput') ? 'input' : 'change';
         const attrExpr = enhancedElement.getAttribute('oninput') || enhancedElement.getAttribute('onchange');
         const scriptRef = attrExpr ? undefined : 'previousElementSibling';
         return {
