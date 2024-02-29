@@ -140,11 +140,9 @@ We may want to display the sum in various places.  One way to do this is shown b
     +<input type="number" id=b value="25">
     =<script nomodule>
         a + b
-    </script><output name=sum for="a b" be-calculating='{
-        "xform": {
-            "| sum
-        }
-    }'></output>
+    </script><output name=sum for="a b" be-calculating='
+        {"notify": "scope"}
+    '></output>
         
     <data itemprop=sum aria-live=polite></data>
 
