@@ -1,4 +1,4 @@
-# be-calculating [WIP]
+# be-calculating
 
 [![The Plan](https://www.berfrois.com/uploads/2011/06/rr3.jpg)](https://www.berfrois.com/2011/06/wile-e-coyote-pursues-road-runner/)
 
@@ -128,7 +128,7 @@ This recalculates on the input event, rather than the change event.
 
 This also recalculates on the input event, rather than the change event.
 
-## Sharing calculated values
+## Example 2 - Sharing calculated values
 
 We may want to display the sum in various places.  One way to do this is shown below:
 
@@ -148,9 +148,7 @@ We may want to display the sum in various places.  One way to do this is shown b
 
     
 </form>
-```
-
-[TODO]  Bring back transform option?  
+```  
 
 ## External Module Renaming
 
