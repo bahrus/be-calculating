@@ -116,6 +116,18 @@ be-calculating supports specific syntax for switching to the input element:
 
 This recalculates on the input event, rather than the change event.
 
+## Example 1d
+
+```html
+<form>
+    <input type="range" id=a value="50">
+    +<input type="number" id=b value="25">
+    =<output for="a b" be-calculating oninput="a+b"></output>
+</form>
+```
+
+This also recalculates on the input event, rather than the change event.
+
 ## Sharing calculated values
 
 We may want to display the sum in various places.  One way to do this is shown below:
