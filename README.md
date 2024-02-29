@@ -21,7 +21,7 @@ Calculate value of the output element from peer input elements.
 
 It is unclear how to leverage that magic outside the confines of this example. How does the context of the names get passed so elegantly into the expression?
 
-Anyway, be-calculating hopes to at least come close when it comes to brevity, while also providing more flexible options.
+Anyway, be-calculating vows to match, if not exceed, the brevity of the markup above, while also providing more flexible options.
 
 One critique of the example above is that it recalculates and rebinds the value of the sum anytime any form element inside is modified by the user.
 
@@ -92,8 +92,6 @@ This is shorthand for:
 </form>
 ```
 
-
-
 What this means is we aren't limited to adorning the output element.  But if using some element other than output, the developer will need to override the default settings shown above, depending on the particular scenario.
 
 So to specify to act on the input event, we can edit the JSON above, overriding only those values that need to deviate from the default (recalculateOn: change)
@@ -104,7 +102,7 @@ And the [may-it-be](https://github.com/bahrus/may-it-be) package allows us to be
 
 be-calculating supports specific syntax for switching to the input element:
 
-## Example 1c [TODO]
+## Example 1c
 
 ```html
 <form>
@@ -115,6 +113,8 @@ be-calculating supports specific syntax for switching to the input element:
     </script><output for="a b" be-calculating oninput></output>
 </form>
 ```
+
+This recalculates on the input event, rather than the change event.
 
 ## Sharing calculated values
 
