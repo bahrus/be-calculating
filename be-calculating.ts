@@ -2,7 +2,6 @@ import {BE, propDefaults, propInfo} from 'be-enhanced/BE.js';
 import {BEConfig} from 'be-enhanced/types';
 import {XE} from 'xtal-element/XE.js';
 import {Actions, AllProps, AP, PAP, ProPAP} from './types';
-import {register} from 'be-hive/register.js';
 import {Link} from 'be-linked/types';
 import {AllProps as BeExportableAllProps} from 'be-exportable/types';
 
@@ -149,9 +148,8 @@ export class BeCalculating extends BE<AP, Actions> implements Actions{
 
 export interface BeCalculating extends AllProps{}
 
-const tagName = 'be-calculating';
-const ifWantsToBe = 'calculating';
-const upgrade = '*';
+export const tagName = 'be-calculating';
+
 
 const xe = new XE<AP, Actions>({
     config: {
@@ -195,5 +193,3 @@ const xe = new XE<AP, Actions>({
     },
     superclass: BeCalculating
 });
-
-register(ifWantsToBe, upgrade, tagName);

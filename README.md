@@ -208,7 +208,7 @@ export const TuringAwardDeservingAlgorithm = ({a, b}) => ({
 
 ## [Demo](https://codepen.io/bahrus/pen/NWMjxYV)
 
-Obscure note (ignore if it not understanding the context):  This behavior probably doesn't make sense to be used where it makes sense to use the [trans-render](https://github.com/bahrus/trans-render?tab=readme-ov-file#part-10----trans-render-the-web-component) web component.  For that reason, not separating the be-hive registration from the be-computed class.
+
 
 ## Viewing Locally
 

@@ -1,6 +1,5 @@
 import { BE, propDefaults, propInfo } from 'be-enhanced/BE.js';
 import { XE } from 'xtal-element/XE.js';
-import { register } from 'be-hive/register.js';
 export class BeCalculating extends BE {
     static get beConfig() {
         return {
@@ -130,9 +129,7 @@ export class BeCalculating extends BE {
         }
     }
 }
-const tagName = 'be-calculating';
-const ifWantsToBe = 'calculating';
-const upgrade = '*';
+export const tagName = 'be-calculating';
 const xe = new XE({
     config: {
         tagName,
@@ -175,4 +172,3 @@ const xe = new XE({
     },
     superclass: BeCalculating
 });
-register(ifWantsToBe, upgrade, tagName);
