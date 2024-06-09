@@ -1,4 +1,4 @@
-import { BeCalculating } from "./be-calculating";
+import { BeCalculating } from "./legacy/be-calculating";
 import { Scope } from 'trans-render/lib/types';
 
 

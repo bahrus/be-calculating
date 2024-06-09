@@ -47,7 +47,7 @@ Here, we are "commandeering" the onchange built-in attribute (which isn't applic
 
 Why?
 
-We consider it safe to include free-ranging JavaScript expressions inside such attributes, having confidence that sanitizing algorithms will strip such attributes if not explicitly permitted by parties who should have such a say-so.
+We consider it safe to include free-ranging JavaScript expressions inside such attributes, having confidence that sanitizing algorithms will strip such attributes if not explicitly permitted by parties who should have a say-so in the matter.
 
 If the expression is difficult to encode inside an HTML attribute, use a script element preceding the output element:
 
@@ -67,7 +67,7 @@ Think of what we've accomplished here!  We have now purified the JavaScript's do
 
 Code that we can patent and earn Turing Awards with!
 
-Because now, with a little more tender loving care (described below), we can start to see that we can create a reusable function that can be used in multiple contexts -- anywhere we need to add two numbers together. We've been showing inline examples, but the code can be imported via ESM modules, which is discussed below.
+Because now, with a little more tender loving care (described below), we can start to see that we can create a reusable function that can be used in multiple contexts -- anywhere we need to add two numbers together. We've been showing inline examples, but the code can be imported via ESM modules, which is discussed below.  We will also discuss how to utilize a reusable function that dares to explore other letters of the alphabet. [TODO]
 
 This is shorthand for:
 

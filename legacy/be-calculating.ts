@@ -1,11 +1,19 @@
-import {config as beCnfg} from 'be-enhanced/config.js';
-import {BE, BEConfig} from 'be-enhanced/BE.js';
-import {Actions, AllProps, AP, ProPAP, PAP} from './types';
-import {IEnhancement,  BEAllProps} from 'trans-render/be/types';
+import {BE, propDefaults, propInfo} from 'be-enhanced/BE.js';
+import {BEConfig} from 'be-enhanced/types';
+import {XE} from 'xtal-element/XE.js';
+import {Actions, AllProps, AP, PAP, ProPAP} from '../types.js';
 import {Link} from 'be-linked/types';
+import {AllProps as BeExportableAllProps} from 'be-exportable/types';
 
+export class BeCalculating extends BE<AP, Actions> implements Actions{
+    static  override get beConfig(){
+        return {
+            parse: true,
+            primaryProp: 'for',
+            isParsedProp: 'isParsed'
+        } as BEConfig
+    }
 
-export class BeCalculating extends BE implements Actions{
     getDefaultForAttribute(self: this): PAP {
         const {enhancedElement} = self;
         switch(enhancedElement.localName){
@@ -55,7 +63,7 @@ export class BeCalculating extends BE implements Actions{
         import('be-exportable/be-exportable.js');
         
         if(!scriptEl!.src){
-            const {rewrite} = await import('./rewrite.js');
+            const {rewrite} = await import('../rewrite.js');
             rewrite(self, scriptEl!);
         }
         const exportable = await (<any>scriptEl).beEnhanced.whenResolved('be-exportable') as BeExportableAllProps;
@@ -130,10 +138,56 @@ export class BeCalculating extends BE implements Actions{
         const {enhancedElement, value, propertyToSet, notify} = self;
         (<any>enhancedElement)[propertyToSet!] = value;
         if(notify !== undefined){
-            const {doNotify} = await import('./doNotify.js');
+            const {doNotify} = await import('../doNotify.js');
             await doNotify(self);
         }
     }
 }
 
-export interface BeCalculating extends AP{}
+export interface BeCalculating extends AllProps{}
+
+export const tagName = 'be-calculating';
+
+
+const xe = new XE<AP, Actions>({
+    config: {
+        tagName,
+        isEnh: true,
+        propDefaults: {
+            ...propDefaults,
+            searchScope: ['closestOrRootNode', 'form'],
+            propertyToSet: 'value',
+            searchBy: 'id',
+            //scriptRef: 'previousElementSibling',
+            //recalculateOn: 'change',
+            nameOfCalculator: 'calculator'
+        },
+        propInfo: {
+            ...propInfo,
+        },
+        actions: {
+            getDefaultForAttribute:{
+                ifAllOf: ['isParsed'],
+                ifNoneOf: ['forAttribute', 'for', 'args']
+            },
+            getAttrExpr:{
+                ifAllOf: ['isParsed']
+            },
+            onAttrExpr: 'attrExpr',
+            getArgs:{
+                ifAtLeastOneOf: ['forAttribute', 'for']
+            },
+            findScriptEl: 'scriptRef',
+            importSymbols: {
+                ifAllOf: ['scriptEl', 'nameOfCalculator', 'args']
+            },
+            observe:{
+                ifAllOf: ['calculator', 'args']
+            },
+            onValue: {
+                ifAllOf: ['propertyToSet', 'value'],
+            }
+        }
+    },
+    superclass: BeCalculating
+});

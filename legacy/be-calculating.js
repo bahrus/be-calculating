@@ -53,7 +53,7 @@ export class BeCalculating extends BE {
         const { scriptEl, nameOfCalculator } = self;
         import('be-exportable/be-exportable.js');
         if (!scriptEl.src) {
-            const { rewrite } = await import('./rewrite.js');
+            const { rewrite } = await import('../rewrite.js');
             rewrite(self, scriptEl);
         }
         const exportable = await scriptEl.beEnhanced.whenResolved('be-exportable');
@@ -124,7 +124,7 @@ export class BeCalculating extends BE {
         const { enhancedElement, value, propertyToSet, notify } = self;
         enhancedElement[propertyToSet] = value;
         if (notify !== undefined) {
-            const { doNotify } = await import('./doNotify.js');
+            const { doNotify } = await import('../doNotify.js');
             await doNotify(self);
         }
     }
