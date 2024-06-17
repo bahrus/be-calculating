@@ -9,6 +9,8 @@
 
 Calculate value of the output element from peer input elements.
 
+*be-calculating* is a very specialized alternative to [https://github.com/bahrus/be-observant](be-observant), in case you were wondering.
+
 *be-calculating* can't help but admire the brevity and sorcery on [display here](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/output):
 
 ```html
