@@ -1,4 +1,4 @@
-# be-calculating
+# be-calculating (🧮)
 
 [![The Plan](https://www.berfrois.com/uploads/2011/06/rr3.jpg)](https://www.berfrois.com/2011/06/wile-e-coyote-pursues-road-runner/)
 
@@ -123,19 +123,19 @@ be-calculating supports specific syntax for switching to the input event, rather
 </form>
 ```
 
-This recalculates on the input event, rather than the change event.
+## Really, really compact notation
 
-## Example 1d
+Since *be-calculating* seems like a highly useful enhancement that would appear multiple times in a template, it seems to adopt an alternative name, perhaps in less formal settings, that can be much shorter.  For example, this package supports the following alternative (by referencing ): [TODO]
 
 ```html
 <form>
     <input type="range" id=a value="50">
     +<input type="number" id=b value="25">
-    =<output for="a b" be-calculating oninput="a+b"></output>
+    =<output 🧮 for="a b"  oninput=a+b></output>
 </form>
 ```
 
-This also recalculates on the input event, rather than the change event.
+
 
 ## Example 2 - Sharing calculated values
 
