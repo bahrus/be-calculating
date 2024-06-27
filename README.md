@@ -9,7 +9,12 @@
 
 Calculate value of the output element from peer input elements.
 
-*be-calculating* is a very specialized alternative to [https://github.com/bahrus/be-observant](be-observant), in case you were wondering.
+<details>
+    <summary>Alternatives</summary>
+
+*be-calculating* is a very specialized alternative to [https://github.com/bahrus/be-observant](be-observant), in case you were wondering.  *be-calculating* focuses exclusively on the output element and allows for much more compact JavaScript expressions, by taking more liberties with what the platform provides.
+
+</details>
 
 *be-calculating* can't help but admire the brevity and sorcery on [display here](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/output):
 
@@ -35,7 +40,7 @@ And what if we want to pass the sum to multiple places?  be-calculating can do t
 
 So what *be-calculating* is wanting to do with this example is shown below:
 
-## Example 1a -- The most compact notation
+## Example 1a -- Almost the most compact notation
 
 ```html
 <form>
@@ -69,7 +74,9 @@ Think of what we've accomplished here!  We have now purified the JavaScript's do
 
 Code that we can patent and earn Turing Awards with!
 
-Because now, with a little more tender loving care (described below), we can start to see that we can create a reusable function that can be used in multiple contexts -- anywhere we need to add two numbers together. We've been showing inline examples, but the code can be imported via ESM modules, which is discussed below.  We will also discuss how to utilize a reusable function that dares to explore other letters of the alphabet. [TODO]
+Because now, with a little more tender loving care (described below), we can start to see that we can create a reusable function that can be used in multiple contexts -- anywhere we need to add two numbers together. We've been showing inline examples, but the code can be imported via ESM modules, which is discussed below.  
+
+We will also discuss how to utilize a reusable function that dares to explore other letters of the alphabet. [TODO]
 
 This is shorthand for:
 
@@ -102,7 +109,7 @@ If editing JSON inside HTML attributes feels weird, the [json-in-html](https://m
 
 And the [may-it-be](https://github.com/bahrus/may-it-be) package allows us to benefit from TypeScript tooling, and compiles to an HTML file.
 
-be-calculating supports specific syntax for switching to the input element:
+be-calculating supports specific syntax for switching to the input event, rather than the change event:
 
 ## Example 1c
 
