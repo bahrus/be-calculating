@@ -126,9 +126,9 @@ be-calculating supports specific syntax for switching to the input event, rather
 </form>
 ```
 
-## Really, really compact notation
+## Really, really compact notation [TODO]
 
-Since *be-calculating* seems like a highly useful enhancement that would appear multiple times in a template, it seems to adopt an alternative name, perhaps in less formal settings, that can be much shorter.  For example, this package supports the following alternative (by referencing ): [TODO]
+Since *be-calculating* seems like a highly useful enhancement that would appear multiple times in a template, it seems desirable to support an alternative, shorter name, perhaps in less formal settings, that can be much shorter.  For example, this package supports the following alternative (by referencing 🧮.js): [TODO]
 
 ```html
 <form>
@@ -138,23 +138,48 @@ Since *be-calculating* seems like a highly useful enhancement that would appear 
 </form>
 ```
 
+Anything that requires subscribing to alternative event names, or by something other than id, needs to use an alernative to th for attribute.  We do so by adopting [DSS](https://github.com/bahrus/trans-render/wiki/VIII.--Directed-Scoped-Specifiers-(DSS)) to describe what to observe.
+
+
+```html
+<form>
+    <input type="range" name=a value="50">
+    +<input type="number" name=b value="25">
+    =<output 🧮="from @a and @b." onload=a+b></output>
+</form>
+```
+
+This still assumes the "input" event, but we use the more neutral "onload" event as our event name du jour.  Id's and the for attribute are generated automatically in order to optimize our accessibility experience.
+
+This enhancement also supports one other HTML element type other than the output element -- the void (self closing) meta element.  In ths case, we merge the results of the onload expression into the parent element.
+
 ```html
     <input name=domain value=emojipedia.org>
     <input name=search value=calculator>
     <a>Emoji link
-        <meta 🧮="@domain @search" oninput="{href:`https://${domain}/search?q=${search}`}">
+        <meta 🧮="from @domain and @search." onload="{href:`https://${domain}/search?q=${search}`}">
     </a>
 </form>
 ```
 
+To specify target, use dss syntax (for "closest"):
 
+```html
+<table>
+    <tr>
+        <td>
+            <meta 🧮="@domain @search" 🧮-target=^{tr} onload="{`href:`https://${domain}/search?q=${search}`}">
+        </td>
+    </tr>
+</table>
+```
 
 
 ```html
 
 ```
 
-## Example 2 - Sharing calculated values
+## Example 2 - Sharing calculated values [TODO]
 
 We may want to display the sum in various places.  One way to do this is shown below:
 
@@ -166,8 +191,8 @@ We may want to display the sum in various places.  One way to do this is shown b
     +<input type="number" id=b value="25">
     =<script nomodule>
         a + b
-    </script><output name=sum for="a b" be-calculating='
-        {"notify": "scope"}
+    </script><output name=sum for="a b" 🧮-xform='
+        {"| sum": 0}
     '></output>
         
     <data itemprop=sum aria-live=polite></data>
