@@ -128,7 +128,7 @@ be-calculating supports specific syntax for switching to the input event, rather
 
 ## Walk like an Egyptian [TODO]
 
-Since *be-calculating* seems like a highly useful enhancement that would appear multiple times in a template, it seems desirable to support an alternative, shorter name, perhaps in less formal settings, that can be much shorter.  For example, this package supports the following alternative (by referencing 🧮.js): [TODO]
+Since *be-calculating* seems like a highly useful enhancement that would appear multiple times in a template, it seems desirable to support an alternative, shorter name, perhaps in less formal settings.  For example, this package supports the following alternative (by referencing 🧮.js): [TODO]
 
 ```html
 <form>
