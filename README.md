@@ -201,6 +201,28 @@ We may want to display the sum in various places.  One way to do this is shown b
 </form>
 ```  
 
+This utilizes trans-rendering, aka "binding from a distance" syntax. "xform" stands for transform.  By default, the scope of the transform is the parent element (*form* in this case), but this scope can be expanded using DSS:
+
+```html
+<form itemscope be-sharing='
+    Share sum from scope.
+'>
+    <input type="range" id=a value="50">
+    +<input type="number" id=b value="25">
+    =<script nomodule>
+        a + b
+    </script><output name=sum for="a b" 🧮-xform='
+        {"| sum": 0}
+    ' 🧮-scope=^{body}></output>
+        
+    <data itemprop=sum aria-live=polite></data>
+
+    
+</form>
+```
+
+
+
 ## External Module Renaming
 
 If we want to share our calculating code with the world, we might package it as an npm package.  Note that the code is library neutral, so doesn't need to be accompanied by 17 black-hole-o-grams of dependencies, and a cottage industry of boot camps to master.  Just saying.
