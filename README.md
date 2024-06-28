@@ -140,7 +140,7 @@ Since *be-calculating* seems like a highly useful enhancement that would appear 
 
 So everywhere you see 🧮, please map this hieroglyph to the expression "be calculating".
 
-Anything that requires subscribing to alternative event names, or that requires referencing nearby elements using something other than id, needs to use an alternative to the *for* attribute, and use neither the oninput nor the onload event.  We do so by adopting [DSS](https://github.com/bahrus/trans-render/wiki/VIII.--Directed-Scoped-Specifiers-(DSS)) to describe what to observe.
+Anything that requires subscribing to alternative event names, or that requires referencing nearby elements using something other than id, needs to use an alternative to the *for* attribute, and use neither the oninput nor the onchange event.  We do so by adopting [DSS](https://github.com/bahrus/trans-render/wiki/VIII.--Directed-Scoped-Specifiers-(DSS)) to describe what to observe.
 
 
 ```html
