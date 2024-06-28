@@ -12,7 +12,7 @@ Calculate value of the output element from peer input elements.
 <details>
     <summary>Alternatives</summary>
 
-*be-calculating* is a very specialized alternative to [https://github.com/bahrus/be-observant](be-observant), in case you were wondering.  Unlike *be-observing*, *be-calculating* can only adorn the output and meta elements and skips any attempt at avoiding JavaScript expressions.  *be-calculating* allows for much more compact JavaScript expressions, by taking more liberties with what the platform provides.
+*be-calculating* is a very specialized alternative to [*be-observant*](https://github.com/bahrus/be-observant), in case you were wondering.  Unlike *be-observing*, *be-calculating* can only adorn the output and meta elements and skips any attempt at avoiding JavaScript expressions.  *be-calculating* allows for much more compact JavaScript expressions, by taking more liberties with what the platform provides.
 
 </details>
 
