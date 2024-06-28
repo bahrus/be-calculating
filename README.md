@@ -141,8 +141,9 @@ Since *be-calculating* seems like a highly useful enhancement that would appear 
 ```html
     <input name=domain value=emojipedia.org>
     <input name=search value=calculator>
-    <meta 🧮="@domain @search" oninput="{href:`https://${domain}/search?q=${search}`}">
-    <a 🔭=^>Emoji link</a>
+    <a>Emoji link
+        <meta 🧮="@domain @search" oninput="{href:`https://${domain}/search?q=${search}`}">
+    </a>
 </form>
 ```
 
