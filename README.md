@@ -151,7 +151,7 @@ Anything that requires subscribing to alternative event names, or that requires 
 </form>
 ```
 
-This still assumes the "input" event, but we use the more neutral "onload" event as our event name du jour.  "Onload of (changes) to these elements, do this...".  Id's and the *for* attribute are generated automatically in order to optimize our accessibility experience.
+This still assumes the "input" event, but having adopted DSS syntax, we can specify any other event name we may want.   We use the more neutral "onload" event as our event name du jour.  Think "Onload of (changes) to these elements, do this...".  Id's and the *for* attribute are generated automatically in order to optimize our accessibility experience.
 
 This enhancement also supports one other HTML element type other than the output element -- the void (self closing) *meta* element.  In ths case, we merge the results of the onload expression into the parent element.
 
@@ -177,9 +177,6 @@ To specify the target to assign the output to, use dss syntax (for "closest"):
 ```
 
 
-```html
-
-```
 
 ## Example 2 - Sharing calculated values [TODO]
 
