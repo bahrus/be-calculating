@@ -126,7 +126,7 @@ be-calculating supports specific syntax for switching to the input event, rather
 </form>
 ```
 
-## Really, really compact notation [TODO]
+## Walk like an Egyptian [TODO]
 
 Since *be-calculating* seems like a highly useful enhancement that would appear multiple times in a template, it seems desirable to support an alternative, shorter name, perhaps in less formal settings, that can be much shorter.  For example, this package supports the following alternative (by referencing 🧮.js): [TODO]
 
@@ -138,7 +138,9 @@ Since *be-calculating* seems like a highly useful enhancement that would appear 
 </form>
 ```
 
-Anything that requires subscribing to alternative event names, or by something other than id, needs to use an alernative to th for attribute.  We do so by adopting [DSS](https://github.com/bahrus/trans-render/wiki/VIII.--Directed-Scoped-Specifiers-(DSS)) to describe what to observe.
+So everywhere you see 🧮, please map this hieroglyph to the expression "be calculating".
+
+Anything that requires subscribing to alternative event names, or that requires referencing nearby elements using something other than id, needs to use an alternative to the *for* attribute.  We do so by adopting [DSS](https://github.com/bahrus/trans-render/wiki/VIII.--Directed-Scoped-Specifiers-(DSS)) to describe what to observe.
 
 
 ```html
