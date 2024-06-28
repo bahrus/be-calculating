@@ -203,9 +203,7 @@ We may want to display the sum in various places.  One way to do this is shown b
 This utilizes trans-rendering, aka "binding from a distance" syntax. "xform" stands for transform.  By default, the scope of the transform is the parent element (*form* in this case), but this scope can be expanded using DSS:
 
 ```html
-<form itemscope be-sharing='
-    Share sum from scope.
-'>
+<form itemscope>
     <input type="range" id=a value="50">
     +<input type="number" id=b value="25">
     =<script nomodule>
