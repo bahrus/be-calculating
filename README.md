@@ -164,13 +164,13 @@ This enhancement also supports one other HTML element type other than the output
 </form>
 ```
 
-To specify target, use dss syntax (for "closest"):
+To specify the target to assign the output to, use dss syntax (for "closest"):
 
 ```html
 <table>
     <tr>
         <td>
-            <meta 🧮="@domain @search" 🧮-target=^{tr} onload="{`href:`https://${domain}/search?q=${search}`}">
+            <meta 🧮="from @domain and @search" 🧮-target=^{tr} onload="{`href:`https://${domain}/search?q=${search}`}">
         </td>
     </tr>
 </table>
