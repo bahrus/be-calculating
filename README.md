@@ -78,6 +78,7 @@ Because now, with a little more tender loving care (described below), we can sta
 
 We will also discuss how to utilize a reusable function that dares to explore other letters of the alphabet. [TODO]
 
+<!--
 This is shorthand for:
 
 ```html
@@ -109,6 +110,8 @@ If editing JSON inside HTML attributes feels weird, the [json-in-html](https://m
 
 And the [may-it-be](https://github.com/bahrus/may-it-be) package allows us to benefit from TypeScript tooling, and compiles to an HTML file.
 
+-->
+
 be-calculating supports specific syntax for switching to the input event, rather than the change event:
 
 ## Example 1c
@@ -131,11 +134,24 @@ Since *be-calculating* seems like a highly useful enhancement that would appear 
 <form>
     <input type="range" id=a value="50">
     +<input type="number" id=b value="25">
-    =<output 🧮 for="a b"  oninput=a+b></output>
+    =<output for="a b" 🧮 oninput=a+b></output>
+</form>
+```
+
+```html
+    <input name=domain value=emojipedia.org>
+    <input name=search value=calculator>
+    <meta 🧮="@domain @search" -href  oninput="`https://${domain}/search?q=${search}`">
+    <a 🔭=-href>Emoji link</a>
 </form>
 ```
 
 
+
+
+```html
+
+```
 
 ## Example 2 - Sharing calculated values
 
