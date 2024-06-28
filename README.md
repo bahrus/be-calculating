@@ -140,7 +140,7 @@ Since *be-calculating* seems like a highly useful enhancement that would appear 
 
 So everywhere you see 🧮, please map this hieroglyph to the expression "be calculating".
 
-Anything that requires subscribing to alternative event names, or that requires referencing nearby elements using something other than id, needs to use an alternative to the *for* attribute.  We do so by adopting [DSS](https://github.com/bahrus/trans-render/wiki/VIII.--Directed-Scoped-Specifiers-(DSS)) to describe what to observe.
+Anything that requires subscribing to alternative event names, or that requires referencing nearby elements using something other than id, needs to use an alternative to the *for* attribute, and use neither the oninput nor the onload event.  We do so by adopting [DSS](https://github.com/bahrus/trans-render/wiki/VIII.--Directed-Scoped-Specifiers-(DSS)) to describe what to observe.
 
 
 ```html
@@ -151,7 +151,7 @@ Anything that requires subscribing to alternative event names, or that requires 
 </form>
 ```
 
-This still assumes the "input" event, but we use the more neutral "onload" event as our event name du jour.  Id's and the for attribute are generated automatically in order to optimize our accessibility experience.
+This still assumes the "input" event, but we use the more neutral "onload" event as our event name du jour.  "Onload of (changes) to these elements, do this...".  Id's and the *for* attribute are generated automatically in order to optimize our accessibility experience.
 
 This enhancement also supports one other HTML element type other than the output element -- the void (self closing) meta element.  In ths case, we merge the results of the onload expression into the parent element.
 
