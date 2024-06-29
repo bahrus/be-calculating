@@ -1,11 +1,12 @@
 import {IEnhancement} from 'trans-render/be/types';
 import {Target, Scope, ProxyPropChangeInfo} from 'trans-render/lib/types';
+import { Specifier } from '../trans-render/dss/types';
 
 export interface EndUserProps extends IEnhancement<HTMLOutputElement | HTMLMetaElement>{
     //forAttribute?: string,
-    for?: string,
-    
+    forAttr?: string,
     onInput?: string,
+    onChange?: string,
     
     // propertyToSet?: string,
     // searchBy?: string,
@@ -13,18 +14,19 @@ export interface EndUserProps extends IEnhancement<HTMLOutputElement | HTMLMetaE
     // notify?: 'scope' | 'elementProps',
     // searchScope?: Scope,
     // recalculateOn?: string,
-    // nameOfCalculator?: string,
+    nameOfCalculator?: string,
 }
 
 export interface AllProps extends EndUserProps{
     propertyBag?: EventTarget;
-    calculator?: (et: EventTarget, ppci?: ProxyPropChangeInfo) => any,
+    calculator?: (vm: any) => any, //(et: EventTarget, ppci?: ProxyPropChangeInfo) => any,
     value: any;
     isParsed: boolean;
     attrExpr?: string | null;
     scriptEl?: HTMLScriptElement;
-    defaultEventType?: string,
+    defaultEventType?: 'input' | 'change',
     forArgs?: string[],
+    remoteSpecifiers?: Array<Specifier>,
 }
 
 export type AP = AllProps;
@@ -34,12 +36,12 @@ export type PAP = Partial<AP>;
 export type ProPAP = Promise<PAP>
 
 export interface Actions{
-    //getDefaultForAttribute(self: this): PAP;
-    //getAttrExpr(self: this): PAP;
     parseForAttr(self: this): PAP;
     regOnInput(self: this): PAP;
-    //onAttrExpr(self: this): PAP;
-    findScriptEl(self: this): ProPAP;
+    regOnChange(self: this): PAP;
+    genRemoteSpecifiers(self: this): PAP;
+    hydrate(self: this): ProPAP;
+    //findScriptEl(self: this): ProPAP;
     //getArgs(self: this): PAP;
     //observe(self: this): ProPAP;
     importSymbols(self: this): ProPAP;

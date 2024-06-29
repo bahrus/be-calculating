@@ -2,87 +2,97 @@ import {config as beCnfg} from 'be-enhanced/config.js';
 import {BE, BEConfig} from 'be-enhanced/BE.js';
 import {Actions, AllProps, AP, ProPAP, PAP} from './types';
 import {IEnhancement,  BEAllProps} from 'trans-render/be/types';
-import {Link} from 'be-linked/types';
+import {Link, WeakEndPoint} from 'be-linked/types';
 import {AllProps as BeExportableAllProps} from 'be-exportable/types';
+import { Specifier } from 'trans-render/dss/types';
+import {Seeker} from 'be-linked/Seeker.js';
+import {getObsVal} from 'be-linked/getObsVal.js';
 
 
 class BeCalculating extends BE<any, any, HTMLOutputElement | HTMLMetaElement> implements Actions{
     static override config: BEConfig<AP & BEAllProps, Actions & IEnhancement, any> = {
+        propDefaults: {
+            nameOfCalculator: 'calculator',
+        },
         propInfo:{
             ...beCnfg.propInfo,
-            for:{},
+            forAttr:{},
             forArgs:{},
             onInput: {},
+            onChange: {},
             defaultEventType: {},
+            scriptEl: {},
+            remoteSpecifiers: {},
+            calculator: {},
         },
         actions: {
             parseForAttr:{
-                ifAllOf: ['for']
+                ifAllOf: ['forAttr']
             },
             regOnInput: {
                 ifAllOf: ['onInput']
+            },
+            regOnChange: {
+                ifAllOf: ['onChange']
+            },
+            genRemoteSpecifiers: {
+                ifAllOf: ['forArgs', 'defaultEventType']
+            },
+            importSymbols:  {
+                ifAllOf: ['scriptEl', 'remoteSpecifiers']
+            },
+            hydrate: {
+                ifAllOf: ['calculator', 'remoteSpecifiers']
             }
         }
     };
-    parseForAttr(self: this): PAP {
-        const {for: f} = self;
+    parseForAttr(self: this){
+        const {forAttr} = self;
         return {
-            forArgs: f?.split(' ').map(s => s.trim()),
-        }
+            forArgs: forAttr?.split(' ').map(s => s.trim()),
+        } as PAP
     }
-    regOnInput(self: this): PAP {
+    regOnInput(self: this) {
         const {onInput} = self;
-        console.log({onInput});
         const scriptEl = document.createElement('script');
         scriptEl.innerHTML = onInput!;
         return {
             defaultEventType: 'input',
             scriptEl
-        }
+        } as PAP
     }
-    // getDefaultForAttribute(self: this): PAP {
-    //     const {enhancedElement} = self;
-    //     switch(enhancedElement.localName){
-    //         case 'output':
-    //             return {
-    //                 forAttribute: 'for'
-    //             } as PAP;
-    //         default:
-    //             throw "Need list of id's"
+    regOnChange(self: this) {
+        const {onChange} = self;
+        const scriptEl = document.createElement('script');
+        scriptEl.innerHTML = onChange!;
+        return {
+            defaultEventType: 'change',
+            scriptEl
+        } as PAP
+    }
+
+    genRemoteSpecifiers(self: this) {
+        const {forArgs, defaultEventType} = self;
+        return {
+            remoteSpecifiers: forArgs!.map(fa  => ({
+                elS: fa,
+                prop: fa,
+                s: '#',
+                evt: defaultEventType
+            }) as Specifier),
+        } as PAP;
+    }
+
+
+    // async findScriptEl(self: this): ProPAP {
+    //     const {scriptRef, enhancedElement} = self;
+    //     const {findRealm} = await import('trans-render/lib/findRealm.js');
+    //     const scriptEl = await findRealm(enhancedElement, scriptRef!) as HTMLScriptElement | null;
+    //     if(scriptEl === null) throw 404;
+    //     return {
+    //         scriptEl
     //     }
     // }
-
-    // getAttrExpr(self: this): PAP {
-    //     const {enhancedElement, recalculateOn: r} = self;
-    //     const recalculateOn = enhancedElement.hasAttribute('oninput') ? 'input':  'change';
-    //     const attrExpr = enhancedElement.getAttribute('oninput') || enhancedElement.getAttribute('onchange');
-    //     const scriptRef = attrExpr  ? undefined : 'previousElementSibling';
-    //     return {
-    //         attrExpr,
-    //         recalculateOn,
-    //         scriptRef,
-    //     };
-    // }
-
-    onAttrExpr(self: this): PAP {
-        const {attrExpr} = self;
-        //TODO optimize
-        const scriptEl = document.createElement('script');
-        scriptEl.innerHTML = attrExpr!;
-        return {
-            scriptEl
-        }
-    }
-
-    async findScriptEl(self: this): ProPAP {
-        const {scriptRef, enhancedElement} = self;
-        const {findRealm} = await import('trans-render/lib/findRealm.js');
-        const scriptEl = await findRealm(enhancedElement, scriptRef!) as HTMLScriptElement | null;
-        if(scriptEl === null) throw 404;
-        return {
-            scriptEl
-        }
-    }
 
     async importSymbols(self: this): ProPAP {
         const {scriptEl, nameOfCalculator} = self;
@@ -97,6 +107,41 @@ class BeCalculating extends BE<any, any, HTMLOutputElement | HTMLMetaElement> im
             calculator: exportable.exports[nameOfCalculator!]
         }
     }
+
+    async hydrate(self: this){
+        const {calculator, remoteSpecifiers, enhancedElement} = self;
+        const remoteTuples: Array<[Specifier, WeakEndPoint]> = [];
+        for(const remoteSpecifier of remoteSpecifiers!){
+            const seeker = new Seeker<AP, any>(remoteSpecifier, false);
+            const res = await seeker.do(self, undefined, enhancedElement);
+            remoteTuples.push([remoteSpecifier, res!]);
+        }
+        const val = await this.#getValue(self, remoteTuples, calculator!);
+        if(enhancedElement instanceof HTMLOutputElement){
+            enhancedElement.value = val as string;
+        }
+        return {
+            resolved: true
+        } as PAP;
+    }
+
+    async #getValue(self: this, remoteTuples: Array<[Specifier, WeakEndPoint]>, calculator: (vm: any) => any){
+        const {enhancedElement} = self;
+        const vm: any = {};
+        
+        for(const tuple of remoteTuples){
+            const [remoteSpecifier, rsae] = tuple;
+            const remoteEndPoint = rsae.signal?.deref();
+            if(remoteEndPoint === undefined){
+                //TODO:  remove from list
+                continue;
+            }
+            const val = await getObsVal(remoteEndPoint, remoteSpecifier, enhancedElement);
+            vm[remoteSpecifier.prop!] = val;
+        }
+        return calculator(vm);
+    }
+
     #controllers : AbortController[] | undefined;
     // async observe(self: this): ProPAP {
     //     const {args, searchBy, searchScope, recalculateOn} = self;

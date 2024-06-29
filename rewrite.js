@@ -1,5 +1,6 @@
-export function rewrite({ enhancedElement, nameOfCalculator, args }, scriptEl) {
+export function rewrite({ enhancedElement, nameOfCalculator, remoteSpecifiers }, scriptEl) {
     const inner = scriptEl.innerHTML.trim();
+    const args = remoteSpecifiers?.map(rs => rs.prop);
     if (inner.indexOf('=>') === -1) {
         // const strArgs: string[] = [];
         // instance.getStringArgs(args, strArgs);

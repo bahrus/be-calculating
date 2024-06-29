@@ -1,32 +1,52 @@
 import { config as beCnfg } from 'be-enhanced/config.js';
 import { BE } from 'be-enhanced/BE.js';
+import { Seeker } from 'be-linked/Seeker.js';
+import { getObsVal } from 'be-linked/getObsVal.js';
 class BeCalculating extends BE {
     static config = {
+        propDefaults: {
+            nameOfCalculator: 'calculator',
+        },
         propInfo: {
             ...beCnfg.propInfo,
-            for: {},
+            forAttr: {},
             forArgs: {},
             onInput: {},
+            onChange: {},
             defaultEventType: {},
+            scriptEl: {},
+            remoteSpecifiers: {},
+            calculator: {},
         },
         actions: {
             parseForAttr: {
-                ifAllOf: ['for']
+                ifAllOf: ['forAttr']
             },
             regOnInput: {
                 ifAllOf: ['onInput']
+            },
+            regOnChange: {
+                ifAllOf: ['onChange']
+            },
+            genRemoteSpecifiers: {
+                ifAllOf: ['forArgs', 'defaultEventType']
+            },
+            importSymbols: {
+                ifAllOf: ['scriptEl', 'remoteSpecifiers']
+            },
+            hydrate: {
+                ifAllOf: ['calculator', 'remoteSpecifiers']
             }
         }
     };
     parseForAttr(self) {
-        const { for: f } = self;
+        const { forAttr } = self;
         return {
-            forArgs: f?.split(' ').map(s => s.trim()),
+            forArgs: forAttr?.split(' ').map(s => s.trim()),
         };
     }
     regOnInput(self) {
         const { onInput } = self;
-        console.log({ onInput });
         const scriptEl = document.createElement('script');
         scriptEl.innerHTML = onInput;
         return {
@@ -34,47 +54,35 @@ class BeCalculating extends BE {
             scriptEl
         };
     }
-    // getDefaultForAttribute(self: this): PAP {
-    //     const {enhancedElement} = self;
-    //     switch(enhancedElement.localName){
-    //         case 'output':
-    //             return {
-    //                 forAttribute: 'for'
-    //             } as PAP;
-    //         default:
-    //             throw "Need list of id's"
+    regOnChange(self) {
+        const { onChange } = self;
+        const scriptEl = document.createElement('script');
+        scriptEl.innerHTML = onChange;
+        return {
+            defaultEventType: 'change',
+            scriptEl
+        };
+    }
+    genRemoteSpecifiers(self) {
+        const { forArgs, defaultEventType } = self;
+        return {
+            remoteSpecifiers: forArgs.map(fa => ({
+                elS: fa,
+                prop: fa,
+                s: '#',
+                evt: defaultEventType
+            })),
+        };
+    }
+    // async findScriptEl(self: this): ProPAP {
+    //     const {scriptRef, enhancedElement} = self;
+    //     const {findRealm} = await import('trans-render/lib/findRealm.js');
+    //     const scriptEl = await findRealm(enhancedElement, scriptRef!) as HTMLScriptElement | null;
+    //     if(scriptEl === null) throw 404;
+    //     return {
+    //         scriptEl
     //     }
     // }
-    // getAttrExpr(self: this): PAP {
-    //     const {enhancedElement, recalculateOn: r} = self;
-    //     const recalculateOn = enhancedElement.hasAttribute('oninput') ? 'input':  'change';
-    //     const attrExpr = enhancedElement.getAttribute('oninput') || enhancedElement.getAttribute('onchange');
-    //     const scriptRef = attrExpr  ? undefined : 'previousElementSibling';
-    //     return {
-    //         attrExpr,
-    //         recalculateOn,
-    //         scriptRef,
-    //     };
-    // }
-    onAttrExpr(self) {
-        const { attrExpr } = self;
-        //TODO optimize
-        const scriptEl = document.createElement('script');
-        scriptEl.innerHTML = attrExpr;
-        return {
-            scriptEl
-        };
-    }
-    async findScriptEl(self) {
-        const { scriptRef, enhancedElement } = self;
-        const { findRealm } = await import('trans-render/lib/findRealm.js');
-        const scriptEl = await findRealm(enhancedElement, scriptRef);
-        if (scriptEl === null)
-            throw 404;
-        return {
-            scriptEl
-        };
-    }
     async importSymbols(self) {
         const { scriptEl, nameOfCalculator } = self;
         import('be-exportable/be-exportable.js');
@@ -86,6 +94,37 @@ class BeCalculating extends BE {
         return {
             calculator: exportable.exports[nameOfCalculator]
         };
+    }
+    async hydrate(self) {
+        const { calculator, remoteSpecifiers, enhancedElement } = self;
+        const remoteTuples = [];
+        for (const remoteSpecifier of remoteSpecifiers) {
+            const seeker = new Seeker(remoteSpecifier, false);
+            const res = await seeker.do(self, undefined, enhancedElement);
+            remoteTuples.push([remoteSpecifier, res]);
+        }
+        const val = await this.#getValue(self, remoteTuples, calculator);
+        if (enhancedElement instanceof HTMLOutputElement) {
+            enhancedElement.value = val;
+        }
+        return {
+            resolved: true
+        };
+    }
+    async #getValue(self, remoteTuples, calculator) {
+        const { enhancedElement } = self;
+        const vm = {};
+        for (const tuple of remoteTuples) {
+            const [remoteSpecifier, rsae] = tuple;
+            const remoteEndPoint = rsae.signal?.deref();
+            if (remoteEndPoint === undefined) {
+                //TODO:  remove from list
+                continue;
+            }
+            const val = await getObsVal(remoteEndPoint, remoteSpecifier, enhancedElement);
+            vm[remoteSpecifier.prop] = val;
+        }
+        return calculator(vm);
     }
     #controllers;
     // async observe(self: this): ProPAP {
