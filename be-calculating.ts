@@ -3,9 +3,13 @@ import {BE, BEConfig} from 'be-enhanced/BE.js';
 import {Actions, AllProps, AP, ProPAP, PAP} from './types';
 import {IEnhancement,  BEAllProps} from 'trans-render/be/types';
 import {Link} from 'be-linked/types';
+import {AllProps as BeExportableAllProps} from 'be-exportable/types';
 
 
 export class BeCalculating extends BE implements Actions{
+    static override config: BEConfig<AP & BEAllProps, Actions & IEnhancement, any> = {
+
+    };
     getDefaultForAttribute(self: this): PAP {
         const {enhancedElement} = self;
         switch(enhancedElement.localName){
@@ -109,7 +113,7 @@ export class BeCalculating extends BE implements Actions{
         }
     }
 
-    override detach(detachedElement: Element): void {
+    override async detach(detachedElement: Element){
         this.#disconnect();
     }
 
@@ -126,14 +130,14 @@ export class BeCalculating extends BE implements Actions{
         };
     }
 
-    async onValue(self: this){
-        const {enhancedElement, value, propertyToSet, notify} = self;
-        (<any>enhancedElement)[propertyToSet!] = value;
-        if(notify !== undefined){
-            const {doNotify} = await import('./doNotify.js');
-            await doNotify(self);
-        }
-    }
+    // async onValue(self: this){
+    //     const {enhancedElement, value, propertyToSet, notify} = self;
+    //     (<any>enhancedElement)[propertyToSet!] = value;
+    //     if(notify !== undefined){
+    //         const {doNotify} = await import('./doNotify.js');
+    //         await doNotify(self);
+    //     }
+    // }
 }
 
 export interface BeCalculating extends AP{}
