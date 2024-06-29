@@ -33,8 +33,11 @@ class BeCalculating extends BE<any, any, HTMLOutputElement | HTMLMetaElement> im
     regOnInput(self: this): PAP {
         const {onInput} = self;
         console.log({onInput});
+        const scriptEl = document.createElement('script');
+        scriptEl.innerHTML = onInput!;
         return {
             defaultEventType: 'input',
+            scriptEl
         }
     }
     // getDefaultForAttribute(self: this): PAP {
