@@ -1,6 +1,5 @@
-import {BeHive, EMC, seed, MountObserver} from 'be-hive/be-hive.js';
-
-export const emc: EMC = {
+import { BeHive, seed, MountObserver } from 'be-hive/be-hive.js';
+export const emc = {
     base: 'be-calculating',
     enhPropKey: 'beCalculating',
     // map: {
@@ -13,12 +12,9 @@ export const emc: EMC = {
         }
     ],
     importEnh: async () => {
-        const {BeCalculating} = await import('./be-calculating.js');
+        const { BeCalculating } = await import('./be-calculating.js');
         return BeCalculating;
     }
-
 };
-
 const mose = seed(emc);
-
 MountObserver.synthesize(document, BeHive, mose);

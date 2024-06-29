@@ -1,8 +1,8 @@
-import {IBE} from 'be-enhanced/types';
+import {IEnhancement} from 'trans-render/be/types';
 import {Target, Scope, ProxyPropChangeInfo} from 'trans-render/lib/types';
 
-export interface EndUserProps extends IBE{
-    forAttribute?: string,
+export interface EndUserProps extends IEnhancement<HTMLOutputElement | HTMLMetaElement>{
+    //forAttribute?: string,
     for?: string,
     args?: string[],
     propertyToSet?: string,
@@ -30,8 +30,9 @@ export type PAP = Partial<AP>;
 export type ProPAP = Promise<PAP>
 
 export interface Actions{
-    getDefaultForAttribute(self: this): PAP;
-    getAttrExpr(self: this): PAP;
+    //getDefaultForAttribute(self: this): PAP;
+    //getAttrExpr(self: this): PAP;
+    parseForAttr(self: this): PAP;
     onAttrExpr(self: this): PAP;
     findScriptEl(self: this): ProPAP;
     getArgs(self: this): PAP;

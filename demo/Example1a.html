@@ -10,7 +10,7 @@
     <form>
         <input type="range" id="a" value="50">
         +<input type="number" id="b" value="25">
-        =<output for="a b" be-calculating onchange="a+b"></output>
+        =<output for="a b" be-calculating oninput="a+b"></output>
     </form>
     <script type=importmap>
         {
@@ -20,8 +20,7 @@
                 "be-hive/":  "../node_modules/be-hive/",
                 "be-linked/": "../node_modules/be-linked/",
                 "mount-observer/": "../node_modules/mount-observer/",
-                "trans-render/": "../node_modules/trans-render/",
-                "xtal-element/": "../node_modules/xtal-element/"
+                "trans-render/": "../node_modules/trans-render/"
             }
         }
     </script>

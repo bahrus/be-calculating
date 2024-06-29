@@ -6,33 +6,48 @@ import {Link} from 'be-linked/types';
 import {AllProps as BeExportableAllProps} from 'be-exportable/types';
 
 
-export class BeCalculating extends BE implements Actions{
+class BeCalculating extends BE<any, any, HTMLOutputElement | HTMLMetaElement> implements Actions{
     static override config: BEConfig<AP & BEAllProps, Actions & IEnhancement, any> = {
-
+        propInfo:{
+            ...beCnfg.propInfo,
+            for:{}
+        },
+        actions: {
+            parseForAttr:{
+                ifAllOf: ['for']
+            }
+        }
     };
-    getDefaultForAttribute(self: this): PAP {
+    parseForAttr(self: this): PAP {
         const {enhancedElement} = self;
-        switch(enhancedElement.localName){
-            case 'output':
-                return {
-                    forAttribute: 'for'
-                } as PAP;
-            default:
-                throw "Need list of id's"
+        console.log(enhancedElement);
+        return {
+
         }
     }
+    // getDefaultForAttribute(self: this): PAP {
+    //     const {enhancedElement} = self;
+    //     switch(enhancedElement.localName){
+    //         case 'output':
+    //             return {
+    //                 forAttribute: 'for'
+    //             } as PAP;
+    //         default:
+    //             throw "Need list of id's"
+    //     }
+    // }
 
-    getAttrExpr(self: this): PAP {
-        const {enhancedElement, recalculateOn: r} = self;
-        const recalculateOn = enhancedElement.hasAttribute('oninput') ? 'input':  'change';
-        const attrExpr = enhancedElement.getAttribute('oninput') || enhancedElement.getAttribute('onchange');
-        const scriptRef = attrExpr  ? undefined : 'previousElementSibling';
-        return {
-            attrExpr,
-            recalculateOn,
-            scriptRef,
-        };
-    }
+    // getAttrExpr(self: this): PAP {
+    //     const {enhancedElement, recalculateOn: r} = self;
+    //     const recalculateOn = enhancedElement.hasAttribute('oninput') ? 'input':  'change';
+    //     const attrExpr = enhancedElement.getAttribute('oninput') || enhancedElement.getAttribute('onchange');
+    //     const scriptRef = attrExpr  ? undefined : 'previousElementSibling';
+    //     return {
+    //         attrExpr,
+    //         recalculateOn,
+    //         scriptRef,
+    //     };
+    // }
 
     onAttrExpr(self: this): PAP {
         const {attrExpr} = self;
@@ -140,4 +155,8 @@ export class BeCalculating extends BE implements Actions{
     // }
 }
 
-export interface BeCalculating extends AP{}
+interface BeCalculating extends AP{}
+
+await BeCalculating.bootUp();
+
+export {BeCalculating};
