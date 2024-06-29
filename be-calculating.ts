@@ -96,13 +96,13 @@ class BeCalculating extends BE<any, any, HTMLOutputElement | HTMLMetaElement> im
 
     async importSymbols(self: this): ProPAP {
         const {scriptEl, nameOfCalculator} = self;
-        import('be-exportable/be-exportable.js');
+        const {emc} = await import('be-exportable/behivior.js');
         
         if(!scriptEl!.src){
             const {rewrite} = await import('./rewrite.js');
             rewrite(self, scriptEl!);
         }
-        const exportable = await (<any>scriptEl).beEnhanced.whenResolved('be-exportable') as BeExportableAllProps;
+        const exportable = await (<any>scriptEl).beEnhanced.whenResolved(emc) as BeExportableAllProps;
         return {
             calculator: exportable.exports[nameOfCalculator!]
         }
@@ -116,9 +116,10 @@ class BeCalculating extends BE<any, any, HTMLOutputElement | HTMLMetaElement> im
             const res = await seeker.do(self, undefined, enhancedElement);
             remoteTuples.push([remoteSpecifier, res!]);
         }
-        const val = await this.#getValue(self, remoteTuples, calculator!);
+        const valueContainer = await this.#getValue(self, remoteTuples, calculator!);
+        const {value} = valueContainer;
         if(enhancedElement instanceof HTMLOutputElement){
-            enhancedElement.value = val as string;
+            enhancedElement.value = value === undefined ? ''  : (value + '');
         }
         return {
             resolved: true
