@@ -115,18 +115,23 @@ class BeCalculating extends BE<any, any, HTMLOutputElement | HTMLMetaElement> im
             const seeker = new Seeker<AP, any>(remoteSpecifier, false);
             const res = await seeker.do(self, undefined, enhancedElement);
             remoteTuples.push([remoteSpecifier, res!]);
+            const ac = new AbortController();
+            this.#controllers?.push(ac)
+            const {eventSuggestion} = res!;
+            if(eventSuggestion){
+                res?.signal?.deref()?.addEventListener(eventSuggestion, e => {
+                    this.#setValue(self, remoteTuples, calculator!);
+                }, {signal: ac.signal});
+            }
         }
-        const valueContainer = await this.#getValue(self, remoteTuples, calculator!);
-        const {value} = valueContainer;
-        if(enhancedElement instanceof HTMLOutputElement){
-            enhancedElement.value = value === undefined ? ''  : (value + '');
-        }
+        await this.#setValue(self, remoteTuples, calculator!);
+        
         return {
             resolved: true
         } as PAP;
     }
 
-    async #getValue(self: this, remoteTuples: Array<[Specifier, WeakEndPoint]>, calculator: (vm: any) => any){
+    async #setValue(self: this, remoteTuples: Array<[Specifier, WeakEndPoint]>, calculator: (vm: any) => any){
         const {enhancedElement} = self;
         const vm: any = {};
         
@@ -140,10 +145,14 @@ class BeCalculating extends BE<any, any, HTMLOutputElement | HTMLMetaElement> im
             const val = await getObsVal(remoteEndPoint, remoteSpecifier, enhancedElement);
             vm[remoteSpecifier.prop!] = val;
         }
-        return calculator(vm);
+        const valueContainer =  await calculator(vm);
+        const {value} = valueContainer;
+        if(enhancedElement instanceof HTMLOutputElement){
+            enhancedElement.value = value === undefined ? ''  : (value + '');
+        }
     }
 
-    #controllers : AbortController[] | undefined;
+    #controllers : AbortController[]  = [];
     // async observe(self: this): ProPAP {
     //     const {args, searchBy, searchScope, recalculateOn} = self;
     //     const defaultLink = {
@@ -185,7 +194,7 @@ class BeCalculating extends BE<any, any, HTMLOutputElement | HTMLMetaElement> im
             for(const ac of this.#controllers){
                 ac.abort();
             }
-            this.#controllers = undefined;
+            this.#controllers = [];
         }
     }
 

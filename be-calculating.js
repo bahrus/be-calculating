@@ -102,17 +102,21 @@ class BeCalculating extends BE {
             const seeker = new Seeker(remoteSpecifier, false);
             const res = await seeker.do(self, undefined, enhancedElement);
             remoteTuples.push([remoteSpecifier, res]);
+            const ac = new AbortController();
+            this.#controllers?.push(ac);
+            const { eventSuggestion } = res;
+            if (eventSuggestion) {
+                res?.signal?.deref()?.addEventListener(eventSuggestion, e => {
+                    this.#setValue(self, remoteTuples, calculator);
+                }, { signal: ac.signal });
+            }
         }
-        const valueContainer = await this.#getValue(self, remoteTuples, calculator);
-        const { value } = valueContainer;
-        if (enhancedElement instanceof HTMLOutputElement) {
-            enhancedElement.value = value === undefined ? '' : (value + '');
-        }
+        await this.#setValue(self, remoteTuples, calculator);
         return {
             resolved: true
         };
     }
-    async #getValue(self, remoteTuples, calculator) {
+    async #setValue(self, remoteTuples, calculator) {
         const { enhancedElement } = self;
         const vm = {};
         for (const tuple of remoteTuples) {
@@ -125,9 +129,13 @@ class BeCalculating extends BE {
             const val = await getObsVal(remoteEndPoint, remoteSpecifier, enhancedElement);
             vm[remoteSpecifier.prop] = val;
         }
-        return calculator(vm);
+        const valueContainer = await calculator(vm);
+        const { value } = valueContainer;
+        if (enhancedElement instanceof HTMLOutputElement) {
+            enhancedElement.value = value === undefined ? '' : (value + '');
+        }
     }
-    #controllers;
+    #controllers = [];
     // async observe(self: this): ProPAP {
     //     const {args, searchBy, searchScope, recalculateOn} = self;
     //     const defaultLink = {
@@ -167,7 +175,7 @@ class BeCalculating extends BE {
             for (const ac of this.#controllers) {
                 ac.abort();
             }
-            this.#controllers = undefined;
+            this.#controllers = [];
         }
     }
     async detach(detachedElement) {
