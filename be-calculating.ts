@@ -10,19 +10,31 @@ class BeCalculating extends BE<any, any, HTMLOutputElement | HTMLMetaElement> im
     static override config: BEConfig<AP & BEAllProps, Actions & IEnhancement, any> = {
         propInfo:{
             ...beCnfg.propInfo,
-            for:{}
+            for:{},
+            forArgs:{},
+            onInput: {},
+            defaultEventType: {},
         },
         actions: {
             parseForAttr:{
                 ifAllOf: ['for']
+            },
+            regOnInput: {
+                ifAllOf: ['onInput']
             }
         }
     };
     parseForAttr(self: this): PAP {
-        const {enhancedElement} = self;
-        console.log(enhancedElement);
+        const {for: f} = self;
         return {
-
+            forArgs: f?.split(' ').map(s => s.trim()),
+        }
+    }
+    regOnInput(self: this): PAP {
+        const {onInput} = self;
+        console.log({onInput});
+        return {
+            defaultEventType: 'input',
         }
     }
     // getDefaultForAttribute(self: this): PAP {
@@ -83,40 +95,40 @@ class BeCalculating extends BE<any, any, HTMLOutputElement | HTMLMetaElement> im
         }
     }
     #controllers : AbortController[] | undefined;
-    async observe(self: this): ProPAP {
-        const {args, searchBy, searchScope, recalculateOn} = self;
-        const defaultLink = {
-            localInstance: 'local',
-            enhancement: 'beCalculating',
-            downstreamPropName: 'propertyBag',
-            observe: {
-                attr: searchBy,
-                isFormElement: true,
-                names: args,
-                scope: searchScope,
-                on: recalculateOn
-            }
-        } as Link;
-        const {observe} = await import('be-linked/observe.js');
-        await observe(self, defaultLink);
-        const {propertyBag, calculator} = self;
-        this.#disconnect();
-        this.#controllers = [];
-        for(const arg of args!){
-            const ac = new AbortController();
-            propertyBag!.addEventListener(arg, async e => {
-                const result = await calculator!(propertyBag!, (e as CustomEvent).detail);
-                Object.assign(self, result);
-            }, {signal: ac.signal});
-            this.#controllers.push(ac);
-        }
-        const result = await calculator!(propertyBag!);
-        Object.assign(self, result);
-        return {
-            //value: await calculator!(propertyBag!),
-            resolved: true,
-        } as PAP;
-    }
+    // async observe(self: this): ProPAP {
+    //     const {args, searchBy, searchScope, recalculateOn} = self;
+    //     const defaultLink = {
+    //         localInstance: 'local',
+    //         enhancement: 'beCalculating',
+    //         downstreamPropName: 'propertyBag',
+    //         observe: {
+    //             attr: searchBy,
+    //             isFormElement: true,
+    //             names: args,
+    //             scope: searchScope,
+    //             on: recalculateOn
+    //         }
+    //     } as Link;
+    //     const {observe} = await import('be-linked/observe.js');
+    //     await observe(self, defaultLink);
+    //     const {propertyBag, calculator} = self;
+    //     this.#disconnect();
+    //     this.#controllers = [];
+    //     for(const arg of args!){
+    //         const ac = new AbortController();
+    //         propertyBag!.addEventListener(arg, async e => {
+    //             const result = await calculator!(propertyBag!, (e as CustomEvent).detail);
+    //             Object.assign(self, result);
+    //         }, {signal: ac.signal});
+    //         this.#controllers.push(ac);
+    //     }
+    //     const result = await calculator!(propertyBag!);
+    //     Object.assign(self, result);
+    //     return {
+    //         //value: await calculator!(propertyBag!),
+    //         resolved: true,
+    //     } as PAP;
+    // }
 
     
     #disconnect(){
@@ -132,18 +144,18 @@ class BeCalculating extends BE<any, any, HTMLOutputElement | HTMLMetaElement> im
         this.#disconnect();
     }
 
-    getArgs(self: this): PAP {
-        const {for: forString} = self;
-        let forS: string | null | undefined = forString;
-        if(!forS){
-            const {forAttribute, enhancedElement} = self;
-            forS = enhancedElement.getAttribute(forAttribute!);
-        }
-        if(!forS) throw 404;
-        return {
-            args: forS.split(' ')
-        };
-    }
+    // getArgs(self: this): PAP {
+    //     const {for: forString} = self;
+    //     let forS: string | null | undefined = forString;
+    //     if(!forS){
+    //         const {forAttribute, enhancedElement} = self;
+    //         forS = enhancedElement.getAttribute(forAttribute!);
+    //     }
+    //     if(!forS) throw 404;
+    //     return {
+    //         args: forS.split(' ')
+    //     };
+    // }
 
     // async onValue(self: this){
     //     const {enhancedElement, value, propertyToSet, notify} = self;

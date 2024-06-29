@@ -10,6 +10,10 @@ export const emc: EMC = {
         {
             name: 'for',
             mapsTo: 'for'
+        },
+        {
+            name: 'oninput',
+            mapsTo: 'onInput'
         }
     ],
     importEnh: async () => {

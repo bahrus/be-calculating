@@ -4,14 +4,16 @@ import {Target, Scope, ProxyPropChangeInfo} from 'trans-render/lib/types';
 export interface EndUserProps extends IEnhancement<HTMLOutputElement | HTMLMetaElement>{
     //forAttribute?: string,
     for?: string,
-    args?: string[],
-    propertyToSet?: string,
-    searchBy?: string,
-    scriptRef?: Target,
-    notify?: 'scope' | 'elementProps',
-    searchScope?: Scope,
-    recalculateOn?: string,
-    nameOfCalculator?: string,
+    
+    onInput?: string,
+    
+    // propertyToSet?: string,
+    // searchBy?: string,
+    // scriptRef?: Target,
+    // notify?: 'scope' | 'elementProps',
+    // searchScope?: Scope,
+    // recalculateOn?: string,
+    // nameOfCalculator?: string,
 }
 
 export interface AllProps extends EndUserProps{
@@ -21,6 +23,8 @@ export interface AllProps extends EndUserProps{
     isParsed: boolean;
     attrExpr?: string | null;
     scriptEl?: HTMLScriptElement;
+    defaultEventType?: string,
+    forArgs?: string[],
 }
 
 export type AP = AllProps;
@@ -33,10 +37,11 @@ export interface Actions{
     //getDefaultForAttribute(self: this): PAP;
     //getAttrExpr(self: this): PAP;
     parseForAttr(self: this): PAP;
-    onAttrExpr(self: this): PAP;
+    regOnInput(self: this): PAP;
+    //onAttrExpr(self: this): PAP;
     findScriptEl(self: this): ProPAP;
-    getArgs(self: this): PAP;
-    observe(self: this): ProPAP;
+    //getArgs(self: this): PAP;
+    //observe(self: this): ProPAP;
     importSymbols(self: this): ProPAP;
     //onValue(self: this): void;
 }

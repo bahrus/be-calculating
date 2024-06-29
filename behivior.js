@@ -9,6 +9,10 @@ export const emc = {
         {
             name: 'for',
             mapsTo: 'for'
+        },
+        {
+            name: 'oninput',
+            mapsTo: 'onInput'
         }
     ],
     importEnh: async () => {

@@ -4,18 +4,32 @@ class BeCalculating extends BE {
     static config = {
         propInfo: {
             ...beCnfg.propInfo,
-            for: {}
+            for: {},
+            forArgs: {},
+            onInput: {},
+            defaultEventType: {},
         },
         actions: {
             parseForAttr: {
                 ifAllOf: ['for']
+            },
+            regOnInput: {
+                ifAllOf: ['onInput']
             }
         }
     };
     parseForAttr(self) {
-        const { enhancedElement } = self;
-        console.log(enhancedElement);
-        return {};
+        const { for: f } = self;
+        return {
+            forArgs: f?.split(' ').map(s => s.trim()),
+        };
+    }
+    regOnInput(self) {
+        const { onInput } = self;
+        console.log({ onInput });
+        return {
+            defaultEventType: 'input',
+        };
     }
     // getDefaultForAttribute(self: this): PAP {
     //     const {enhancedElement} = self;
@@ -71,40 +85,40 @@ class BeCalculating extends BE {
         };
     }
     #controllers;
-    async observe(self) {
-        const { args, searchBy, searchScope, recalculateOn } = self;
-        const defaultLink = {
-            localInstance: 'local',
-            enhancement: 'beCalculating',
-            downstreamPropName: 'propertyBag',
-            observe: {
-                attr: searchBy,
-                isFormElement: true,
-                names: args,
-                scope: searchScope,
-                on: recalculateOn
-            }
-        };
-        const { observe } = await import('be-linked/observe.js');
-        await observe(self, defaultLink);
-        const { propertyBag, calculator } = self;
-        this.#disconnect();
-        this.#controllers = [];
-        for (const arg of args) {
-            const ac = new AbortController();
-            propertyBag.addEventListener(arg, async (e) => {
-                const result = await calculator(propertyBag, e.detail);
-                Object.assign(self, result);
-            }, { signal: ac.signal });
-            this.#controllers.push(ac);
-        }
-        const result = await calculator(propertyBag);
-        Object.assign(self, result);
-        return {
-            //value: await calculator!(propertyBag!),
-            resolved: true,
-        };
-    }
+    // async observe(self: this): ProPAP {
+    //     const {args, searchBy, searchScope, recalculateOn} = self;
+    //     const defaultLink = {
+    //         localInstance: 'local',
+    //         enhancement: 'beCalculating',
+    //         downstreamPropName: 'propertyBag',
+    //         observe: {
+    //             attr: searchBy,
+    //             isFormElement: true,
+    //             names: args,
+    //             scope: searchScope,
+    //             on: recalculateOn
+    //         }
+    //     } as Link;
+    //     const {observe} = await import('be-linked/observe.js');
+    //     await observe(self, defaultLink);
+    //     const {propertyBag, calculator} = self;
+    //     this.#disconnect();
+    //     this.#controllers = [];
+    //     for(const arg of args!){
+    //         const ac = new AbortController();
+    //         propertyBag!.addEventListener(arg, async e => {
+    //             const result = await calculator!(propertyBag!, (e as CustomEvent).detail);
+    //             Object.assign(self, result);
+    //         }, {signal: ac.signal});
+    //         this.#controllers.push(ac);
+    //     }
+    //     const result = await calculator!(propertyBag!);
+    //     Object.assign(self, result);
+    //     return {
+    //         //value: await calculator!(propertyBag!),
+    //         resolved: true,
+    //     } as PAP;
+    // }
     #disconnect() {
         if (this.#controllers !== undefined) {
             for (const ac of this.#controllers) {
@@ -115,19 +129,6 @@ class BeCalculating extends BE {
     }
     async detach(detachedElement) {
         this.#disconnect();
-    }
-    getArgs(self) {
-        const { for: forString } = self;
-        let forS = forString;
-        if (!forS) {
-            const { forAttribute, enhancedElement } = self;
-            forS = enhancedElement.getAttribute(forAttribute);
-        }
-        if (!forS)
-            throw 404;
-        return {
-            args: forS.split(' ')
-        };
     }
 }
 await BeCalculating.bootUp();
