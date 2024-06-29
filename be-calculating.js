@@ -13,6 +13,7 @@ class BeCalculating extends BE {
             forArgs: {},
             onInput: {},
             onChange: {},
+            onLoad: {},
             defaultEventType: {},
             scriptEl: {},
             remoteSpecifiers: {},
@@ -27,6 +28,9 @@ class BeCalculating extends BE {
             },
             regOnChange: {
                 ifAllOf: ['onChange']
+            },
+            findScriptEl: {
+                ifNoneOf: ['onInput', 'onChange', 'onLoad']
             },
             genRemoteSpecifiers: {
                 ifAllOf: ['forArgs', 'defaultEventType']
@@ -74,15 +78,16 @@ class BeCalculating extends BE {
             })),
         };
     }
-    // async findScriptEl(self: this): ProPAP {
-    //     const {scriptRef, enhancedElement} = self;
-    //     const {findRealm} = await import('trans-render/lib/findRealm.js');
-    //     const scriptEl = await findRealm(enhancedElement, scriptRef!) as HTMLScriptElement | null;
-    //     if(scriptEl === null) throw 404;
-    //     return {
-    //         scriptEl
-    //     }
-    // }
+    findScriptEl(self) {
+        const { enhancedElement } = self;
+        const scriptEl = enhancedElement.previousElementSibling;
+        if (!(scriptEl instanceof HTMLScriptElement))
+            throw 404;
+        return {
+            defaultEventType: 'input',
+            scriptEl
+        };
+    }
     async importSymbols(self) {
         const { scriptEl, nameOfCalculator } = self;
         const { emc } = await import('be-exportable/behivior.js');

@@ -20,6 +20,7 @@ class BeCalculating extends BE<any, any, HTMLOutputElement | HTMLMetaElement> im
             forArgs:{},
             onInput: {},
             onChange: {},
+            onLoad: {},
             defaultEventType: {},
             scriptEl: {},
             remoteSpecifiers: {},
@@ -34,6 +35,9 @@ class BeCalculating extends BE<any, any, HTMLOutputElement | HTMLMetaElement> im
             },
             regOnChange: {
                 ifAllOf: ['onChange']
+            },
+            findScriptEl: {
+                ifNoneOf: ['onInput', 'onChange', 'onLoad']
             },
             genRemoteSpecifiers: {
                 ifAllOf: ['forArgs', 'defaultEventType']
@@ -84,15 +88,15 @@ class BeCalculating extends BE<any, any, HTMLOutputElement | HTMLMetaElement> im
     }
 
 
-    // async findScriptEl(self: this): ProPAP {
-    //     const {scriptRef, enhancedElement} = self;
-    //     const {findRealm} = await import('trans-render/lib/findRealm.js');
-    //     const scriptEl = await findRealm(enhancedElement, scriptRef!) as HTMLScriptElement | null;
-    //     if(scriptEl === null) throw 404;
-    //     return {
-    //         scriptEl
-    //     }
-    // }
+    findScriptEl(self: this) {
+        const {enhancedElement} = self;
+        const scriptEl = enhancedElement.previousElementSibling;
+        if(!(scriptEl instanceof HTMLScriptElement)) throw 404;
+        return {
+            defaultEventType: 'input',
+            scriptEl
+        } as PAP;
+    }
 
     async importSymbols(self: this): ProPAP {
         const {scriptEl, nameOfCalculator} = self;
@@ -202,27 +206,6 @@ class BeCalculating extends BE<any, any, HTMLOutputElement | HTMLMetaElement> im
         this.#disconnect();
     }
 
-    // getArgs(self: this): PAP {
-    //     const {for: forString} = self;
-    //     let forS: string | null | undefined = forString;
-    //     if(!forS){
-    //         const {forAttribute, enhancedElement} = self;
-    //         forS = enhancedElement.getAttribute(forAttribute!);
-    //     }
-    //     if(!forS) throw 404;
-    //     return {
-    //         args: forS.split(' ')
-    //     };
-    // }
-
-    // async onValue(self: this){
-    //     const {enhancedElement, value, propertyToSet, notify} = self;
-    //     (<any>enhancedElement)[propertyToSet!] = value;
-    //     if(notify !== undefined){
-    //         const {doNotify} = await import('./doNotify.js');
-    //         await doNotify(self);
-    //     }
-    // }
 }
 
 interface BeCalculating extends AP{}

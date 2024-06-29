@@ -7,7 +7,7 @@ export interface EndUserProps extends IEnhancement<HTMLOutputElement | HTMLMetaE
     forAttr?: string,
     onInput?: string,
     onChange?: string,
-    
+    onLoad?: string,
     // propertyToSet?: string,
     // searchBy?: string,
     // scriptRef?: Target,
@@ -41,7 +41,7 @@ export interface Actions{
     regOnChange(self: this): PAP;
     genRemoteSpecifiers(self: this): PAP;
     hydrate(self: this): ProPAP;
-    //findScriptEl(self: this): ProPAP;
+    findScriptEl(self: this): PAP;
     //getArgs(self: this): PAP;
     //observe(self: this): ProPAP;
     importSymbols(self: this): ProPAP;

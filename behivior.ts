@@ -9,15 +9,19 @@ export const emc: EMC = {
     osotas: [
         {
             name: 'for',
-            mapsTo: 'forAttr'
+            mapsTo: 'forAttr',
         },
         {
             name: 'oninput',
-            mapsTo: 'onInput'
+            mapsTo: 'onInput',
         },
         {
             name: 'onchange',
             mapsTo: 'onChange',
+        },
+        {
+            name: 'onload',
+            mapsTo: 'onLoad',
         }
     ],
     importEnh: async () => {
