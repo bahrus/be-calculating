@@ -4,13 +4,17 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Example 2a</title>
+    <title>Example 2b</title>
 </head>
 <body>
     <input name=domain value=emojipedia.org>
     <input name=search value=calculator>
     <a>Emoji link
-        <meta 🧮="@domain @search" onload="{href:`https://${domain}/search?q=${search}`}">
+        <div>
+            I am inside a div.
+            <meta 🧮="@domain @search" 🧮-assign-to="^{a}" onload="{href:`https://${domain}/search?q=${search}`}">
+        </div>
+        
     </a>
     <script type=importmap>
         {

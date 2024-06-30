@@ -8,6 +8,7 @@ export interface EndUserProps extends IEnhancement<HTMLOutputElement | HTMLMetaE
     onInput?: string,
     onChange?: string,
     onLoad?: string,
+    assignTo?: Array<Specifier>,
     // propertyToSet?: string,
     // searchBy?: string,
     // scriptRef?: Target,

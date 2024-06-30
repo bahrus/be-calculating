@@ -18,6 +18,7 @@ class BeCalculating extends BE {
             scriptEl: {},
             remoteSpecifiers: {},
             calculator: {},
+            assignTo: {},
         },
         actions: {
             parseForAttr: {
@@ -154,9 +155,24 @@ class BeCalculating extends BE {
         }
         else {
             if (value !== undefined) {
-                const parentElement = enhancedElement.parentElement;
-                if (parentElement !== null) {
-                    Object.assign(parentElement, value);
+                let targetElement = null;
+                const { assignTo } = self;
+                if (assignTo !== undefined) {
+                    const { find } = await import('trans-render/dss/find.js');
+                    for (const at of assignTo) {
+                        targetElement = await find(enhancedElement, at);
+                        if (targetElement instanceof Element)
+                            break;
+                    }
+                }
+                else {
+                    targetElement = enhancedElement.parentElement;
+                }
+                if (targetElement instanceof Element) {
+                    Object.assign(targetElement, value);
+                }
+                else {
+                    throw 404;
                 }
             }
         }

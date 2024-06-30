@@ -1,11 +1,16 @@
 import { BeHive, seed, MountObserver } from 'be-hive/be-hive.js';
 export const emc = {
     base: 'be-calculating',
+    branches: ['', 'assign-to'],
     enhPropKey: 'beCalculating',
     map: {
         '0.0': {
             instanceOf: 'DSSArray',
             arrValMapsTo: 'remoteSpecifiers'
+        },
+        '1.0': {
+            instanceOf: 'DSSArray',
+            arrValMapsTo: 'assignTo'
         }
     },
     osotas: [
