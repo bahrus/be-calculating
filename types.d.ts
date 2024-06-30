@@ -1,6 +1,6 @@
 import {IEnhancement} from 'trans-render/be/types';
 import {Target, Scope, ProxyPropChangeInfo} from 'trans-render/lib/types';
-import { Specifier } from '../trans-render/dss/types';
+import { Specifier } from 'trans-render/dss/types';
 
 export interface EndUserProps extends IEnhancement<HTMLOutputElement | HTMLMetaElement>{
     //forAttribute?: string,
@@ -39,6 +39,7 @@ export interface Actions{
     parseForAttr(self: this): PAP;
     regOnInput(self: this): PAP;
     regOnChange(self: this): PAP;
+    regOnLoad(self: this): PAP;
     genRemoteSpecifiers(self: this): PAP;
     hydrate(self: this): ProPAP;
     findScriptEl(self: this): PAP;

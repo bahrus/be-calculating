@@ -29,6 +29,9 @@ class BeCalculating extends BE {
             regOnChange: {
                 ifKeyIn: ['onChange']
             },
+            regOnLoad: {
+                ifKeyIn: ['onLoad']
+            },
             findScriptEl: {
                 ifNoneOf: ['onInput', 'onChange', 'onLoad']
             },
@@ -51,33 +54,28 @@ class BeCalculating extends BE {
     }
     regOnInput(self) {
         const { onInput } = self;
-        if (onInput) {
-            const scriptEl = document.createElement('script');
-            scriptEl.innerHTML = onInput;
-            return {
-                defaultEventType: 'input',
-                scriptEl
-            };
-        }
-        else {
-            return {
-                defaultEventType: 'input'
-            };
-        }
+        return this.#reg(onInput, 'input');
     }
     regOnChange(self) {
         const { onChange } = self;
-        if (onChange) {
+        return this.#reg(onChange, 'change');
+    }
+    regOnLoad(self) {
+        const { onLoad } = self;
+        return this.#reg(onLoad, undefined);
+    }
+    #reg(on, defaultEventType) {
+        if (on) {
             const scriptEl = document.createElement('script');
-            scriptEl.innerHTML = onChange;
+            scriptEl.innerHTML = on;
             return {
-                defaultEventType: 'change',
-                scriptEl
+                scriptEl,
+                defaultEventType
             };
         }
         else {
             return {
-                defaultEventType: 'change',
+                defaultEventType: defaultEventType,
             };
         }
     }

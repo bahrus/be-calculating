@@ -36,6 +36,9 @@ class BeCalculating extends BE<any, any, HTMLOutputElement | HTMLMetaElement> im
             regOnChange: {
                 ifKeyIn: ['onChange']
             },
+            regOnLoad: {
+                ifKeyIn: ['onLoad']
+            },
             findScriptEl: {
                 ifNoneOf: ['onInput', 'onChange', 'onLoad']
             },
@@ -58,35 +61,31 @@ class BeCalculating extends BE<any, any, HTMLOutputElement | HTMLMetaElement> im
     }
     regOnInput(self: this) {
         const {onInput} = self;
-        if(onInput){
-            const scriptEl = document.createElement('script');
-            scriptEl.innerHTML = onInput!;
-            return {
-                defaultEventType: 'input',
-                scriptEl
-            } as PAP;
-        }else{
-            return {
-                defaultEventType: 'input'
-            } as PAP;
-        }
+        return this.#reg(onInput, 'input');
 
     }
     regOnChange(self: this) {
         const {onChange} = self;
-        if(onChange){
+        return this.#reg(onChange, 'change');
+        
+    }
+    regOnLoad(self: this){
+        const {onLoad} = self;
+        return this.#reg(onLoad, undefined);
+    }
+    #reg(on: string | undefined, defaultEventType: string){
+        if(on){
             const scriptEl = document.createElement('script');
-            scriptEl.innerHTML = onChange!;
+            scriptEl.innerHTML = on!;
             return {
-                defaultEventType: 'change',
-                scriptEl
-            } as PAP
+                scriptEl,
+                defaultEventType
+            } as PAP;
         }else{
             return {
-                defaultEventType: 'change',
-            } as PAP
+                defaultEventType: defaultEventType,
+            } as PAP;
         }
-        
     }
 
     genRemoteSpecifiers(self: this) {
