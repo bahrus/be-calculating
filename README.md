@@ -126,9 +126,11 @@ be-calculating supports specific syntax for switching to the change event, rathe
 </form>
 ```
 
-## Walk like an Egyptian [TODO]
+## Walk like an Egyptian
 
-Since *be-calculating* seems like a highly useful enhancement that would appear multiple times in a template / html stream, it seems desirable to support an alternative, shorter name, perhaps for less formal settings.  For example, this package supports the following alternative (by referencing 🧮.js): [TODO]
+Since *be-calculating* seems like a highly useful enhancement that would appear multiple times in a template / html stream, it seems desirable to support an alternative, shorter name, perhaps for less formal settings.  For example, this package supports the following alternative (by referencing 🧮.js).
+
+## Example 1d
 
 ```html
 <form>
@@ -142,18 +144,21 @@ If you prefer some other emoji or (shorter? name), look to [this file](https://g
 
 So everywhere you see 🧮 below, please map this hieroglyph in your mind to the expression "be calculating".
 
+## Alternative element references and/or event names [TODO]
+
 Anything that requires subscribing to alternative or mixed event names, and/or that requires referencing nearby elements using something other than id, needs to use an alternative to the *for* attribute, and use neither the oninput nor the onchange event.  We do so by adopting [DSS](https://github.com/bahrus/trans-render/wiki/VIII.--Directed-Scoped-Specifiers-(DSS)) to describe what to observe, and the more neutral "onload" event.
 
+## Example 1e
 
 ```html
 <form>
     <input type="range" name=a value="50">
     +<input type="number" name=b value="25">
-    =<output 🧮="from @a and @b." onload=a+b></output>
+    =<output 🧮="@a @b" onload=a+b></output>
 </form>
 ```
 
-This still happens to assume, by default, that the "input" event is what we should listen for, but having adopted DSS syntax, we can specify any other event name we may want.   While "onload" isn't the most semantic name, perhaps, think "Onload of (changes) to these elements, do this...".  Id's and the *for* attribute are generated automatically by *be-calculating* in order to optimize our accessibility experience.
+This still happens to assume, by default, that the "input" event is what we should listen for, but having adopted DSS syntax, we can specify any other event name we may want.   While "onload" isn't the most semantic name, perhaps, think "onload of (changes) to these elements, do this...".  Id's and the *for* attribute are generated automatically by *be-calculating* in order to optimize our accessibility experience.
 
 This enhancement also supports one other HTML element type other than the output element -- the void (self closing) *meta* element.  In ths case, we shallow merge (Object.assignGingerly) the results of the onload expression into the parent element.
 
@@ -161,7 +166,7 @@ This enhancement also supports one other HTML element type other than the output
     <input name=domain value=emojipedia.org>
     <input name=search value=calculator>
     <a>Emoji link
-        <meta 🧮="from @domain and @search." onload="{href:`https://${domain}/search?q=${search}`}">
+        <meta 🧮="@domain @search" onload="{href:`https://${domain}/search?q=${search}`}">
     </a>
 </form>
 ```
@@ -172,7 +177,7 @@ To specify the target to assign the output to, use dss syntax (for "closest"):
 <table>
     <tr>
         <td>
-            <meta 🧮="from @domain and @search" 🧮-assign-to=^{tr} onload="{`href:`https://${domain}/search?q=${search}`}">
+            <meta 🧮="@domain @search" 🧮-assign-to=^{tr} onload="{`href:`https://${domain}/search?q=${search}`}">
         </td>
     </tr>
 </table>
