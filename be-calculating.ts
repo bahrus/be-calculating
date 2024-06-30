@@ -58,7 +58,7 @@ class BeCalculating extends BE<any, any, HTMLOutputElement | HTMLMetaElement> im
     }
     regOnInput(self: this) {
         const {onInput} = self;
-        if(oninput){
+        if(onInput){
             const scriptEl = document.createElement('script');
             scriptEl.innerHTML = onInput!;
             return {
