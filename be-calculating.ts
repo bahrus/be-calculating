@@ -73,7 +73,7 @@ class BeCalculating extends BE<any, any, HTMLOutputElement | HTMLMetaElement> im
         const {onLoad} = self;
         return this.#reg(onLoad, undefined);
     }
-    #reg(on: string | undefined, defaultEventType: string){
+    #reg(on: string | undefined, defaultEventType: string | undefined){
         if(on){
             const scriptEl = document.createElement('script');
             scriptEl.innerHTML = on!;
@@ -167,7 +167,18 @@ class BeCalculating extends BE<any, any, HTMLOutputElement | HTMLMetaElement> im
         const {value} = valueContainer;
         if(enhancedElement instanceof HTMLOutputElement){
             enhancedElement.value = value === undefined ? ''  : (value + '');
+        }else{
+            if(value !== undefined){
+                const parentElement = enhancedElement.parentElement;
+                if(parentElement !== null){
+                    Object.assign(parentElement, value);
+                }
+                
+            }
+            
+
         }
+
     }
 
     #controllers : AbortController[]  = [];

@@ -7,6 +7,8 @@
 <img src="http://img.badgesize.io/https://cdn.jsdelivr.net/npm/be-calculating?compression=gzip">
 [![NPM version](https://badge.fury.io/js/be-calculating.png)](http://badge.fury.io/js/be-calculating)
 
+# Part I  Enhancing the output element
+
 Calculate value of the output element from peer input elements.
 
 <details>
@@ -144,7 +146,7 @@ If you prefer some other emoji or (shorter? name), look to [this file](https://g
 
 So everywhere you see 🧮 below, please map this hieroglyph in your mind to the expression "be calculating".
 
-## Alternative element references and/or event names [TODO]
+## Alternative element references and/or event names
 
 Anything that requires subscribing to alternative or mixed event names, and/or that requires referencing nearby elements using something other than id, needs to use an alternative to the *for* attribute, and use neither the oninput nor the onchange event.  We do so by adopting [DSS](https://github.com/bahrus/trans-render/wiki/VIII.--Directed-Scoped-Specifiers-(DSS)) to describe what to observe, and the more neutral "onload" event.
 
@@ -160,18 +162,21 @@ Anything that requires subscribing to alternative or mixed event names, and/or t
 
 This still happens to assume, by default, that the "input" event is what we should listen for, but having adopted DSS syntax, we can specify any other event name we may want.   While "onload" isn't the most semantic name, perhaps, think "onload of (changes) to these elements, do this...".  Id's and the *for* attribute are generated automatically by *be-calculating* in order to optimize our accessibility experience.
 
-This enhancement also supports one other HTML element type other than the output element -- the void (self closing) *meta* element.  In ths case, we shallow merge (Object.assignGingerly) the results of the onload expression into the parent element.
+# Part II meta-binding
+
+This enhancement also supports one other HTML element type other than the output element -- the void (self closing) *meta* element.  In this case, we shallow merge (Object.assignGingerly) the results of the onload expression into the parent element.
+
+Example 2a:
 
 ```html
-    <input name=domain value=emojipedia.org>
-    <input name=search value=calculator>
-    <a>Emoji link
-        <meta 🧮="@domain @search" onload="{href:`https://${domain}/search?q=${search}`}">
-    </a>
-</form>
+<input name=domain value=emojipedia.org>
+<input name=search value=calculator>
+<a>Emoji link
+    <meta 🧮="@domain @search" onload="{href:`https://${domain}/search?q=${search}`}">
+</a>
 ```
 
-To specify the target to assign the output to, use dss syntax (for "closest"):
+To specify the target to assign the output to, use dss syntax for "closest":
 
 ```html
 <table>

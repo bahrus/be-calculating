@@ -152,6 +152,14 @@ class BeCalculating extends BE {
         if (enhancedElement instanceof HTMLOutputElement) {
             enhancedElement.value = value === undefined ? '' : (value + '');
         }
+        else {
+            if (value !== undefined) {
+                const parentElement = enhancedElement.parentElement;
+                if (parentElement !== null) {
+                    Object.assign(parentElement, value);
+                }
+            }
+        }
     }
     #controllers = [];
     // async observe(self: this): ProPAP {
