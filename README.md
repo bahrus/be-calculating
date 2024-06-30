@@ -138,9 +138,9 @@ Since *be-calculating* seems like a highly useful enhancement that would appear 
 </form>
 ```
 
-If you prefer some other emoji or (shorter? name), look to this file to see how easy it is to take ownership of your own name.
+If you prefer some other emoji or (shorter? name), look to [this file](https://github.com/bahrus/be-calculating/blob/baseline/%F0%9F%A7%AE.js) to see how easy it is to take ownership of your own name.
 
-So everywhere you see 🧮, please map this hieroglyph in your mind to the expression "be calculating".
+So everywhere you see 🧮 below, please map this hieroglyph in your mind to the expression "be calculating".
 
 Anything that requires subscribing to alternative or mixed event names, and/or that requires referencing nearby elements using something other than id, needs to use an alternative to the *for* attribute, and use neither the oninput nor the onchange event.  We do so by adopting [DSS](https://github.com/bahrus/trans-render/wiki/VIII.--Directed-Scoped-Specifiers-(DSS)) to describe what to observe, and the more neutral "onload" event.
 
