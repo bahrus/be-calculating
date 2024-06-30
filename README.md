@@ -188,47 +188,7 @@ To specify the target to assign the output to, use dss syntax for "closest":
 </table>
 ```
 
-
-
-## Example 2 - Sharing calculated values [TODO]
-
-We may want to display the sum in various places.  One way to do this is shown below:
-
-```html
-<form itemscope be-sharing='
-    Share sum from scope.
-'>
-    <input type="range" id=a value="50">
-    +<input type="number" id=b value="25">
-    =<script nomodule>
-        a + b
-    </script><output name=sum for="a b" 🧮-xform='
-        {"| sum": 0}
-    '></output>
-        
-    <data itemprop=sum aria-live=polite></data>
-
-    
-</form>
-```  
-
-This utilizes trans-rendering, aka "binding from a distance" syntax. "xform" stands for transform.  By default, the scope of the transform is the parent element (*form* in this case), but this scope can be expanded using DSS:
-
-```html
-<form itemscope>
-    <input type="range" id=a value="50">
-    +<input type="number" id=b value="25">
-    =<script nomodule>
-        a + b
-    </script><output name=sum for="a b" 🧮-xform='
-        {"| sum": 0}
-    ' 🧮-xform-scope=^{body}></output>
-        
-    <data itemprop=sum aria-live=polite></data>
-
-    
-</form>
-```
+In fact, the *-assign-to attribute can specify a list of specifiers to target (space or " and " delimited), so we can share the result to multiple places, fulfilling one of our earlier promises above.
 
 
 

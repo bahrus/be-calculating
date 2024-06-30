@@ -155,25 +155,27 @@ class BeCalculating extends BE {
         }
         else {
             if (value !== undefined) {
-                let targetElement = null;
                 const { assignTo } = self;
+                let foundAtLeastOne = false;
                 if (assignTo !== undefined) {
                     const { find } = await import('trans-render/dss/find.js');
                     for (const at of assignTo) {
-                        targetElement = await find(enhancedElement, at);
-                        if (targetElement instanceof Element)
-                            break;
+                        const targetElement = await find(enhancedElement, at);
+                        if (targetElement instanceof Element) {
+                            foundAtLeastOne = true;
+                            Object.assign(targetElement, value);
+                        }
                     }
                 }
                 else {
-                    targetElement = enhancedElement.parentElement;
+                    const targetElement = enhancedElement.parentElement;
+                    if (targetElement instanceof Element) {
+                        foundAtLeastOne = true;
+                        Object.assign(targetElement, value);
+                    }
                 }
-                if (targetElement instanceof Element) {
-                    Object.assign(targetElement, value);
-                }
-                else {
+                if (!foundAtLeastOne)
                     throw 404;
-                }
             }
         }
     }
