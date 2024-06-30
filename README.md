@@ -128,7 +128,7 @@ be-calculating supports specific syntax for switching to the change event, rathe
 
 ## Walk like an Egyptian [TODO]
 
-Since *be-calculating* seems like a highly useful enhancement that would appear multiple times in a template, it seems desirable to support an alternative, shorter name, perhaps in less formal settings.  For example, this package supports the following alternative (by referencing 🧮.js): [TODO]
+Since *be-calculating* seems like a highly useful enhancement that would appear multiple times in a template / html stream, it seems desirable to support an alternative, shorter name, perhaps for less formal settings.  For example, this package supports the following alternative (by referencing 🧮.js): [TODO]
 
 ```html
 <form>
@@ -137,6 +137,8 @@ Since *be-calculating* seems like a highly useful enhancement that would appear 
     =<output for="a b" 🧮 oninput=a+b></output>
 </form>
 ```
+
+If you prefer some other emoji or (shorter? name), look to this file to see how easy it is to take ownership of your own name.
 
 So everywhere you see 🧮, please map this hieroglyph in your mind to the expression "be calculating".
 

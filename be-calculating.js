@@ -24,10 +24,10 @@ class BeCalculating extends BE {
                 ifAllOf: ['forAttr']
             },
             regOnInput: {
-                ifAllOf: ['onInput']
+                ifKeyIn: ['onInput']
             },
             regOnChange: {
-                ifAllOf: ['onChange']
+                ifKeyIn: ['onChange']
             },
             findScriptEl: {
                 ifNoneOf: ['onInput', 'onChange', 'onLoad']
@@ -51,21 +51,35 @@ class BeCalculating extends BE {
     }
     regOnInput(self) {
         const { onInput } = self;
-        const scriptEl = document.createElement('script');
-        scriptEl.innerHTML = onInput;
-        return {
-            defaultEventType: 'input',
-            scriptEl
-        };
+        if (oninput) {
+            const scriptEl = document.createElement('script');
+            scriptEl.innerHTML = onInput;
+            return {
+                defaultEventType: 'input',
+                scriptEl
+            };
+        }
+        else {
+            return {
+                defaultEventType: 'input'
+            };
+        }
     }
     regOnChange(self) {
         const { onChange } = self;
-        const scriptEl = document.createElement('script');
-        scriptEl.innerHTML = onChange;
-        return {
-            defaultEventType: 'change',
-            scriptEl
-        };
+        if (onChange) {
+            const scriptEl = document.createElement('script');
+            scriptEl.innerHTML = onChange;
+            return {
+                defaultEventType: 'change',
+                scriptEl
+            };
+        }
+        else {
+            return {
+                defaultEventType: 'change',
+            };
+        }
     }
     genRemoteSpecifiers(self) {
         const { forArgs, defaultEventType } = self;
@@ -79,12 +93,12 @@ class BeCalculating extends BE {
         };
     }
     findScriptEl(self) {
-        const { enhancedElement } = self;
+        const { enhancedElement, defaultEventType } = self;
         const scriptEl = enhancedElement.previousElementSibling;
         if (!(scriptEl instanceof HTMLScriptElement))
             throw 404;
         return {
-            defaultEventType: 'input',
+            defaultEventType: defaultEventType || 'input',
             scriptEl
         };
     }
@@ -101,7 +115,7 @@ class BeCalculating extends BE {
         };
     }
     async hydrate(self) {
-        const { calculator, remoteSpecifiers, enhancedElement } = self;
+        const { calculator, remoteSpecifiers, enhancedElement, defaultEventType } = self;
         const remoteTuples = [];
         for (const remoteSpecifier of remoteSpecifiers) {
             const seeker = new Seeker(remoteSpecifier, false);
@@ -110,8 +124,9 @@ class BeCalculating extends BE {
             const ac = new AbortController();
             this.#controllers?.push(ac);
             const { eventSuggestion } = res;
-            if (eventSuggestion) {
-                res?.signal?.deref()?.addEventListener(eventSuggestion, e => {
+            const eventName = defaultEventType || eventSuggestion;
+            if (eventName !== undefined) {
+                res?.signal?.deref()?.addEventListener(eventName, e => {
                     this.#setValue(self, remoteTuples, calculator);
                 }, { signal: ac.signal });
             }

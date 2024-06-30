@@ -8,7 +8,8 @@
 		"strict": true,
 	},
 	"files":[
-		"behivior.ts"
+		"behivior.ts",
+		"🧮.ts"
 	],
 	"exclude":[
 		"node_modules"
