@@ -8,7 +8,7 @@ import { Specifier } from 'trans-render/dss/types';
 import {Seeker} from 'be-linked/Seeker.js';
 import {getObsVal} from 'be-linked/getObsVal.js';
 
-
+let cnt = 0;
 class BeCalculating extends BE<any, any, HTMLOutputElement | HTMLMetaElement> implements Actions{
     static override config: BEConfig<AP & BEAllProps, Actions & IEnhancement, any> = {
         propDefaults: {
@@ -148,11 +148,12 @@ class BeCalculating extends BE<any, any, HTMLOutputElement | HTMLMetaElement> im
                 const remoteHardRef = res?.signal?.deref();
                 if(remoteHardRef === undefined){
                     //TODO delete from list
-                    return;
+                    continue;
                 }
                 if(ignoreForAttr && remoteHardRef instanceof Element && rootNode.contains(remoteHardRef) && enhancedElement instanceof HTMLOutputElement){
                     if(!remoteHardRef.id){
-                        const guid = 'a-' + crypto.randomUUID();
+                        const guid = 'be-calculating-' + cnt;
+                        cnt++;
                         remoteHardRef.id = guid;
                     }
                     enhancedElement.htmlFor.add(remoteHardRef.id);

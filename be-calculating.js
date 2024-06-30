@@ -2,6 +2,7 @@ import { config as beCnfg } from 'be-enhanced/config.js';
 import { BE } from 'be-enhanced/BE.js';
 import { Seeker } from 'be-linked/Seeker.js';
 import { getObsVal } from 'be-linked/getObsVal.js';
+let cnt = 0;
 class BeCalculating extends BE {
     static config = {
         propDefaults: {
@@ -132,11 +133,12 @@ class BeCalculating extends BE {
                 const remoteHardRef = res?.signal?.deref();
                 if (remoteHardRef === undefined) {
                     //TODO delete from list
-                    return;
+                    continue;
                 }
                 if (ignoreForAttr && remoteHardRef instanceof Element && rootNode.contains(remoteHardRef) && enhancedElement instanceof HTMLOutputElement) {
                     if (!remoteHardRef.id) {
-                        const guid = 'a-' + crypto.randomUUID();
+                        const guid = 'be-calculating-' + cnt;
+                        cnt++;
                         remoteHardRef.id = guid;
                     }
                     enhancedElement.htmlFor.add(remoteHardRef.id);
