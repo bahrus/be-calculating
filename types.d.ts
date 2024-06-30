@@ -28,6 +28,7 @@ export interface AllProps extends EndUserProps{
     defaultEventType?: 'input' | 'change',
     forArgs?: string[],
     remoteSpecifiers?: Array<Specifier>,
+    ignoreForAttr?: boolean,
 }
 
 export type AP = AllProps;

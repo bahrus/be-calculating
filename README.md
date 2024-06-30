@@ -78,41 +78,6 @@ Code that we can patent and earn Turing Awards with!
 
 Because now, with a little more tender loving care (described below), we can start to see that we can create a reusable function that can be used in multiple contexts -- anywhere we need to add two numbers together. We've been showing inline examples, but the code can be imported via ESM modules, which is discussed below.  
 
-We will also discuss how to utilize a reusable function that dares to explore other letters of the alphabet. [TODO]
-
-<!--
-This is shorthand for:
-
-```html
-<form>
-    <input type="range" id=a value="50">
-    +<input type="number" id=b value="25">
-    =<script nomodule>
-        a + b
-    </script><output for="a b" be-calculating='{
-        "forAttribute": "for",
-        "args": ["a", "b"],
-        "propertyToSet": "value",
-        "searchBy": "id",
-        "searchScope":  ["closestOrHost", "form"],
-        "scriptRef": "previousElementSibling",
-        "recalculateOn": "change",
-        "nameOfCalculator": "calculator"
-    }'></output>
-
-    
-</form>
-```
-
-What this means is we aren't limited to adorning the output element.  But if using some element other than output, the developer will need to override the default settings shown above, depending on the particular scenario.
-
-So to specify to act on the input event, we can edit the JSON above, overriding only those values that need to deviate from the default (recalculateOn: change)
-
-If editing JSON inside HTML attributes feels weird, the [json-in-html](https://marketplace.visualstudio.com/items?itemName=andersonbruceb.json-in-html) vs-code extension makes it feel much more natural, even when editing README files.  Because of the declarative, side-effect-free nature of the extension, it can be used with the web version of VSCode as well.
-
-And the [may-it-be](https://github.com/bahrus/may-it-be) package allows us to benefit from TypeScript tooling, and compiles to an HTML file.
-
--->
 
 be-calculating supports specific syntax for switching to the change event, rather than the input event:
 

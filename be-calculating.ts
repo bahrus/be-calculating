@@ -26,10 +26,12 @@ class BeCalculating extends BE<any, any, HTMLOutputElement | HTMLMetaElement> im
             remoteSpecifiers: {},
             calculator: {},
             assignTo: {},
+            ignoreForAttr: {},
         },
         actions: {
             parseForAttr:{
-                ifAllOf: ['forAttr']
+                ifAllOf: ['forAttr'],
+                ifNoneOf: ['ignoreForAttr']
             },
             regOnInput: {
                 ifKeyIn: ['onInput']
@@ -89,6 +91,8 @@ class BeCalculating extends BE<any, any, HTMLOutputElement | HTMLMetaElement> im
         }
     }
 
+    
+
     genRemoteSpecifiers(self: this) {
         const {forArgs, defaultEventType} = self;
         return {
@@ -113,7 +117,7 @@ class BeCalculating extends BE<any, any, HTMLOutputElement | HTMLMetaElement> im
     }
 
     async importSymbols(self: this): ProPAP {
-        const {scriptEl, nameOfCalculator} = self;
+        const {scriptEl, nameOfCalculator, forAttr} = self;
         const {emc} = await import('be-exportable/behivior.js');
         
         if(!scriptEl!.src){
@@ -122,13 +126,15 @@ class BeCalculating extends BE<any, any, HTMLOutputElement | HTMLMetaElement> im
         }
         const exportable = await (<any>scriptEl).beEnhanced.whenResolved(emc) as BeExportableAllProps;
         return {
+            ignoreForAttr: forAttr === undefined,
             calculator: exportable.exports[nameOfCalculator!]
         }
     }
 
     async hydrate(self: this){
-        const {calculator, remoteSpecifiers, enhancedElement, defaultEventType} = self;
+        const {calculator, remoteSpecifiers, enhancedElement, defaultEventType, ignoreForAttr} = self;
         const remoteTuples: Array<[Specifier, WeakEndPoint]> = [];
+        const rootNode = enhancedElement.getRootNode();
         for(const remoteSpecifier of remoteSpecifiers!){
             const seeker = new Seeker<AP, any>(remoteSpecifier, false);
             const res = await seeker.do(self, undefined, enhancedElement);
@@ -137,8 +143,21 @@ class BeCalculating extends BE<any, any, HTMLOutputElement | HTMLMetaElement> im
             this.#controllers?.push(ac)
             const {eventSuggestion} = res!;
             const eventName = defaultEventType || eventSuggestion;
+            
             if(eventName !== undefined){
-                res?.signal?.deref()?.addEventListener(eventName, e => {
+                const remoteHardRef = res?.signal?.deref();
+                if(remoteHardRef === undefined){
+                    //TODO delete from list
+                    return;
+                }
+                if(ignoreForAttr && remoteHardRef instanceof Element && rootNode.contains(remoteHardRef) && enhancedElement instanceof HTMLOutputElement){
+                    if(!remoteHardRef.id){
+                        const guid = 'a-' + crypto.randomUUID();
+                        remoteHardRef.id = guid;
+                    }
+                    enhancedElement.htmlFor.add(remoteHardRef.id);
+                }
+                remoteHardRef.addEventListener(eventName, e => {
                     this.#setValue(self, remoteTuples, calculator!);
                 }, {signal: ac.signal});
             }
