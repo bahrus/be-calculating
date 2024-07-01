@@ -25,7 +25,7 @@ class BeCalculating extends BE {
         actions: {
             parseForAttr: {
                 ifAllOf: ['forAttr'],
-                ifNoneOf: ['ignoreForAttr']
+                //ifNoneOf: ['ignoreForAttr']
             },
             regOnInput: {
                 ifKeyIn: ['onInput']
@@ -135,14 +135,14 @@ class BeCalculating extends BE {
                     //TODO delete from list
                     continue;
                 }
-                if (ignoreForAttr && remoteHardRef instanceof Element && rootNode.contains(remoteHardRef) && enhancedElement instanceof HTMLOutputElement) {
-                    if (!remoteHardRef.id) {
-                        const guid = 'be-calculating-' + cnt;
-                        cnt++;
-                        remoteHardRef.id = guid;
-                    }
-                    enhancedElement.htmlFor.add(remoteHardRef.id);
-                }
+                // if(ignoreForAttr && remoteHardRef instanceof Element && rootNode.contains(remoteHardRef) && enhancedElement instanceof HTMLOutputElement){
+                //     if(!remoteHardRef.id){
+                //         const guid = 'be-calculating-' + cnt;
+                //         cnt++;
+                //         remoteHardRef.id = guid;
+                //     }
+                //     enhancedElement.htmlFor.add(remoteHardRef.id);
+                // }
                 remoteHardRef.addEventListener(eventName, e => {
                     this.#setValue(self, remoteTuples, calculator);
                 }, { signal: ac.signal });
