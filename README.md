@@ -163,7 +163,7 @@ If we want to share our calculating code with the world, we might package it as 
 
 But as things stand, we will need to specify the name of the calculator thusly:
 
-### Example 3
+### Example 4a
 
 ```JavaScript
 //file calculator.js
@@ -173,22 +173,15 @@ export const calculator = ({a, b}) => ({
 ```
 
 ```html
-    <form itemscope be-sharing='
-      Share sum from scope.
-    '>
-        <input type="range" id="a" value="23">
-        +<input type="number" id="b" value="252334">
-        =<script nomodule src="./calculator.js"></script><output name="sum" for="a b" be-calculating='
-            {"notify": "scope"}
-        '></output>
-
-        <data itemprop=sum></data>
-    </form>
+<input type="range" id="a" value="23">
++<input type="number" id="b" value="252334">
+=<script nomodule src="./calculator.js"></script>
+<output for="a b" 🧮></output>
 ```
 
 If we wish to give it a different name, *be-calculating* needs to know about that:
 
-### Example 4
+### Example 4b
 
 ```JavaScript
 //file TuringAwardDeservingAlgorithm.js
@@ -198,19 +191,10 @@ export const TuringAwardDeservingAlgorithm = ({a, b}) => ({
 ```
 
 ```html
-<form itemscope be-sharing='
-    Share sum from scope.
-'>
-    <input type="range" id="a" value="23">
-    +<input type="number" id="b" value="252334">
-    =<script nomodule src="./TuringAwardDeservingAlgorithm.js"></script><output name="sum" for="a b" be-calculating='{
-        "notify": "scope",
-        "nameOfCalculator": "TuringAwardDeservingAlgorithm"
-        
-    }'></output>
-
-    <data itemprop=sum></data>
-</form>
+<input type="range" id="a" value="23">
++<input type="number" id="b" value="252334">
+=<script nomodule src="./TuringAwardDeservingAlgorithm.js"></script>
+<output for="a b" 🧮-name-of-calculator=TuringAwardDeservingAlgorithm></output>
 ```
 
 ## [Demo](https://codepen.io/bahrus/pen/NWMjxYV)

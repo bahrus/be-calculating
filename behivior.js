@@ -1,7 +1,7 @@
 import { BeHive, seed, MountObserver } from 'be-hive/be-hive.js';
 export const emc = {
     base: 'be-calculating',
-    branches: ['', 'assign-to'],
+    branches: ['', 'assign-to', 'name-of-calculator'],
     enhPropKey: 'beCalculating',
     map: {
         '0.0': {
@@ -11,6 +11,10 @@ export const emc = {
         '1.0': {
             instanceOf: 'DSSArray',
             arrValMapsTo: 'assignTo'
+        },
+        '2.0': {
+            instanceOf: 'String',
+            mapsTo: 'nameOfCalculator'
         }
     },
     osotas: [
