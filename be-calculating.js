@@ -25,7 +25,7 @@ class BeCalculating extends BE {
         actions: {
             parseForAttr: {
                 ifAllOf: ['forAttr'],
-                //ifNoneOf: ['ignoreForAttr']
+                ifNoneOf: ['ignoreForAttr']
             },
             regOnInput: {
                 ifKeyIn: ['onInput']
