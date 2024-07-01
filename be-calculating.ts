@@ -26,12 +26,12 @@ class BeCalculating extends BE<any, any, HTMLOutputElement | HTMLMetaElement> im
             remoteSpecifiers: {},
             calculator: {},
             assignTo: {},
-            ignoreForAttr: {},
+            //ignoreForAttr: {},
         },
         actions: {
             parseForAttr:{
                 ifAllOf: ['forAttr'],
-                ifNoneOf: ['ignoreForAttr']
+                //ifNoneOf: ['ignoreForAttr']
             },
             regOnInput: {
                 ifKeyIn: ['onInput']
@@ -56,7 +56,12 @@ class BeCalculating extends BE<any, any, HTMLOutputElement | HTMLMetaElement> im
             }
         }
     };
+    #ignoreForAttr = false;
     parseForAttr(self: this){
+        if(this.#ignoreForAttr){
+            this.#ignoreForAttr = false;
+            return {};
+        }
         const {forAttr} = self;
         return {
             forArgs: forAttr?.split(' ').map(s => s.trim()),
@@ -126,13 +131,12 @@ class BeCalculating extends BE<any, any, HTMLOutputElement | HTMLMetaElement> im
         }
         const exportable = await (<any>scriptEl).beEnhanced.whenResolved(emc) as BeExportableAllProps;
         return {
-            ignoreForAttr: forAttr === undefined,
             calculator: exportable.exports[nameOfCalculator!]
         }
     }
 
     async hydrate(self: this){
-        const {calculator, remoteSpecifiers, enhancedElement, defaultEventType, ignoreForAttr} = self;
+        const {calculator, remoteSpecifiers, enhancedElement, defaultEventType} = self;
         const remoteTuples: Array<[Specifier, WeakEndPoint]> = [];
         const rootNode = enhancedElement.getRootNode();
         for(const remoteSpecifier of remoteSpecifiers!){
@@ -150,12 +154,13 @@ class BeCalculating extends BE<any, any, HTMLOutputElement | HTMLMetaElement> im
                     //TODO delete from list
                     continue;
                 }
-                if(ignoreForAttr && remoteHardRef instanceof Element && rootNode.contains(remoteHardRef) && enhancedElement instanceof HTMLOutputElement){
+                if(remoteHardRef instanceof Element && rootNode.contains(remoteHardRef) && enhancedElement instanceof HTMLOutputElement){
                     if(!remoteHardRef.id){
                         const guid = 'be-calculating-' + cnt;
                         cnt++;
                         remoteHardRef.id = guid;
                     }
+                    this.#ignoreForAttr = true;
                     enhancedElement.htmlFor.add(remoteHardRef.id);
                 }
                 remoteHardRef.addEventListener(eventName, e => {

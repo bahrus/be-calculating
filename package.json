@@ -29,7 +29,7 @@
     "be-hive": "0.0.182",
     "be-linked": "0.0.106",
     "be-scoped": "0.0.37",
-    "trans-render": "0.0.788",
+    "trans-render": "0.0.789",
     "xtal-element": "0.0.609"
   },
   "devDependencies": {

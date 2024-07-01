@@ -20,12 +20,12 @@ class BeCalculating extends BE {
             remoteSpecifiers: {},
             calculator: {},
             assignTo: {},
-            ignoreForAttr: {},
+            //ignoreForAttr: {},
         },
         actions: {
             parseForAttr: {
                 ifAllOf: ['forAttr'],
-                ifNoneOf: ['ignoreForAttr']
+                //ifNoneOf: ['ignoreForAttr']
             },
             regOnInput: {
                 ifKeyIn: ['onInput']
@@ -50,7 +50,12 @@ class BeCalculating extends BE {
             }
         }
     };
+    #ignoreForAttr = false;
     parseForAttr(self) {
+        if (this.#ignoreForAttr) {
+            this.#ignoreForAttr = false;
+            return {};
+        }
         const { forAttr } = self;
         return {
             forArgs: forAttr?.split(' ').map(s => s.trim()),
@@ -113,12 +118,11 @@ class BeCalculating extends BE {
         }
         const exportable = await scriptEl.beEnhanced.whenResolved(emc);
         return {
-            ignoreForAttr: forAttr === undefined,
             calculator: exportable.exports[nameOfCalculator]
         };
     }
     async hydrate(self) {
-        const { calculator, remoteSpecifiers, enhancedElement, defaultEventType, ignoreForAttr } = self;
+        const { calculator, remoteSpecifiers, enhancedElement, defaultEventType } = self;
         const remoteTuples = [];
         const rootNode = enhancedElement.getRootNode();
         for (const remoteSpecifier of remoteSpecifiers) {
@@ -135,14 +139,15 @@ class BeCalculating extends BE {
                     //TODO delete from list
                     continue;
                 }
-                // if(ignoreForAttr && remoteHardRef instanceof Element && rootNode.contains(remoteHardRef) && enhancedElement instanceof HTMLOutputElement){
-                //     if(!remoteHardRef.id){
-                //         const guid = 'be-calculating-' + cnt;
-                //         cnt++;
-                //         remoteHardRef.id = guid;
-                //     }
-                //     enhancedElement.htmlFor.add(remoteHardRef.id);
-                // }
+                if (remoteHardRef instanceof Element && rootNode.contains(remoteHardRef) && enhancedElement instanceof HTMLOutputElement) {
+                    if (!remoteHardRef.id) {
+                        const guid = 'be-calculating-' + cnt;
+                        cnt++;
+                        remoteHardRef.id = guid;
+                    }
+                    this.#ignoreForAttr = true;
+                    enhancedElement.htmlFor.add(remoteHardRef.id);
+                }
                 remoteHardRef.addEventListener(eventName, e => {
                     this.#setValue(self, remoteTuples, calculator);
                 }, { signal: ac.signal });
