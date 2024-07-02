@@ -131,7 +131,7 @@ This still happens to assume, by default, that the "input" event is what we shou
 
 This enhancement also supports one other HTML element type other than the output element -- the void (self closing) *meta* element.  In this case, we shallow merge (Object.assignGingerly) the results of the onload expression into the parent element.
 
-Example 2a:
+## Example 2a
 
 ```html
 <input name=domain value=emojipedia.org>
@@ -141,7 +141,9 @@ Example 2a:
 </a>
 ```
 
-To specify the target to assign the output to, use dss syntax for "closest":
+To specify the target to assign the output to, use dss syntax for "closest".
+
+## Example 2b
 
 ```html
 <table>
@@ -155,9 +157,11 @@ To specify the target to assign the output to, use dss syntax for "closest":
 
 In fact, the *-assign-to attribute can specify a list of specifiers to target (space or " and " delimited), so we can share the result to multiple places, fulfilling one of our earlier promises above.
 
-## Part III Sharing the output element, and other binding examples
+# Part III Sharing the output element, and other binding examples
 
-The output element can also get in on the sharing act:
+The output element can also get in on the sharing act.
+
+
 
 ```html
 <form>
@@ -168,13 +172,13 @@ The output element can also get in on the sharing act:
 </form>
 ```
 
-## Part IV External Module Renaming
+# Part IV External Module Renaming
 
 If we want to share our calculating code with the world, we might package it as an npm package.  Note that the code is library neutral, so doesn't need to be accompanied by 17 black-hole-o-grams of dependencies, and a cottage industry of boot camps to master.  Just saying.
 
 But as things stand, we will need to specify the name of the calculator thusly:
 
-### Example 4a
+## Example 4a
 
 ```JavaScript
 //file calculator.js
@@ -192,7 +196,7 @@ export const calculator = ({a, b}) => ({
 
 If we wish to give it a different name, *be-calculating* needs to know about that:
 
-### Example 4b
+## Example 4b
 
 ```JavaScript
 //file TuringAwardDeservingAlgorithm.js
