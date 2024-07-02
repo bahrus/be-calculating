@@ -159,7 +159,14 @@ In fact, the *-assign-to attribute can specify a list of specifiers to target (s
 
 The output element can also get in on the sharing act:
 
-
+```html
+<form>
+    <span itemprop=sum></span>
+    <input type="range" id="a" value="50">
+    +<input type="number" id="b" value="25">
+    =<output for="a b" 🧮-assign-to=^{form}|sum:tabIndex oninput="a+b"></output>
+</form>
+```
 
 ## Part IV External Module Renaming
 
