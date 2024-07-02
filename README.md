@@ -155,9 +155,13 @@ To specify the target to assign the output to, use dss syntax for "closest":
 
 In fact, the *-assign-to attribute can specify a list of specifiers to target (space or " and " delimited), so we can share the result to multiple places, fulfilling one of our earlier promises above.
 
+## Part III Sharing the output element, and other binding examples
+
+The output element can also get in on the sharing act:
 
 
-## External Module Renaming
+
+## Part IV External Module Renaming
 
 If we want to share our calculating code with the world, we might package it as an npm package.  Note that the code is library neutral, so doesn't need to be accompanied by 17 black-hole-o-grams of dependencies, and a cottage industry of boot camps to master.  Just saying.
 

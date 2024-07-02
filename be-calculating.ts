@@ -191,33 +191,50 @@ class BeCalculating extends BE<any, any, HTMLOutputElement | HTMLMetaElement> im
         }
         const valueContainer =  await calculator(vm);
         const {value} = valueContainer;
+        let isMeta = false;
         if(enhancedElement instanceof HTMLOutputElement){
             enhancedElement.value = value === undefined ? ''  : (value + '');
         }else{
-            if(value !== undefined){
-                const {assignTo} = self;
-                let foundAtLeastOne = false;
-                if(assignTo !== undefined){
-                    const {find} = await import('trans-render/dss/find.js');
-                    for(const at of assignTo){
-                        const targetElement = await find(enhancedElement, at);
-                        if(targetElement instanceof Element){
-                            foundAtLeastOne = true;
-                            Object.assign(targetElement, value);
-                        }
-                    }
-                }else{
-                    const targetElement = enhancedElement.parentElement;
+            isMeta = true;
+        }
+        
+        if(value !== undefined){
+            const {assignTo} = self;
+            let foundAtLeastOne = false;
+            const {assignGingerly} = await import('trans-render/lib/assignGingerly.js');
+            if(assignTo !== undefined){
+                const {find} = await import('trans-render/dss/find.js');
+                for(const at of assignTo){
+                    const targetElement = await find(enhancedElement, at);
                     if(targetElement instanceof Element){
                         foundAtLeastOne = true;
-                        Object.assign(targetElement, value);
+                        switch(typeof value){
+                            case 'object':
+                                assignGingerly(targetElement, value);
+                                break;
+                            default:
+                                //TODO create or reuse some common functions for this
+                                const {path} = at;
+                                if(path){
+                                    //TODO allow for nested path
+                                    (<any>targetElement)[path] = value;
+                                }else{
+                                    throw 'NI';
+                                }
+                                
+                        }
+                        
                     }
                 }
-                if(!foundAtLeastOne) throw 404;
-                
+            }else if(isMeta){
+                const targetElement = enhancedElement.parentElement;
+                if(targetElement instanceof Element){
+                    foundAtLeastOne = true;
+                    assignGingerly(targetElement, value);
+                }
             }
+            if(!foundAtLeastOne && isMeta) throw 404;
             
-
         }
 
     }
