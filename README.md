@@ -1,4 +1,4 @@
-# be-calculating (🧮) [TODO]
+# be-calculating (🧮)
 
 [![The Plan](https://www.berfrois.com/uploads/2011/06/rr3.jpg)](https://www.berfrois.com/2011/06/wile-e-coyote-pursues-road-runner/)
 
@@ -157,7 +157,7 @@ To specify the target to assign the output to, use dss syntax for "closest".
 
 In fact, the *-assign-to attribute can specify a list of specifiers to target (space or " and " delimited), so we can share the result to multiple places, fulfilling one of our earlier promises above.
 
-# Part III Sharing the output element, and other binding examples
+# Part III Sharing the output element, and other binding examples [WIP]
 
 The output element can also get in on the sharing act.
 
