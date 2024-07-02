@@ -28,12 +28,9 @@
     "be-exportable": "0.0.118",
     "be-hive": "0.0.183",
     "be-linked": "0.0.106",
-    "be-scoped": "0.0.37",
-    "trans-render": "0.0.789",
-    "xtal-element": "0.0.609"
+    "trans-render": "0.0.789"
   },
   "devDependencies": {
-    "be-sharing": "0.0.5",
     "may-it-serve": "0.0.7",
     "@playwright/test": "1.45.0"
   },
