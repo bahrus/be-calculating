@@ -6,8 +6,14 @@
   <title>Document</title>
 </head>
 <body>
-  <output onchange="hello()" oninput="a+b">
+  <output id=test onchange="hello()" oninput="return ish.a+ish.b">
     <input>
   </output>
+  <script>
+    test.ish = {};
+    test.ish.a = 7;
+    test.ish.b = 2;
+    console.log(test.oninput())
+  </script>
 </body>
 </html>
