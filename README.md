@@ -93,9 +93,19 @@ be-calculating supports specific syntax for switching to the change event, rathe
 </form>
 ```
 
+or
+
+```html
+<form>
+    <input type="range" id=a value="50">
+    +<input type="number" id=b value="25">
+    =<output for="a b" be-calculating onchange="a+b"></output>
+</form>
+```
+
 ## Walk like an Egyptian
 
-Since *be-calculating* seems like a highly useful enhancement that would appear multiple times in a template / html stream, it seems desirable to support an alternative, shorter name, perhaps for less formal settings.  For example, this package supports the following alternative (by referencing 🧮.js).
+Since *be-calculating* seems like a highly useful enhancement that would appear multiple times in a template / html stream, it seems desirable to support an alternative, shorter name, perhaps for less formal settings, where clashes between libraries can be contained.  For example, this package supports the following alternative (by referencing 🧮.js).
 
 ## Example 1d
 
@@ -113,7 +123,7 @@ So everywhere you see 🧮 below, please map this hieroglyph in your mind to the
 
 ## Alternative element references and/or event names
 
-Anything that requires subscribing to alternative or mixed event names, and/or that requires referencing nearby elements using something other than id, needs to use an alternative to the *for* attribute, and use neither the oninput nor the onchange event.  We do so by adopting [DSS](https://github.com/bahrus/trans-render/wiki/VIII.--Directed-Scoped-Specifiers-(DSS)) to describe what to observe, and the more neutral "onload" event.
+Anything that requires subscribing to alternative or mixed event names, and/or that requires referencing nearby elements using something other than id's, needs to use an alternative to the *for* attribute, and use neither the oninput nor the onchange event.  We do so by adopting [DSS](https://github.com/bahrus/trans-render/wiki/VIII.--Directed-Scoped-Specifiers-(DSS)) to describe what to observe, and the more neutral "onload" event.
 
 ## Example 1e
 
