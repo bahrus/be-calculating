@@ -22,9 +22,9 @@ Calculate value of the output element from peer input elements.
 
 ```html
 <form oninput="x.value=parseInt(a.value)+parseInt(b.value)">
-    <input type="range" name="a" value="50">
-    +<input type="number" name="b" value="25">
-    =<output name="x" for="a b"></output>
+     <input type=range id=a name=a value=50>
+    +<input type=number id=b name=b value=25>
+    =<output name=result for="a b"></output>
 </form>
 ```
 
@@ -46,8 +46,8 @@ So what *be-calculating* is wanting to do with this example is shown below:
 
 ```html
 <form>
-    <input type="range" id=a value="50">
-    +<input type="number" id=b value="25">
+    <input type=range id=a value=50>
+    +<input type=number id=b value=25>
     =<output for="a b" be-calculating oninput="a+b"></output>
 </form>
 ```
