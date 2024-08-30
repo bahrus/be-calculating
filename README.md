@@ -148,8 +148,6 @@ If no other enhancements are overloading the onload event, script away bravely
 </a>
 ```
 
-To specify the target to assign the output to, use dss syntax for "closest".
-
 ## Example 2b - Defensive syntax [TODO]
 
 To code defensively, check for the enh property of the event:
