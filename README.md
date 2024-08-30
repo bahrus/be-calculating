@@ -48,7 +48,7 @@ So what *be-calculating* is wanting to do with this example is shown below:
 <form>
     <input type=range id=a value=50>
     +<input type=number id=b value=25>
-    =<output for="a b" be-calculating oninput="a+b"></output>
+    =<output for="a b" be-calculating oninput="value = for.a + for.b"></output>
 </form>
 ```
 
@@ -58,19 +58,6 @@ Why?
 
 We consider it safe to include free-ranging JavaScript expressions inside such attributes, having confidence that sanitizing algorithms will strip such attributes if not explicitly permitted by parties who should have a say-so in the matter.
 
-If the expression is difficult to encode inside an HTML attribute, use a script element preceding the output element:
-
-## Example 1b -- using the script/nomodule element
-
-```html
-<form>
-    <input type="range" id=a value="50">
-    +<input type="number" id=b value="25">
-    =<script nomodule>
-        a + b
-    </script><output for="a b" be-calculating oninput></output>
-</form>
-```
 
 Think of what we've accomplished here!  We have now purified the JavaScript's domain to be independent of the UI.  
 
@@ -87,19 +74,7 @@ be-calculating supports specific syntax for switching to the change event, rathe
 <form>
     <input type="range" id=a value="50">
     +<input type="number" id=b value="25">
-    =<script nomodule>
-        a + b
-    </script><output for="a b" be-calculating onchange></output>
-</form>
-```
-
-or
-
-```html
-<form>
-    <input type="range" id=a value="50">
-    +<input type="number" id=b value="25">
-    =<output for="a b" be-calculating onchange="a+b"></output>
+    =<output for="a b" be-calculating onchange="value = for.a + for.b"></output>
 </form>
 ```
 
@@ -113,7 +88,7 @@ Since *be-calculating* seems like a highly useful enhancement that would appear 
 <form>
     <input type="range" id=a value="50">
     +<input type="number" id=b value="25">
-    =<output for="a b" 🧮 oninput=a+b></output>
+    =<output for="a b" 🧮 oninput="value=for.a + for.b"></output>
 </form>
 ```
 
@@ -131,7 +106,7 @@ Anything that requires subscribing to alternative or mixed event names, and/or t
 <form>
     <input type="range" name=a value="50">
     +<input type="number" name=b value="25">
-    =<output 🧮="@a @b" onload=a+b></output>
+    =<output 🧮="@a @b" onload="value = for.a + for.b"></output>
 </form>
 ```
 
