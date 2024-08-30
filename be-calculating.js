@@ -15,6 +15,12 @@ class BeCalculating extends BE {
      * @type {BEConfig<AP & BEAllProps, Actions & IEnhancement, any>}
      */
     static config = {
+        propDefaults: {
+            nameOfCalculator: 'calculator',
+        },
+        propInfo:{
+            ...propInfo,
+        }
     }
 
 }
