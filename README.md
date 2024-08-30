@@ -42,7 +42,7 @@ And what if we want to pass the sum to multiple places?  be-calculating can do t
 
 So what *be-calculating* is wanting to do with this example is shown below:
 
-## Example 1a -- Almost the most compact notation
+## Example 1a -- Almost the most compact notation [TODO]
 
 ```html
 <form>
@@ -68,7 +68,7 @@ Because now, with a little more tender loving care (described below), we can sta
 
 be-calculating supports specific syntax for switching to the change event, rather than the input event:
 
-## Example 1c
+## Example 1c [TODO]
 
 ```html
 <form>
@@ -82,7 +82,7 @@ be-calculating supports specific syntax for switching to the change event, rathe
 
 Since *be-calculating* seems like a highly useful enhancement that would appear multiple times in a template / html stream, it seems desirable to support an alternative, shorter name, perhaps for less formal settings, where clashes between libraries can be contained.  For example, this package supports the following alternative (by referencing 🧮.js).
 
-## Example 1d
+## Example 1d [TODO]
 
 ```html
 <form>
@@ -100,7 +100,7 @@ So everywhere you see 🧮 below, please map this hieroglyph in your mind to the
 
 Anything that requires subscribing to alternative or mixed event names, and/or that requires referencing nearby elements using something other than id's, needs to use an alternative to the *for* attribute, and use neither the oninput nor the onchange event.  We do so by adopting [DSS](https://github.com/bahrus/trans-render/wiki/VIII.--Directed-Scoped-Specifiers-(DSS)) to describe what to observe, and the more neutral "onload" event.
 
-## Example 1e
+## Example 1e [TODO]
 
 ```html
 <form>
@@ -116,7 +116,7 @@ This still happens to assume, by default, that the "input" event is what we shou
 
 This enhancement also supports other elements.  The script will need to be a bit more verbose though:
 
-## Example 2a - Brave syntax
+## Example 2a - Brave syntax [TODO]
 
 If no other enhancements are overloading the onload event, script away bravely
 
@@ -132,7 +132,9 @@ If no other enhancements are overloading the onload event, script away bravely
 
 To specify the target to assign the output to, use dss syntax for "closest".
 
-## Example 2b - Defensive syntax
+## Example 2b - Defensive syntax [TODO]
+
+To code defensively, check for the enh property of the event:
 
 ```html
 <input name=domain value=emojipedia.org>
@@ -149,13 +151,15 @@ To specify the target to assign the output to, use dss syntax for "closest".
 
 # Part III Sharing the output element, and other binding examples [WIP]
 
+Trigger alert:  Allow for a little head spinning below.  It takes a little getting used to.
+
 The output element can also get in on the sharing act.
 
 
 
 ```html
 <form>
-    <span itemprop=sum 🧮=c oninput="textContent = for.c.value"></span>
+    <span itemprop=sum 🧮=@c oninput="textContent = for.c.value"></span>
     <input type="range" id="a" value="50">
     +<input type="number" id="b" value="25">
     =<output name=c for="a b" 🧮 oninput="value=for.a + for.b"></output>
@@ -172,9 +176,11 @@ But as things stand, we will need to specify the name of the calculator thusly:
 
 ```JavaScript
 //file calculator.js
-export const calculator = ({a, b}) => ({
-    value: a + b
-});
+export class Calculator {
+    handleEvent(e){
+        e.target.value = e.for.a + e.for.b;
+    }
+}
 ```
 
 ```html
@@ -186,13 +192,15 @@ export const calculator = ({a, b}) => ({
 
 If we wish to give it a different name, *be-calculating* needs to know about that:
 
-## Example 4b
+## Example 4b [TODO]
 
 ```JavaScript
 //file TuringAwardDeservingAlgorithm.js
-export const TuringAwardDeservingAlgorithm = ({a, b}) => ({
-    value: a + b
-});
+export class TuringAwardDeservingAlgorithm {
+    handleEvent(e){
+        e.target.value = e.for.a + e.for.b;
+    }
+}
 ```
 
 ```html
