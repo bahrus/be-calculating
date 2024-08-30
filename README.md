@@ -1,4 +1,4 @@
-# be-calculating (🧮)
+# be-calculating (🧮) [TODO]
 
 [![The Plan](https://www.berfrois.com/uploads/2011/06/rr3.jpg)](https://www.berfrois.com/2011/06/wile-e-coyote-pursues-road-runner/)
 
@@ -112,35 +112,40 @@ Anything that requires subscribing to alternative or mixed event names, and/or t
 
 This still happens to assume, by default, that the "input" event is what we should listen for, but having adopted DSS syntax, we can specify any other event name we may want.   While "onload" isn't the most semantic name, perhaps, think "onload of (changes) to these elements, do this...".  Id's and the *for* attribute are generated automatically by *be-calculating* in order to optimize our accessibility experience.
 
-# Part II meta-binding
+# Part II Applied to non output elements
 
-This enhancement also supports one other HTML element type other than the output element -- the void (self closing) *meta* element.  In this case, we shallow merge (Object.assignGingerly) the results of the onload expression into the parent element.
+This enhancement also supports other elements.  The script will need to be a bit more verbose though:
 
-## Example 2a
+## Example 2a - Brave syntax
+
+If no other enhancements are overloading the onload event, script away bravely
 
 ```html
 <input name=domain value=emojipedia.org>
 <input name=search value=calculator>
-<a>Emoji link
-    <meta 🧮="@domain @search" onload="{href:`https://${domain}/search?q=${search}`}">
+<a 
+    🧮="@domain @search" 
+    onload="href = `https://${event.for.domain}/search?q=${event.for.search}`">
+    Emoji link
 </a>
 ```
 
 To specify the target to assign the output to, use dss syntax for "closest".
 
-## Example 2b
+## Example 2b - Defensive syntax
 
 ```html
-<table>
-    <tr>
-        <td>
-            <meta 🧮="@domain @search" 🧮-assign-to=^{tr} onload="{`href:`https://${domain}/search?q=${search}`}">
-        </td>
-    </tr>
-</table>
+<input name=domain value=emojipedia.org>
+<input name=search value=calculator>
+<a 
+    🧮="@domain @search" 
+    onload="
+    const {enh, for: f} = event;
+    if(enh !== 🧮) return;
+    href = `https://${f.domain}/search?q=${f.search}`">
+    Emoji link
+</a>
 ```
-
-In fact, the *-assign-to attribute can specify a list of specifiers to target (space or " and " delimited), so we can share the result to multiple places, fulfilling one of our earlier promises above.
 
 # Part III Sharing the output element, and other binding examples [WIP]
 
@@ -150,10 +155,10 @@ The output element can also get in on the sharing act.
 
 ```html
 <form>
-    <span itemprop=sum></span>
+    <span itemprop=sum 🧮=c oninput="textContent = for.c.value"></span>
     <input type="range" id="a" value="50">
     +<input type="number" id="b" value="25">
-    =<output for="a b" 🧮-assign-to=^{form}|sum:tabIndex oninput="a+b"></output>
+    =<output name=c for="a b" 🧮 oninput="value=for.a + for.b"></output>
 </form>
 ```
 
