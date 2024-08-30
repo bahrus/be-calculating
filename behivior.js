@@ -1,7 +1,14 @@
+// @ts-check
 import { BeHive, seed, MountObserver } from 'be-hive/be-hive.js';
+/** @import {EMC} from './ts-refs/trans-render/be/types.d.ts' */
+/** @import {Actions, PAP,  AP} from './ts-refs/be-calculating/types' */;
+
+/**
+ * @type {EMC<any, AP>}
+ */
 export const emc = {
     base: 'be-calculating',
-    branches: ['', 'assign-to', 'name-of-calculator'],
+    branches: ['', 'name-of-calculator'],
     enhPropKey: 'beCalculating',
     map: {
         '0.0': {
@@ -9,10 +16,6 @@ export const emc = {
             arrValMapsTo: 'remoteSpecifiers'
         },
         '1.0': {
-            instanceOf: 'DSSArray',
-            arrValMapsTo: 'assignTo'
-        },
-        '2.0': {
             instanceOf: 'String',
             mapsTo: 'nameOfCalculator'
         }
@@ -22,21 +25,12 @@ export const emc = {
             name: 'for',
             mapsTo: 'forAttr',
         },
-        {
-            name: 'oninput',
-            mapsTo: 'onInput',
-        },
-        {
-            name: 'onchange',
-            mapsTo: 'onChange',
-        },
-        {
-            name: 'onload',
-            mapsTo: 'onLoad',
-        }
     ],
     importEnh: async () => {
-        const { BeCalculating } = await import('./be-calculating.js');
+        const { BeCalculating } = 
+        /** @type {{new(): IEnhancement<Element>}} */ 
+        /** @type {any} */
+        (await import('./be-calculating.js'));
         return BeCalculating;
     }
 };
