@@ -63,10 +63,28 @@ Think of what we've accomplished here!  We have now purified the JavaScript's do
 
 Code that we can patent and earn Turing Awards with!
 
-Because now, with a little more tender loving care (described below), we can start to see that we can create a reusable function that can be used in multiple contexts -- anywhere we need to add two numbers together. We've been showing inline examples, but the code can be imported via ESM modules, which is discussed below.  
+Because now, with a little more tender loving care (described below), we can start to see that we can create a reusable function that can be used in multiple contexts -- anywhere we need to add two numbers together. We've been showing inline examples, but the code can be imported via ESM modules, which is discussed below. 
 
+We can move the script out of the oninput attribute and into a previous script element:
 
-be-calculating supports specific syntax for switching to the change event, rather than the input event:
+## Example 1b [TODO]
+
+```html
+<form>
+    <input type=range id=a value=50>
+    +<input type=number id=b value=25>
+    <script nomodule>
+        export class Calculator {
+            handleEvent(e){
+                e.target.value = e.for.a + e.for.b;
+            }
+        }
+    </script>
+    =<output for="a b" be-calculating></output>
+</form>
+```
+
+*be-calculating* supports specific syntax for switching to the change event, rather than the input event:
 
 ## Example 1c [TODO]
 
@@ -82,7 +100,7 @@ be-calculating supports specific syntax for switching to the change event, rathe
 
 Since *be-calculating* seems like a highly useful enhancement that would appear multiple times in a template / html stream, it seems desirable to support an alternative, shorter name, perhaps for less formal settings, where clashes between libraries can be contained.  For example, this package supports the following alternative (by referencing 🧮.js).
 
-## Example 1d [TODO]
+## Example 1d The most compact notation [TODO]
 
 ```html
 <form>
