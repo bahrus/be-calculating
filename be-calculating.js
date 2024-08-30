@@ -20,6 +20,11 @@ class BeCalculating extends BE {
         },
         propInfo:{
             ...propInfo,
+            forAttr: {},
+            forArgs: {},
+            remoteSpecifiers: {},
+            defaultEventType: {},
+            scriptEl: {},
         }
     }
 
