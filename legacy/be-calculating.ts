@@ -1,111 +1,279 @@
-import {BE, propDefaults, propInfo} from 'be-enhanced/BE.js';
-import {BEConfig} from 'be-enhanced/types';
-import {XE} from 'xtal-element/XE.js';
-import {Actions, AllProps, AP, PAP, ProPAP} from '../types.js';
-import {Link} from 'be-linked/types';
+import {config as beCnfg} from 'be-enhanced/config.js';
+import {BE, BEConfig} from 'be-enhanced/BE.js';
+import {Actions, AllProps, AP, ProPAP, PAP} from '../types.js';
+import {IEnhancement,  BEAllProps} from 'trans-render/be/types';
+import {Link, WeakEndPoint} from 'be-linked/types';
 import {AllProps as BeExportableAllProps} from 'be-exportable/types';
+import { Specifier } from 'trans-render/dss/types';
+import {Seeker} from 'be-linked/Seeker.js';
+import {getObsVal} from 'be-linked/getObsVal.js';
 
-export class BeCalculating extends BE<AP, Actions> implements Actions{
-    static  override get beConfig(){
+let cnt = 0;
+class BeCalculating extends BE<any, any, HTMLOutputElement | HTMLMetaElement> implements Actions{
+    static override config: BEConfig<AP & BEAllProps, Actions & IEnhancement, any> = {
+        propDefaults: {
+            nameOfCalculator: 'calculator',
+        },
+        propInfo:{
+            ...beCnfg.propInfo,
+            forAttr:{},
+            forArgs:{},
+            onInput: {},
+            onChange: {},
+            onLoad: {},
+            defaultEventType: {},
+            scriptEl: {},
+            remoteSpecifiers: {},
+            calculator: {},
+            assignTo: {},
+            //ignoreForAttr: {},
+        },
+        actions: {
+            parseForAttr:{
+                ifAllOf: ['forAttr'],
+                //ifNoneOf: ['ignoreForAttr']
+            },
+            regOnInput: {
+                ifKeyIn: ['onInput']
+            },
+            regOnChange: {
+                ifKeyIn: ['onChange']
+            },
+            regOnLoad: {
+                ifKeyIn: ['onLoad']
+            },
+            findScriptEl: {
+                ifNoneOf: ['onInput', 'onChange', 'onLoad']
+            },
+            genRemoteSpecifiers: {
+                ifAllOf: ['forArgs', 'defaultEventType']
+            },
+            importSymbols:  {
+                ifAllOf: ['scriptEl', 'remoteSpecifiers']
+            },
+            hydrate: {
+                ifAllOf: ['calculator', 'remoteSpecifiers']
+            }
+        }
+    };
+    #ignoreForAttr = false;
+    parseForAttr(self: this){
+        if(this.#ignoreForAttr){
+            this.#ignoreForAttr = false;
+            return {};
+        }
+        const {forAttr} = self;
         return {
-            parse: true,
-            primaryProp: 'for',
-            isParsedProp: 'isParsed'
-        } as BEConfig
+            forArgs: forAttr?.split(' ').map(s => s.trim()),
+        } as PAP
     }
+    regOnInput(self: this) {
+        const {onInput} = self;
+        return this.#reg(onInput, 'input');
 
-    getDefaultForAttribute(self: this): PAP {
-        const {enhancedElement} = self;
-        switch(enhancedElement.localName){
-            case 'output':
-                return {
-                    forAttribute: 'for'
-                } as PAP;
-            default:
-                throw "Need list of id's"
+    }
+    regOnChange(self: this) {
+        const {onChange} = self;
+        return this.#reg(onChange, 'change');
+        
+    }
+    regOnLoad(self: this){
+        const {onLoad} = self;
+        return this.#reg(onLoad, undefined);
+    }
+    #reg(on: string | undefined, defaultEventType: string | undefined){
+        if(on){
+            const scriptEl = document.createElement('script');
+            scriptEl.innerHTML = on!;
+            return {
+                scriptEl,
+                defaultEventType
+            } as PAP;
+        }else{
+            return {
+                defaultEventType: defaultEventType,
+            } as PAP;
         }
     }
 
-    getAttrExpr(self: this): PAP {
-        const {enhancedElement, recalculateOn: r} = self;
-        const recalculateOn = enhancedElement.hasAttribute('oninput') ? 'input':  'change';
-        const attrExpr = enhancedElement.getAttribute('oninput') || enhancedElement.getAttribute('onchange');
-        const scriptRef = attrExpr  ? undefined : 'previousElementSibling';
+    
+
+    genRemoteSpecifiers(self: this) {
+        const {forArgs, defaultEventType} = self;
         return {
-            attrExpr,
-            recalculateOn,
-            scriptRef,
-        };
+            remoteSpecifiers: forArgs!.map(fa  => ({
+                elS: fa,
+                prop: fa,
+                s: '#',
+                evt: defaultEventType
+            }) as Specifier),
+        } as PAP;
     }
 
-    onAttrExpr(self: this): PAP {
-        const {attrExpr} = self;
-        //TODO optimize
-        const scriptEl = document.createElement('script');
-        scriptEl.innerHTML = attrExpr!;
+
+    findScriptEl(self: this) {
+        const {enhancedElement, defaultEventType} = self;
+        const scriptEl = enhancedElement.previousElementSibling;
+        if(!(scriptEl instanceof HTMLScriptElement)) throw 404;
         return {
+            defaultEventType: defaultEventType ||  'input',
             scriptEl
-        }
-    }
-
-    async findScriptEl(self: this): ProPAP {
-        const {scriptRef, enhancedElement} = self;
-        const {findRealm} = await import('trans-render/lib/findRealm.js');
-        const scriptEl = await findRealm(enhancedElement, scriptRef!) as HTMLScriptElement | null;
-        if(scriptEl === null) throw 404;
-        return {
-            scriptEl
-        }
+        } as PAP;
     }
 
     async importSymbols(self: this): ProPAP {
-        const {scriptEl, nameOfCalculator} = self;
-        import('be-exportable/be-exportable.js');
+        const {scriptEl, nameOfCalculator, forAttr} = self;
+        const {emc} = await import('be-exportable/behivior.js');
         
         if(!scriptEl!.src){
             const {rewrite} = await import('../rewrite.js');
             rewrite(self, scriptEl!);
         }
-        const exportable = await (<any>scriptEl).beEnhanced.whenResolved('be-exportable') as BeExportableAllProps;
+        const exportable = await (<any>scriptEl).beEnhanced.whenResolved(emc) as BeExportableAllProps;
         return {
             calculator: exportable.exports[nameOfCalculator!]
         }
     }
-    #controllers : AbortController[] | undefined;
-    async observe(self: this): ProPAP {
-        const {args, searchBy, searchScope, recalculateOn} = self;
-        const defaultLink = {
-            localInstance: 'local',
-            enhancement: 'beCalculating',
-            downstreamPropName: 'propertyBag',
-            observe: {
-                attr: searchBy,
-                isFormElement: true,
-                names: args,
-                scope: searchScope,
-                on: recalculateOn
-            }
-        } as Link;
-        const {observe} = await import('be-linked/observe.js');
-        await observe(self, defaultLink);
-        const {propertyBag, calculator} = self;
-        this.#disconnect();
-        this.#controllers = [];
-        for(const arg of args!){
+
+    async hydrate(self: this){
+        const {calculator, remoteSpecifiers, enhancedElement, defaultEventType} = self;
+        const remoteTuples: Array<[Specifier, WeakEndPoint]> = [];
+        const rootNode = enhancedElement.getRootNode();
+        for(const remoteSpecifier of remoteSpecifiers!){
+            const seeker = new Seeker<AP, any>(remoteSpecifier, false);
+            const res = await seeker.do(self, undefined, enhancedElement);
+            remoteTuples.push([remoteSpecifier, res!]);
             const ac = new AbortController();
-            propertyBag!.addEventListener(arg, async e => {
-                const result = await calculator!(propertyBag!, (e as CustomEvent).detail);
-                Object.assign(self, result);
-            }, {signal: ac.signal});
-            this.#controllers.push(ac);
+            this.#controllers?.push(ac)
+            const {eventSuggestion} = res!;
+            const eventName = defaultEventType || eventSuggestion;
+            
+            if(eventName !== undefined){
+                const remoteHardRef = res?.signal?.deref();
+                if(remoteHardRef === undefined){
+                    //TODO delete from list
+                    continue;
+                }
+                if(remoteHardRef instanceof Element && rootNode.contains(remoteHardRef) && enhancedElement instanceof HTMLOutputElement){
+                    if(!remoteHardRef.id){
+                        const guid = 'be-calculating-' + cnt;
+                        cnt++;
+                        remoteHardRef.id = guid;
+                    }
+                    this.#ignoreForAttr = true;
+                    enhancedElement.htmlFor.add(remoteHardRef.id);
+                }
+                remoteHardRef.addEventListener(eventName, e => {
+                    this.#setValue(self, remoteTuples, calculator!);
+                }, {signal: ac.signal});
+            }
         }
-        const result = await calculator!(propertyBag!);
-        Object.assign(self, result);
+        await this.#setValue(self, remoteTuples, calculator!);
+        
         return {
-            //value: await calculator!(propertyBag!),
-            resolved: true,
+            resolved: true
         } as PAP;
     }
+
+    async #setValue(self: this, remoteTuples: Array<[Specifier, WeakEndPoint]>, calculator: (vm: any) => any){
+        const {enhancedElement} = self;
+        const vm: any = {};
+        
+        for(const tuple of remoteTuples){
+            const [remoteSpecifier, rsae] = tuple;
+            const remoteEndPoint = rsae.signal?.deref();
+            if(remoteEndPoint === undefined){
+                //TODO:  remove from list
+                continue;
+            }
+            const val = await getObsVal(remoteEndPoint, remoteSpecifier, enhancedElement);
+            vm[remoteSpecifier.prop!] = val;
+        }
+        const valueContainer =  await calculator(vm);
+        const {value} = valueContainer;
+        let isMeta = false;
+        if(enhancedElement instanceof HTMLOutputElement){
+            enhancedElement.value = value === undefined ? ''  : (value + '');
+        }else{
+            isMeta = true;
+        }
+        
+        if(value !== undefined){
+            const {assignTo} = self;
+            let foundAtLeastOne = false;
+            const {assignGingerly} = await import('trans-render/lib/assignGingerly.js');
+            if(assignTo !== undefined){
+                const {find} = await import('trans-render/dss/find.js');
+                for(const at of assignTo){
+                    const targetElement = await find(enhancedElement, at);
+                    if(targetElement instanceof Element){
+                        foundAtLeastOne = true;
+                        switch(typeof value){
+                            case 'object':
+                                assignGingerly(targetElement, value);
+                                break;
+                            default:
+                                //TODO create or reuse some common functions for this
+                                const {path} = at;
+                                if(path){
+                                    //TODO allow for nested path
+                                    (<any>targetElement)[path] = value;
+                                }else{
+                                    throw 'NI';
+                                }
+                                
+                        }
+                        
+                    }
+                }
+            }else if(isMeta){
+                const targetElement = enhancedElement.parentElement;
+                if(targetElement instanceof Element){
+                    foundAtLeastOne = true;
+                    assignGingerly(targetElement, value);
+                }
+            }
+            if(!foundAtLeastOne && isMeta) throw 404;
+            
+        }
+
+    }
+
+    #controllers : AbortController[]  = [];
+    // async observe(self: this): ProPAP {
+    //     const {args, searchBy, searchScope, recalculateOn} = self;
+    //     const defaultLink = {
+    //         localInstance: 'local',
+    //         enhancement: 'beCalculating',
+    //         downstreamPropName: 'propertyBag',
+    //         observe: {
+    //             attr: searchBy,
+    //             isFormElement: true,
+    //             names: args,
+    //             scope: searchScope,
+    //             on: recalculateOn
+    //         }
+    //     } as Link;
+    //     const {observe} = await import('be-linked/observe.js');
+    //     await observe(self, defaultLink);
+    //     const {propertyBag, calculator} = self;
+    //     this.#disconnect();
+    //     this.#controllers = [];
+    //     for(const arg of args!){
+    //         const ac = new AbortController();
+    //         propertyBag!.addEventListener(arg, async e => {
+    //             const result = await calculator!(propertyBag!, (e as CustomEvent).detail);
+    //             Object.assign(self, result);
+    //         }, {signal: ac.signal});
+    //         this.#controllers.push(ac);
+    //     }
+    //     const result = await calculator!(propertyBag!);
+    //     Object.assign(self, result);
+    //     return {
+    //         //value: await calculator!(propertyBag!),
+    //         resolved: true,
+    //     } as PAP;
+    // }
 
     
     #disconnect(){
@@ -113,81 +281,18 @@ export class BeCalculating extends BE<AP, Actions> implements Actions{
             for(const ac of this.#controllers){
                 ac.abort();
             }
-            this.#controllers = undefined;
+            this.#controllers = [];
         }
     }
 
-    override detach(detachedElement: Element): void {
+    override async detach(detachedElement: Element){
         this.#disconnect();
     }
 
-    getArgs(self: this): PAP {
-        const {for: forString} = self;
-        let forS: string | null | undefined = forString;
-        if(!forS){
-            const {forAttribute, enhancedElement} = self;
-            forS = enhancedElement.getAttribute(forAttribute!);
-        }
-        if(!forS) throw 404;
-        return {
-            args: forS.split(' ')
-        };
-    }
-
-    async onValue(self: this){
-        const {enhancedElement, value, propertyToSet, notify} = self;
-        (<any>enhancedElement)[propertyToSet!] = value;
-        if(notify !== undefined){
-            const {doNotify} = await import('../doNotify.js');
-            await doNotify(self);
-        }
-    }
 }
 
-export interface BeCalculating extends AllProps{}
+interface BeCalculating extends AP{}
 
-export const tagName = 'be-calculating';
+await BeCalculating.bootUp();
 
-
-const xe = new XE<AP, Actions>({
-    config: {
-        tagName,
-        isEnh: true,
-        propDefaults: {
-            ...propDefaults,
-            searchScope: ['closestOrRootNode', 'form'],
-            propertyToSet: 'value',
-            searchBy: 'id',
-            //scriptRef: 'previousElementSibling',
-            //recalculateOn: 'change',
-            nameOfCalculator: 'calculator'
-        },
-        propInfo: {
-            ...propInfo,
-        },
-        actions: {
-            getDefaultForAttribute:{
-                ifAllOf: ['isParsed'],
-                ifNoneOf: ['forAttribute', 'for', 'args']
-            },
-            getAttrExpr:{
-                ifAllOf: ['isParsed']
-            },
-            onAttrExpr: 'attrExpr',
-            getArgs:{
-                ifAtLeastOneOf: ['forAttribute', 'for']
-            },
-            findScriptEl: 'scriptRef',
-            importSymbols: {
-                ifAllOf: ['scriptEl', 'nameOfCalculator', 'args']
-            },
-            observe:{
-                ifAllOf: ['calculator', 'args']
-            },
-            onValue: {
-                ifAllOf: ['propertyToSet', 'value'],
-            }
-        }
-    },
-    superclass: BeCalculating
-});
+export {BeCalculating};
