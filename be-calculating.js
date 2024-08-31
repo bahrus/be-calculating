@@ -30,11 +30,14 @@ class BeCalculating extends BE {
             isOutputEl: {},
         },
         compacts: {
-            when_forAttr_changes_invoke_parseForAttr: 0
+            //when_forAttr_changes_invoke_parseForAttr: 0
         },
         actions: {
             genRemoteSpecifiers: {
                 ifAllOf: ['forArgs', 'defaultEventType']
+            },
+            parseForAttr: {
+                ifAllOf: ['forAttr', 'isOutputEl']
             }
         },
     }

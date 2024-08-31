@@ -32,7 +32,8 @@ export const emc = {
         /** @type {any} */
         (await import('./be-calculating.js'));
         return BeCalculating;
-    }
+    },
+    mapLocalNameTo: 'enhElLocalName'
 };
 const mose = seed(emc);
 MountObserver.synthesize(document, BeHive, mose);
