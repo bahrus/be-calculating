@@ -48,7 +48,7 @@ So what *be-calculating* is wanting to do with this example is shown below:
 <form>
     <input type=range id=a value=50>
     +<input type=number id=b value=25>
-    =<output for="a b" be-calculating oninput="value = for.a + for.b"></output>
+    =<output for="a b" be-calculating oninput="value = $a + $b"></output>
 </form>
 ```
 
@@ -76,7 +76,7 @@ We can move the script out of the oninput attribute and into a previous script e
     <script nomodule>
         export class Calculator {
             handleEvent(e){
-                e.target.value = e.for.a + e.for.b;
+                e.target.value = e.factors.a + e.factors.b;
             }
         }
     </script>
@@ -92,7 +92,7 @@ We can move the script out of the oninput attribute and into a previous script e
 <form>
     <input type="range" id=a value="50">
     +<input type="number" id=b value="25">
-    =<output for="a b" be-calculating onchange="value = for.a + for.b"></output>
+    =<output for="a b" be-calculating onchange="value = $a + $b"></output>
 </form>
 ```
 
@@ -106,7 +106,7 @@ Since *be-calculating* seems like a highly useful enhancement that would appear 
 <form>
     <input type="range" id=a value="50">
     +<input type="number" id=b value="25">
-    =<output for="a b" 🧮 oninput="value=for.a + for.b"></output>
+    =<output for="a b" 🧮 oninput="value=$a + $b"></output>
 </form>
 ```
 
@@ -143,7 +143,7 @@ If no other enhancements are overloading the onload event, script away bravely
 <input name=search value=calculator>
 <a 
     🧮="@domain @search" 
-    onload="href = `https://${event.for.domain}/search?q=${event.for.search}`">
+    onload="href = `https://${event.factors.domain}/search?q=${event.factors.search}`">
     Emoji link
 </a>
 ```
@@ -158,7 +158,7 @@ To code defensively, check for the enh property of the event:
 <a 
     🧮="@domain @search" 
     onload="
-    const {enh, for: f} = event;
+    const {enh, factors: f} = event;
     if(enh !== 🧮) return;
     href = `https://${f.domain}/search?q=${f.search}`">
     Emoji link
@@ -194,7 +194,7 @@ But as things stand, we will need to specify the name of the calculator thusly:
 //file calculator.js
 export class Calculator {
     handleEvent(e){
-        e.target.value = e.for.a + e.for.b;
+        e.target.value = e.factors.a + e.actors.b;
     }
 }
 ```

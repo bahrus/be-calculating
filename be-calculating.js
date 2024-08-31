@@ -143,14 +143,13 @@ class BeCalculating extends BE {
             const remoteEl = await find(enhancedElement, remoteSpecifier);
             if(!(remoteEl instanceof Element)) continue;
             const ao = await ASMR.getAO(remoteEl, {
-                UEEN: eventTypeToListen
+                evt: eventTypeToListen
             });
-            aos[remoteSpecifier.prop] = [ao, new WeakRef(remoteEl)];
+            aos[remoteSpecifier.prop] = ao;
             ao.addEventListener('value', async e => {
-                debugger;
                 for(const prop in aos){
-                    const [ao, ref] = aos[prop];
-                    const val = await ao.getValue(ref.deref());
+                    const ao = aos[prop];
+                    const val = await ao.getValue();
                     console.log({enhancedElement, val});
                     enhancedElement['$' + prop] = val;
                 }
