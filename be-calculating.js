@@ -173,24 +173,7 @@ class BeCalculating extends BE {
             //TODO abort controller
             ao.addEventListener('value', this);
         }
-        // for(const remoteSpecifier of remoteSpecifiers){
-        //     const remoteEl = await find(enhancedElement, remoteSpecifier);
-        //     if(!(remoteEl instanceof Element)) continue;
-        //     const ao = await ASMR.getAO(remoteEl, {
-        //         evt: eventTypeToListen
-        //     });
-        //     aos[remoteSpecifier.prop] = ao;
-        //     ao.addEventListener('value', async e => {
-        //         for(const prop in aos){
-        //             const ao = aos[prop];
-        //             const val = await ao.getValue();
-        //             console.log({enhancedElement, val});
-        //             enhancedElement['$' + prop] = val;
-        //         }
-                
-        //         enhancedElement.dispatchEvent(new Event(eventTypeToListen))
-        //     });
-        // }
+        this.handleEvent();
         return {
             resolved: true
         }
@@ -205,7 +188,6 @@ class BeCalculating extends BE {
             enhancedElement['$' + prop] = val;
         }
         self.channelEvent(new Event(defaultEventType));
-        console.log({self});
     }
 
 }
