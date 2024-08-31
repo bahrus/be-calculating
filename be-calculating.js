@@ -8,9 +8,11 @@ import { BE } from 'be-enhanced/BE.js';
 
 /**
  * @implements {Actions}
+ * @implements {EventListenerObject}
  * 
  */
 class BeCalculating extends BE {
+
 
     /**
      * @type {BEConfig<AP & BEAllProps, Actions & IEnhancement, any>}
@@ -19,6 +21,8 @@ class BeCalculating extends BE {
         propDefaults: {
             nameOfCalculator: 'calculator',
             isAttached: true,
+            categorized: false,
+            remSpecifierLen: 0
         },
         propInfo:{
             ...propInfo,
@@ -33,13 +37,18 @@ class BeCalculating extends BE {
         compacts: {
             //when_forAttr_changes_invoke_parseForAttr: 0
             when_enhElLocalName_changes_invoke_getDefltEvtType: 0,
+            when_enhElLocalName_changes_invoke_categorizeEl: 0,
+            pass_length_of_remoteSpecifiers_to_remSpecifierLen: 0,
         },
         actions: {
+            parseForAttr: {
+                ifAllOf: ['forAttr', 'isOutputEl']
+            },
             genRemoteSpecifiers: {
                 ifAllOf: ['forArgs', 'defaultEventType']
             },
-            parseForAttr: {
-                ifAllOf: ['forAttr', 'isOutputEl']
+            hydrate: {
+                ifAllOf: ['defaultEventType', 'remSpecifierLen']
             }
         },
     }
@@ -52,7 +61,8 @@ class BeCalculating extends BE {
         //TODO Make this logic compactible?
         const {enhElLocalName} = self;
         return /** @type {PAP} */({
-            isOutputEl: enhElLocalName === 'output'
+            isOutputEl: enhElLocalName === 'output',
+            categorized: true,
         });
     }
 
@@ -124,9 +134,40 @@ class BeCalculating extends BE {
      * @param {BAP} self 
      */
     async hydrate(self){
+        const {remoteSpecifiers, enhancedElement, defaultEventType} = self;
+        const {find} = await import('trans-render/dss/find.js');
+        const {ASMR} = await import('trans-render/asmr/asmr.js');
+        const eventTypeToListen = defaultEventType !== 'load' ? defaultEventType || 'input' : 'input';
+        const aos = {};
+        for(const remoteSpecifier of remoteSpecifiers){
+            const remoteEl = await find(enhancedElement, remoteSpecifier);
+            if(!(remoteEl instanceof Element)) continue;
+            const ao = await ASMR.getAO(remoteEl, {
+                UEEN: eventTypeToListen
+            });
+            aos[remoteSpecifier.prop] = [ao, new WeakRef(remoteEl)];
+            ao.addEventListener('value', async e => {
+                //debugger;
+                for(const prop in aos){
+                    const [ao, ref] = aos[prop];
+                    const val = await ao.getValue(ref.deref());
+                    console.log({enhancedElement, val});
+                    enhancedElement['$' + prop] = val;
+                }
+                
+                enhancedElement.dispatchEvent(new Event(eventTypeToListen))
+            });
+        }
         return {
             resolved: true
         }
+    }
+
+    handleEvent(object) {
+        const self = /** @type {BAP} *//** @type {any} */ (this);
+        const {enhancedElement, defaultEventType} = self;
+        
+        console.log({self});
     }
 
 }

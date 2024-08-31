@@ -124,7 +124,7 @@ Anything that requires subscribing to alternative or mixed event names, and/or t
 <form>
     <input type="range" name=a value="50">
     +<input type="number" name=b value="25">
-    =<output 🧮="@a @b" onload="value = for.a + for.b"></output>
+    =<output 🧮="@a @b" onload="value = $a + $b"></output>
 </form>
 ```
 
