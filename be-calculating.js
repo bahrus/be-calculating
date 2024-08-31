@@ -3,7 +3,7 @@ import { resolved, rejected, propInfo} from 'be-enhanced/cc.js';
 import { BE } from 'be-enhanced/BE.js';
 
 /** @import {BEConfig, IEnhancement, BEAllProps} from './ts-refs/be-enhanced/types.d.ts' */
-/** @import {Actions, PAP,  AP} from './ts-refs/be-calculating/types' */;
+/** @import {Actions, PAP,  AP, BAP} from './ts-refs/be-calculating/types' */;
 /** @import {EnhancementInfo} from './ts-refs/trans-render/be/types.d.ts' */
 
 /**
@@ -41,15 +41,26 @@ class BeCalculating extends BE {
             }
         },
     }
+
     /**
      * 
-     * @param {AP & BEAllProps} self 
-     * @returns {PAP}
+     * @param {BAP} self 
+     */
+    categorizeEl(self){
+        //TODO Make this logic compactible?
+        const {enhElLocalName} = self;
+        return /** @type {PAP} */({
+            isOutputEl: enhElLocalName === 'output'
+        });
+    }
+
+    /**
+     * 
+     * @param {BAP} self 
      */
     getDefltEvtType(self){
-        const {enhancedElement} = self;
-        const {localName} = enhancedElement;
-        switch(localName){
+        const {enhElLocalName, enhancedElement} = self;
+        switch(enhElLocalName){
             case 'output':
                 if(self.forAttr === undefined){
                     return /** @type {PAP} */({
@@ -77,22 +88,22 @@ class BeCalculating extends BE {
     #ignoreForAttr = false;
     /**
      * 
-     * @param {AP & BEAllProps} self 
+     * @param {BAP} self 
      */
     parseForAttr(self) {
         if(this.#ignoreForAttr){
             this.#ignoreForAttr = false;
             return {};
         }
-        const {forAttr} = self;
+        const {enhancedElement} = self;
         return {
-            forArgs: forAttr?.split(' ').map(s => s.trim()),
+            forArgs: Array.from(/** @type {HTMLOutputElement} */(enhancedElement).htmlFor)
         }
     }
 
     /**
      * 
-     * @param {AP & BEAllProps} self 
+     * @param {BAP} self 
      */
     genRemoteSpecifiers(self){
         const {forArgs, defaultEventType} = self;
@@ -108,7 +119,7 @@ class BeCalculating extends BE {
 
     /**
      * 
-     * @param {AP & BEAllProps} self 
+     * @param {BAP} self 
      */
     async hydrate(self){
         return {

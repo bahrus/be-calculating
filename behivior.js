@@ -7,6 +7,7 @@ import { BeHive, seed, MountObserver } from 'be-hive/be-hive.js';
  * @type {EMC<any, AP>}
  */
 export const emc = {
+    hostInstanceOf: [HTMLElement],
     base: 'be-calculating',
     branches: ['', 'name-of-calculator'],
     enhPropKey: 'beCalculating',
