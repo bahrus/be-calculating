@@ -181,13 +181,23 @@ class BeCalculating extends BE {
 
     async handleEvent() {
         const self = /** @type {BAP} */(/** @type {any} */ (this));
-        const {enhancedElement, defaultEventType, propToAO} = self;
+        const {enhancedElement, defaultEventType, propToAO, isOutputEl} = self;
         for(const prop in propToAO){
             const ao = propToAO[prop];
             const val = await ao.getValue();
-            enhancedElement['$' + prop] = val;
+            if(isOutputEl){
+                const key = '$' + prop;
+                if(key in enhancedElement) throw 500;
+                enhancedElement[key] = val;
+            }
         }
         self.channelEvent(new Event(defaultEventType));
+        if(isOutputEl){
+            for(const prop in propToAO){
+                const key = '$' + prop;
+                delete enhancedElement[key];
+            }
+        }
     }
 
 }

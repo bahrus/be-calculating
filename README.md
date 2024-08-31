@@ -1,4 +1,4 @@
-# be-calculating (🧮) [TODO]
+# be-calculating (🧮) [WIP]
 
 [![The Plan](https://www.berfrois.com/uploads/2011/06/rr3.jpg)](https://www.berfrois.com/2011/06/wile-e-coyote-pursues-road-runner/)
 
@@ -42,7 +42,7 @@ And what if we want to pass the sum to multiple places?  be-calculating can do t
 
 So what *be-calculating* is wanting to do with this example is shown below:
 
-## Example 1a -- Almost the most compact notation [TODO]
+## Example 1a -- Almost the most compact notation
 
 ```html
 <form>
