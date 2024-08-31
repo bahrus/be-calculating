@@ -147,7 +147,7 @@ class BeCalculating extends BE {
             });
             aos[remoteSpecifier.prop] = [ao, new WeakRef(remoteEl)];
             ao.addEventListener('value', async e => {
-                //debugger;
+                debugger;
                 for(const prop in aos){
                     const [ao, ref] = aos[prop];
                     const val = await ao.getValue(ref.deref());
