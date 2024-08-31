@@ -28,6 +28,7 @@ class BeCalculating extends BE {
             defaultEventType: {},
             scriptEl: {},
             isOutputEl: {},
+            enhElLocalName: {},
         },
         compacts: {
             //when_forAttr_changes_invoke_parseForAttr: 0
