@@ -31,6 +31,7 @@ class BeCalculating extends BE {
         },
         compacts: {
             //when_forAttr_changes_invoke_parseForAttr: 0
+            when_enhElLocalName_changes_invoke_getDefltEvtType: 0,
         },
         actions: {
             genRemoteSpecifiers: {
