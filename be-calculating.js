@@ -36,7 +36,7 @@ class BeCalculating extends BE {
             genRemoteSpecifiers: {
                 ifAllOf: ['forArgs', 'defaultEventType']
             }
-        }
+        },
     }
     /**
      * 
