@@ -31,6 +31,11 @@ class BeCalculating extends BE {
         },
         compacts: {
             when_forAttr_changes_invoke_parseForAttr: 0
+        },
+        actions: {
+            genRemoteSpecifiers: {
+                ifAllOf: ['forArgs', 'defaultEventType']
+            }
         }
     }
     /**
@@ -79,6 +84,32 @@ class BeCalculating extends BE {
         const {forAttr} = self;
         return {
             forArgs: forAttr?.split(' ').map(s => s.trim()),
+        }
+    }
+
+    /**
+     * 
+     * @param {AP & BEAllProps} self 
+     */
+    genRemoteSpecifiers(self){
+        const {forArgs, defaultEventType} = self;
+        return /** @type {PAP} */ ({
+            remoteSpecifiers: forArgs.map(fa  => ({
+                elS: fa,
+                prop: fa,
+                s: '#',
+                evt: defaultEventType
+            })),
+        });
+    }
+
+    /**
+     * 
+     * @param {AP & BEAllProps} self 
+     */
+    async hydrate(self){
+        return {
+            resolved: true
         }
     }
 

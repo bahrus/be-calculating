@@ -18,7 +18,7 @@ Calculate value of the output element from peer input elements.
 
 </details>
 
-*be-calculating* can't help but admire the brevity and sorcery on [display here](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/output):
+*be-calculating* can't help but admire the brevity and sorcery on [display here](https://www.w3schools.com/TAGs/tag_output.asp):
 
 ```html
 <form oninput="x.value=parseInt(a.value)+parseInt(b.value)">
