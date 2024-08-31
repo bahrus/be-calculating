@@ -59,11 +59,11 @@ Why?
 We consider it safe to include free-ranging JavaScript expressions inside such attributes, having confidence that sanitizing algorithms will strip such attributes if not explicitly permitted by parties who should have a say-so in the matter.
 
 
-Think of what we've accomplished here!  We have now purified the JavaScript's domain to be independent of the UI.  
+Think of what we've accomplished here!  We have now purified the JavaScript's domain to be independent of the UI, if one squints hard enough.  
 
 Code that we can patent and earn Turing Awards with!
 
-Because now, with a little more tender loving care (described below), we can start to see that we can create a reusable function that can be used in multiple contexts -- anywhere we need to add two numbers together. We've been showing inline examples, but the code can be imported via ESM modules, which is discussed below. 
+Because now, with a little more tender loving care (described below), we can start to see that we can create a reusable class that can be used in multiple contexts -- anywhere we need to add two numbers together. We've been showing inline examples, but the code can be imported via ES classes located in ESM modules, which is discussed below. 
 
 We can move the script out of the oninput attribute and into a previous script element:
 
