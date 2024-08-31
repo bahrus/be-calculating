@@ -5,6 +5,7 @@ import { BE } from 'be-enhanced/BE.js';
 /** @import {BEConfig, IEnhancement, BEAllProps} from './ts-refs/be-enhanced/types.d.ts' */
 /** @import {Actions, PAP,  AP, BAP} from './ts-refs/be-calculating/types' */;
 /** @import {EnhancementInfo} from './ts-refs/trans-render/be/types.d.ts' */
+/** @import {AbsorbingObject} from './ts-refs/trans-render/asmr/types.d.ts' */
 
 /**
  * @implements {Actions}
@@ -33,6 +34,7 @@ class BeCalculating extends BE {
             scriptEl: {},
             isOutputEl: {},
             enhElLocalName: {},
+            propToAO: {},
         },
         compacts: {
             //when_forAttr_changes_invoke_parseForAttr: 0
@@ -47,8 +49,11 @@ class BeCalculating extends BE {
             genRemoteSpecifiers: {
                 ifAllOf: ['forArgs', 'defaultEventType']
             },
-            hydrate: {
+            seek: {
                 ifAllOf: ['defaultEventType', 'remSpecifierLen']
+            },
+            hydrate: {
+                ifAllOf: ['propToAO']
             }
         },
     }
@@ -133,39 +138,73 @@ class BeCalculating extends BE {
      * 
      * @param {BAP} self 
      */
-    async hydrate(self){
+    async seek(self){
         const {remoteSpecifiers, enhancedElement, defaultEventType} = self;
         const {find} = await import('trans-render/dss/find.js');
         const {ASMR} = await import('trans-render/asmr/asmr.js');
         const eventTypeToListen = defaultEventType !== 'load' ? defaultEventType || 'input' : 'input';
-        const aos = {};
+        /**
+         * @type {{[key: string]: AbsorbingObject}}
+         */
+        const propToAO = {};
         for(const remoteSpecifier of remoteSpecifiers){
             const remoteEl = await find(enhancedElement, remoteSpecifier);
             if(!(remoteEl instanceof Element)) continue;
+            const {prop} = remoteSpecifier;
+            if(prop === undefined) throw 'NI';
             const ao = await ASMR.getAO(remoteEl, {
                 evt: eventTypeToListen
             });
-            aos[remoteSpecifier.prop] = ao;
-            ao.addEventListener('value', async e => {
-                for(const prop in aos){
-                    const ao = aos[prop];
-                    const val = await ao.getValue();
-                    console.log({enhancedElement, val});
-                    enhancedElement['$' + prop] = val;
-                }
-                
-                enhancedElement.dispatchEvent(new Event(eventTypeToListen))
-            });
+            propToAO[prop] = ao;
         }
+        return {
+            propToAO
+        };
+    }
+
+    /**
+     * 
+     * @param {BAP} self 
+     */
+    async hydrate(self){
+        const {propToAO} = self;
+        const aos = Object.values(propToAO);
+        for(const ao of aos){
+            //TODO abort controller
+            ao.addEventListener('value', this);
+        }
+        // for(const remoteSpecifier of remoteSpecifiers){
+        //     const remoteEl = await find(enhancedElement, remoteSpecifier);
+        //     if(!(remoteEl instanceof Element)) continue;
+        //     const ao = await ASMR.getAO(remoteEl, {
+        //         evt: eventTypeToListen
+        //     });
+        //     aos[remoteSpecifier.prop] = ao;
+        //     ao.addEventListener('value', async e => {
+        //         for(const prop in aos){
+        //             const ao = aos[prop];
+        //             const val = await ao.getValue();
+        //             console.log({enhancedElement, val});
+        //             enhancedElement['$' + prop] = val;
+        //         }
+                
+        //         enhancedElement.dispatchEvent(new Event(eventTypeToListen))
+        //     });
+        // }
         return {
             resolved: true
         }
     }
 
-    handleEvent(object) {
-        const self = /** @type {BAP} *//** @type {any} */ (this);
-        const {enhancedElement, defaultEventType} = self;
-        
+    async handleEvent() {
+        const self = /** @type {BAP} */(/** @type {any} */ (this));
+        const {enhancedElement, defaultEventType, propToAO} = self;
+        for(const prop in propToAO){
+            const ao = propToAO[prop];
+            const val = await ao.getValue();
+            enhancedElement['$' + prop] = val;
+        }
+        self.channelEvent(new Event(defaultEventType));
         console.log({self});
     }
 
