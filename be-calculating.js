@@ -210,7 +210,8 @@ class BeCalculating extends BE {
             const {prop} = remoteSpecifier;
             if(prop === undefined) throw 'NI';
             const ao = await ASMR.getAO(remoteEl, {
-                evt: remoteSpecifier.evt || defaultEventType
+                evt: remoteSpecifier.evt || defaultEventType,
+                
             });
             propToAO[prop] = ao;
         }

@@ -197,10 +197,9 @@ To do so, specify this as follows:
 
 ```html
 <form>
-    <span itemprop=sum 🧮=@c onload="textContent = $.c"></span>
     <input type="range" id="a" value="50">
     +<input type="number" id="b" value="25">
-    =<output name=c 🧮="#a:$0 #b:$0" oninput="value=$.a.valueAsNumber + $.b.valueAsNumber"></output>
+    =<output 🧮="#a:$0 #b:$0" oninput="value=$.a.valueAsNumber + $.b.valueAsNumber"></output>
 </form>
 ```
 
