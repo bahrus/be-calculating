@@ -163,20 +163,46 @@ class BeCalculating extends BE {
     }
 
     /**
+     * @type {Array<AbortController> | undefined}
+     */
+    #acs;
+
+    /**
      * 
      * @param {BAP} self 
      */
     async hydrate(self){
+        this.disconnect();
         const {propToAO} = self;
         const aos = Object.values(propToAO);
         for(const ao of aos){
-            //TODO abort controller
-            ao.addEventListener('value', this);
+            const ac = new AbortController();
+            this.#acs?.push(ac);
+            ao.addEventListener('value', this, {signal: ac.signal});
         }
         this.handleEvent();
         return {
             resolved: true
         }
+    }
+
+    disconnect(){
+        const acs = this.#acs;
+        if(acs !== undefined){
+            for(const ac of acs){
+                ac.abort();
+            }
+        }
+        this.#acs = [];
+    }
+
+    /**
+     * @param {Element} enhancedElement
+     * @override
+     */
+    async detach(enhancedElement){
+        await super.detach(enhancedElement);
+        this.disconnect();
     }
 
     async handleEvent() {
