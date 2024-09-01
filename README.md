@@ -118,7 +118,7 @@ So everywhere you see 🧮 below, please map this hieroglyph in your mind to the
 
 Anything that requires subscribing to alternative or mixed event names, and/or that requires referencing nearby elements using something other than id's, needs to use an alternative to the *for* attribute, and use neither the oninput nor the onchange event.  We do so by adopting [DSS](https://github.com/bahrus/trans-render/wiki/VIII.--Directed-Scoped-Specifiers-(DSS)) to describe what to observe, and the more neutral "onload" event.
 
-## Example 1e [TODO]
+## Example 1e
 
 ```html
 <form>
