@@ -178,7 +178,7 @@ The output element can also get in on the sharing act.
     <span itemprop=sum 🧮=@c onload="textContent = $.c"></span>
     <input type="range" id="a" value="50">
     +<input type="number" id="b" value="25">
-    =<output name=c for="a b" 🧮 oninput="value=for.a + for.b"></output>
+    =<output name=c for="a b" 🧮 oninput="value=$.a + $.b"></output>
 </form>
 ```
 
@@ -214,7 +214,7 @@ If we wish to give it a different name, *be-calculating* needs to know about tha
 //file TuringAwardDeservingAlgorithm.js
 export class TuringAwardDeservingAlgorithm {
     handleEvent(e){
-        e.target.value = e.for.a + e.for.b;
+        e.target.value = e.factors.a + e.factors.b;
     }
 }
 ```
