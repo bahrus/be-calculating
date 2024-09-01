@@ -246,7 +246,7 @@ class BeCalculating extends BE {
     #calculatorInstance;
     async handleEvent() {
         const self = /** @type {BAP} */(/** @type {any} */ (this));
-        const {enhancedElement, calculator, propToAO, eventArg} = self;
+        const {enhancedElement, calculator, propToAO, eventArg, hasInlineEvent, publishEventType} = self;
         if(eventArg in enhancedElement){
             throw `${eventArg} classes with existing element.  Specify alternative eventArg.`;
         }
@@ -257,9 +257,17 @@ class BeCalculating extends BE {
             factors[prop] = val;
         }
         enhancedElement[eventArg] = factors;
-        const loadEvent = new LoadEvent(enhancedElement, factors)
+        /**
+         * @type {Event}
+         */
+        let event;
+        if(hasInlineEvent){
+            event = new Event(publishEventType);
+        }else{
+            event = new LoadEvent(enhancedElement, factors);
+        }
         try{
-            self.channelEvent(loadEvent);
+            self.channelEvent(event);
         }finally{
             delete enhancedElement[eventArg];
         }
@@ -267,7 +275,7 @@ class BeCalculating extends BE {
             const c = new calculator();
             this.#calculatorInstance = c;
         }
-        this.#calculatorInstance?.handleEvent(loadEvent);
+        this.#calculatorInstance?.handleEvent(event);
         
     }
 
