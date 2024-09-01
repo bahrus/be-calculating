@@ -23,7 +23,8 @@ class BeCalculating extends BE {
             nameOfCalculator: 'calculator',
             isAttached: true,
             categorized: false,
-            remSpecifierLen: 0
+            remSpecifierLen: 0,
+            eventArg: '$',
         },
         propInfo:{
             ...propInfo,
@@ -178,7 +179,9 @@ class BeCalculating extends BE {
         for(const ao of aos){
             const ac = new AbortController();
             this.#acs?.push(ac);
+            //TODO:  remove line below
             ao.addEventListener('value', this, {signal: ac.signal});
+            ao.addEventListener('.', this, {signal: ac.signal});
         }
         this.handleEvent();
         return {
@@ -207,23 +210,24 @@ class BeCalculating extends BE {
 
     async handleEvent() {
         const self = /** @type {BAP} */(/** @type {any} */ (this));
-        const {enhancedElement, defaultEventType, propToAO, isOutputEl} = self;
+        const {enhancedElement, defaultEventType, propToAO, isOutputEl, eventArg} = self;
+        if(eventArg in enhancedElement){
+            throw `${eventArg} classes with exisitng element.  Specify alternative eventArg.`;
+        }
+        const arg = {};
         for(const prop in propToAO){
             const ao = propToAO[prop];
             const val = await ao.getValue();
-            if(isOutputEl){
-                const key = '$' + prop;
-                if(key in enhancedElement) throw 500;
-                enhancedElement[key] = val;
-            }
+            arg[prop] = val;
         }
-        self.channelEvent(new Event(defaultEventType));
-        if(isOutputEl){
-            for(const prop in propToAO){
-                const key = '$' + prop;
-                delete enhancedElement[key];
-            }
+        enhancedElement[eventArg] = arg;
+        try{
+            self.channelEvent(new Event(defaultEventType));
+        }finally{
+            delete enhancedElement[eventArg];
         }
+        
+        
     }
 
 }

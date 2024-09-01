@@ -9,7 +9,7 @@ import { BeHive, seed, MountObserver } from 'be-hive/be-hive.js';
 export const emc = {
     hostInstanceOf: [HTMLElement],
     base: 'be-calculating',
-    branches: ['', 'name-of-calculator'],
+    branches: ['', 'name-of-calculator', 'event-arg'],
     enhPropKey: 'beCalculating',
     map: {
         '0.0': {
@@ -19,6 +19,10 @@ export const emc = {
         '1.0': {
             instanceOf: 'String',
             mapsTo: 'nameOfCalculator'
+        },
+        '2.0': {
+            instanceOf: 'String',
+            mapsTo: 'eventArg'
         }
     },
     osotas: [
