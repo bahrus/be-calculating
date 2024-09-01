@@ -100,7 +100,7 @@ We can move the script out of the oninput attribute and into a previous script e
 
 Since *be-calculating* seems like a highly useful enhancement that would appear multiple times in a template / html stream, it seems desirable to support an alternative, shorter name, perhaps for less formal settings, where clashes between libraries can be contained.  For example, this package supports the following alternative (by referencing 🧮.js).
 
-## Example 1d The most compact notation [TODO]
+## Example 1d The most compact notation
 
 ```html
 <form>
@@ -110,7 +110,7 @@ Since *be-calculating* seems like a highly useful enhancement that would appear 
 </form>
 ```
 
-If you prefer some other emoji or (shorter? name), look to [this file](https://github.com/bahrus/be-calculating/blob/baseline/%F0%9F%A7%AE.js) to see how easy it is to take ownership of your own name.
+If you prefer some other emoji or (shorter?) name, look to [this file](https://github.com/bahrus/be-calculating/blob/baseline/%F0%9F%A7%AE.js) to see how easy it is to take ownership of your own name.
 
 So everywhere you see 🧮 below, please map this hieroglyph in your mind to the expression "be calculating".
 

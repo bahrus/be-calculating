@@ -8,6 +8,7 @@ import { BE } from 'be-enhanced/BE.js';
 /** @import {AbsorbingObject} from './ts-refs/trans-render/asmr/types.d.ts' */
 /** @import {AllProps as BeExportableAllProps} from  './ts-refs/be-exportable/types.d.ts' */
 
+let cnt = 0;
 /**
  * @implements {Actions}
  * @implements {EventListenerObject}
@@ -196,9 +197,16 @@ class BeCalculating extends BE {
          * @type {{[key: string]: AbsorbingObject}}
          */
         const propToAO = {};
+
         for(const remoteSpecifier of remoteSpecifiers){
             const remoteEl = await find(enhancedElement, remoteSpecifier);
             if(!(remoteEl instanceof Element)) continue;
+            if(enhancedElement instanceof HTMLOutputElement && !remoteEl.id){
+                const id = `be-calculating-${cnt}`;
+                remoteEl.id = id;
+                enhancedElement.htmlFor.add(id);
+                cnt++;
+            }
             const {prop} = remoteSpecifier;
             if(prop === undefined) throw 'NI';
             const ao = await ASMR.getAO(remoteEl, {
