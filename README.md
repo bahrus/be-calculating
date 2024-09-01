@@ -67,7 +67,7 @@ Because now, with a little more tender loving care (described below), we can sta
 
 We can move the script out of the oninput attribute and into a previous script element:
 
-## Example 1b [TODO]
+## Example 1b
 
 ```html
 <form>

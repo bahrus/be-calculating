@@ -11,7 +11,11 @@
         <input type="range" id="a" value="50">
         +<input type="number" id="b" value="25">
         =<script nomodule>
-            a + b
+            export class Calculator {
+                handleEvent(e){
+                    e.target.value = e.factors.a + e.factors.b;
+                }
+            }
         </script><output for="a b" be-calculating></output>
     </form>
     <div id='target'></div>
