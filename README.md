@@ -134,7 +134,7 @@ This still happens to assume, by default, that the "input" event is what we shou
 
 This enhancement also supports other elements.  The script will need to be a bit more verbose though:
 
-## Example 2a - Brave syntax [TODO]
+## Example 2a - Brave syntax
 
 If no other enhancements are overloading the onload event, script away bravely
 

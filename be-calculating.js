@@ -271,7 +271,7 @@ class BeCalculating extends BE {
          * @type {Event}
          */
         let event;
-        if(hasInlineEvent){
+        if(hasInlineEvent && publishEventType !== 'load'){
             event = new Event(publishEventType);
         }else{
             event = new LoadEvent(enhancedElement, factors);

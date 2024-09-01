@@ -9,8 +9,10 @@
 <body>
     <input name=domain value=emojipedia.org>
     <input name=search value=calculator>
-    <a>Emoji link
-        <meta 🧮="@domain @search" onload="{href:`https://${domain}/search?q=${search}`}">
+    <a 
+        🧮="@domain @search" 
+        onload="href = `https://${event.factors.domain}/search?q=${event.factors.search}`">
+        Emoji link
     </a>
     <script type=importmap>
         {
