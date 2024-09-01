@@ -171,7 +171,7 @@ Trigger alert:  Allow for a little head spinning below.  It takes a little getti
 
 The output element can also get in on the sharing act.
 
-
+## Example 3a Responding to changes of the output element
 
 ```html
 <form>
@@ -181,6 +181,9 @@ The output element can also get in on the sharing act.
     =<output name=c for="a b" 🧮 oninput="value=$.a + $.b"></output>
 </form>
 ```
+
+> ![NOTE]
+> In the example above, data is "flowing" both up and down.  In general, I think it is more natural and easier on the end user for data to flow in a downward direction, as most languages flow in that direction.  However, if that is not possible, do map out mentally or on (virtual) paper the dependency tree to make sure there aren't any cyclic loops that could result in an infinite loop catastrophe.
 
 # Part IV External Module Renaming
 

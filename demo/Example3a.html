@@ -8,10 +8,10 @@
 </head>
 <body>
     <form>
-        <span itemprop=sum></span>
+        <span itemprop=sum 🧮=@c onload="textContent = $.c"></span>
         <input type="range" id="a" value="50">
         +<input type="number" id="b" value="25">
-        =<output for="a b" 🧮-assign-to=^{form}|sum:tabIndex oninput="a+b"></output>
+        =<output name=c for="a b" 🧮 oninput="value=$.a + $.b"></output>
     </form>
     <script type=importmap>
         {
@@ -19,7 +19,6 @@
                 "be-enhanced/": "/node_modules/be-enhanced/",
                 "be-exportable/": "/node_modules/be-exportable/",
                 "be-hive/":  "/node_modules/be-hive/",
-                "be-linked/": "/node_modules/be-linked/",
                 "mount-observer/": "/node_modules/mount-observer/",
                 "trans-render/": "/node_modules/trans-render/"
             }
