@@ -81,7 +81,9 @@ class BeCalculating extends BE {
         const {enhElLocalName, enhancedElement} = self;
         return /** @type {PAP} */({
             isOutputEl: enhElLocalName === 'output',
-            hasInlineEvent: !!(enhancedElement.onload || enhancedElement.oninput || enhancedElement.onload),
+            hasInlineEvent: !!(
+                enhancedElement.onload || enhancedElement.oninput || enhancedElement.onchange
+            ),
             categorized: true,
         });
     }
@@ -112,7 +114,7 @@ class BeCalculating extends BE {
                     }else if(enhancedElement.onchange){
                         return /** @type {PAP} */({
                             publishEventType: 'change',
-                            defaultEventType: 'input'
+                            defaultEventType: 'change'
                         });
                     }
 

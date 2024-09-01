@@ -86,7 +86,7 @@ We can move the script out of the oninput attribute and into a previous script e
 
 *be-calculating* supports specific syntax for switching to the change event, rather than the input event:
 
-## Example 1c [TODO]
+## Example 1c
 
 ```html
 <form>
