@@ -199,7 +199,7 @@ To do so, specify this as follows:
 <form>
     <input type="range" id="a" value="50">
     +<input type="number" id="b" value="25">
-    =<output 🧮="#a:$0 #b:$0" oninput="value=$.a.valueAsNumber + $.b.valueAsNumber"></output>
+    =<output 🧮="#a:$0 #b:$0" onload="value=$.a.valueAsNumber + $.b.valueAsNumber"></output>
 </form>
 ```
 
