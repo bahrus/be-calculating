@@ -25,7 +25,7 @@
   },
   "dependencies": {
     "be-enhanced": "0.0.137",
-    "be-exportable": "0.0.127",
+    "be-exportable": "0.0.129",
     "be-hive": "0.0.206",
     "trans-render": "0.0.831"
   },

@@ -6,6 +6,7 @@ import { BE } from 'be-enhanced/BE.js';
 /** @import {Actions, PAP,  AP, BAP} from './ts-refs/be-calculating/types' */;
 /** @import {EnhancementInfo} from './ts-refs/trans-render/be/types.d.ts' */
 /** @import {AbsorbingObject} from './ts-refs/trans-render/asmr/types.d.ts' */
+/** @import {AllProps as BeExportableAllProps} from  './ts-refs/be-exportable/types.d.ts' */
 
 /**
  * @implements {Actions}
@@ -20,7 +21,7 @@ class BeCalculating extends BE {
      */
     static config = {
         propDefaults: {
-            nameOfCalculator: 'calculator',
+            nameOfCalculator: 'Calculator',
             isAttached: true,
             categorized: false,
             remSpecifierLen: 0,
@@ -38,6 +39,7 @@ class BeCalculating extends BE {
             isOutputEl: {},
             enhElLocalName: {},
             propToAO: {},
+            calculator: {},
         },
         compacts: {
             when_enhElLocalName_changes_invoke_categorizeEl: 0,
@@ -46,6 +48,13 @@ class BeCalculating extends BE {
         actions: {
             getDefltEvtType: {
                 ifAllOf: ['enhElLocalName', 'categorized'],
+            },
+            findScriptEl: {
+                ifAllOf: ['categorized'],
+                ifNoneOf: ['hasInlineEvent']
+            },
+            importSymbols: {
+                ifAllOf: ['scriptEl']
             },
             parseForAttr: {
                 ifAllOf: ['forAttr', 'isOutputEl']
@@ -57,7 +66,8 @@ class BeCalculating extends BE {
                 ifAllOf: ['publishEventType', 'defaultEventType', 'remSpecifierLen']
             },
             hydrate: {
-                ifAllOf: ['propToAO']
+                ifAllOf: ['propToAO'],
+                ifAtLeastOneOf: ['hasInlineEvent', 'calculator']
             }
         },
     }
@@ -127,19 +137,46 @@ class BeCalculating extends BE {
             forArgs: Array.from(/** @type {HTMLOutputElement} */(enhancedElement).htmlFor)
         }
     }
+    /**
+     * 
+     * @param {BAP} self 
+     */
+    findScriptEl(self) {
+        const {enhancedElement} = self;
+        const scriptEl = enhancedElement.previousElementSibling;
+        if(!(scriptEl instanceof HTMLScriptElement)) throw 404;
+        return /** @type {PAP} */ ({
+            scriptEl
+        });
+    }
+
+    /**
+     * 
+     * @param {BAP} self 
+     */
+    async importSymbols(self){
+        const {scriptEl, nameOfCalculator, forAttr} = self;
+        const {emc} = await import('be-exportable/behivior.js');
+        const exportable = 
+            /** @type {BeExportableAllProps} */
+            (await /** @type {any} */(scriptEl).beEnhanced.whenResolved(emc));
+        return /** @type {PAP} */ {
+            calculator: exportable.exports[nameOfCalculator]
+        }
+    }
 
     /**
      * 
      * @param {BAP} self 
      */
     genRemoteSpecifiers(self){
-        const {forArgs, publishEventType} = self;
+        const {forArgs, defaultEventType} = self;
         return /** @type {PAP} */ ({
             remoteSpecifiers: forArgs.map(fa  => ({
                 elS: fa,
                 prop: fa,
                 s: '#',
-                evt: publishEventType
+                evt: defaultEventType
             })),
         });
     }
@@ -187,15 +224,60 @@ class BeCalculating extends BE {
         const aos = Object.values(propToAO);
         for(const ao of aos){
             const ac = new AbortController();
+            //TODO:  share one abort controller
             this.#acs?.push(ac);
             //TODO:  remove line below
             ao.addEventListener('value', this, {signal: ac.signal});
             ao.addEventListener('.', this, {signal: ac.signal});
+
         }
         this.handleEvent();
         return {
             resolved: true
         }
+    }
+
+
+
+
+    /**
+     * @type {EventListenerObject | undefined}
+     */
+    #calculatorInstance;
+    async handleEvent() {
+        const self = /** @type {BAP} */(/** @type {any} */ (this));
+        const {enhancedElement, calculator, propToAO, eventArg} = self;
+        if(eventArg in enhancedElement){
+            throw `${eventArg} classes with existing element.  Specify alternative eventArg.`;
+        }
+        const factors = {};
+        for(const prop in propToAO){
+            const ao = propToAO[prop];
+            const val = await ao.getValue();
+            factors[prop] = val;
+        }
+        enhancedElement[eventArg] = factors;
+        const loadEvent = new LoadEvent(enhancedElement, factors)
+        try{
+            self.channelEvent(loadEvent);
+        }finally{
+            delete enhancedElement[eventArg];
+        }
+        if(calculator !== undefined && this.#calculatorInstance === undefined){
+            const c = new calculator();
+            this.#calculatorInstance = c;
+        }
+        this.#calculatorInstance?.handleEvent(loadEvent);
+        
+    }
+
+    /**
+     * @param {Element} enhancedElement
+     * @override
+     */
+    async detach(enhancedElement){
+        await super.detach(enhancedElement);
+        this.disconnect();
     }
 
     disconnect(){
@@ -208,38 +290,32 @@ class BeCalculating extends BE {
         this.#acs = [];
     }
 
-    /**
-     * @param {Element} enhancedElement
-     * @override
-     */
-    async detach(enhancedElement){
-        await super.detach(enhancedElement);
-        this.disconnect();
-    }
-
-    async handleEvent() {
-        const self = /** @type {BAP} */(/** @type {any} */ (this));
-        const {enhancedElement, publishEventType, propToAO, eventArg} = self;
-        if(eventArg in enhancedElement){
-            throw `${eventArg} classes with existing element.  Specify alternative eventArg.`;
-        }
-        const arg = {};
-        for(const prop in propToAO){
-            const ao = propToAO[prop];
-            const val = await ao.getValue();
-            arg[prop] = val;
-        }
-        enhancedElement[eventArg] = arg;
-        try{
-            self.channelEvent(new Event(publishEventType));
-        }finally{
-            delete enhancedElement[eventArg];
-        }
-        
-        
-    }
-
 }
 
 await BeCalculating.bootUp();
 export {BeCalculating};
+
+export class LoadEvent extends Event{
+    static EventName = 'load';
+    /**
+     * @type {any}
+     */
+    factors;
+    /**
+     * @type {Element}
+     */
+    target;
+    /**
+     * 
+     * @param {Element} target 
+     * @param {any} factors 
+     */
+    constructor (
+        target,
+        factors
+    ){
+        super(LoadEvent.EventName);
+        this.factors = factors;
+        this.target = target;
+    }
+}
