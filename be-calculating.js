@@ -237,7 +237,7 @@ class BeCalculating extends BE {
             //TODO:  share one abort controller
             this.#acs?.push(ac);
             //TODO:  remove line below
-            ao.addEventListener('value', this, {signal: ac.signal});
+            //ao.addEventListener('value', this, {signal: ac.signal});
             ao.addEventListener('.', this, {signal: ac.signal});
 
         }
