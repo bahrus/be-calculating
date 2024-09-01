@@ -24,9 +24,9 @@
     "url": "git+https://github.com/bahrus/be-calculating.git"
   },
   "dependencies": {
-    "be-enhanced": "0.0.137",
-    "be-exportable": "0.0.129",
-    "be-hive": "0.0.206",
+    "be-enhanced": "0.0.138",
+    "be-exportable": "0.0.130",
+    "be-hive": "0.0.207",
     "trans-render": "0.0.833"
   },
   "devDependencies": {
