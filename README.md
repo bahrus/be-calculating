@@ -207,7 +207,7 @@ In particular, DSS now supports :$0 to specify the element itself as the thing t
 
 
 
-# Part IV External Module Renaming [TODO]
+# Part IV External Module Renaming
 
 If we want to share our calculating code with the world, we might package it as an npm package.  Note that the code is library neutral, so doesn't need to be accompanied by 17 black-hole-o-grams of dependencies, and a cottage industry of boot camps to master.  Just saying.
 
