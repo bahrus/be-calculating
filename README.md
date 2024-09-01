@@ -148,7 +148,7 @@ If no other enhancements are overloading the onload event, script away bravely
 </a>
 ```
 
-## Example 2b - Defensive syntax [TODO]
+## Example 2b - Defensive syntax
 
 To code defensively, check for the enh property of the event:
 
@@ -159,7 +159,7 @@ To code defensively, check for the enh property of the event:
     🧮="@domain @search" 
     onload="
     const {enh, factors: f} = event;
-    if(enh !== 🧮) return;
+    if(enh !== '🧮') return;
     href = `https://${f.domain}/search?q=${f.search}`">
     Emoji link
 </a>

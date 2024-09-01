@@ -9,12 +9,13 @@
 <body>
     <input name=domain value=emojipedia.org>
     <input name=search value=calculator>
-    <a>Emoji link
-        <div>
-            I am inside a div.
-            <meta 🧮="@domain @search" 🧮-assign-to="^{a}" onload="{href:`https://${domain}/search?q=${search}`}">
-        </div>
-        
+    <a 
+        🧮="@domain @search" 
+        onload="
+        const {enh, factors: f} = event;
+        if(enh !== '🧮') return;
+        href = `https://${f.domain}/search?q=${f.search}`">
+        Emoji link
     </a>
     <script type=importmap>
         {
