@@ -163,7 +163,7 @@ class BeCalculating extends BE {
             const {prop} = remoteSpecifier;
             if(prop === undefined) throw 'NI';
             const ao = await ASMR.getAO(remoteEl, {
-                evt: defaultEventType
+                evt: remoteSpecifier.evt || defaultEventType
             });
             propToAO[prop] = ao;
         }
@@ -221,7 +221,7 @@ class BeCalculating extends BE {
         const self = /** @type {BAP} */(/** @type {any} */ (this));
         const {enhancedElement, publishEventType, propToAO, eventArg} = self;
         if(eventArg in enhancedElement){
-            throw `${eventArg} classes with exisitng element.  Specify alternative eventArg.`;
+            throw `${eventArg} classes with existing element.  Specify alternative eventArg.`;
         }
         const arg = {};
         for(const prop in propToAO){
