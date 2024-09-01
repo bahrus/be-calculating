@@ -185,11 +185,11 @@ The output element can also get in on the sharing act.
 > ![NOTE]
 > In the example above, data is "flowing" both up and down.  In general, I think it is more natural and easier on the end user for data to flow in a downward direction, as most literary languages flow in that direction.  However, if that is not possible, do map out mentally or on (virtual) paper the dependency tree to make sure there aren't any cyclic loops that could result in an infinite loop catastrophe.
 
-## Example 3b - Gain full access to the element [TODO]
+## Example 3b - Gain full access to the element
 
 In the examples above, we engaged in "mind reading" in order to pass to the event handler the precise values we want to use in order to calculate the result.
 
-The DSS syntax this package relies on allows us to override these mind readings, and specify which property to pass.  The DSS feature [TODO] that seems most useful in this context is probably:
+The DSS syntax this package relies on allows us to override these mind readings, and specify which property to pass.  The DSS feature that seems most useful in this context is probably:
 
 > Thanks but no thanks to all your "mind reading" -- could you please just pass in the dependent elements when they change, since I have full, unfettered access to the JavaScript engine, and I would like to extract things out of the elements that I please without your help?
 
@@ -203,7 +203,7 @@ To do so, specify this as follows:
 </form>
 ```
 
-In particular, DSS now [TODO] supports :$0 to specify the element itself as the thing that needs passing.
+In particular, DSS now supports :$0 to specify the element itself as the thing that needs passing.
 
 
 
