@@ -48,7 +48,7 @@ So what *be-calculating* is wanting to do with this example is shown below:
 <form>
     <input type=range id=a value=50>
     +<input type=number id=b value=25>
-    =<output for="a b" be-calculating oninput="value = $a + $b"></output>
+    =<output for="a b" be-calculating oninput="value = $.a + $.b"></output>
 </form>
 ```
 
@@ -92,7 +92,7 @@ We can move the script out of the oninput attribute and into a previous script e
 <form>
     <input type="range" id=a value="50">
     +<input type="number" id=b value="25">
-    =<output for="a b" be-calculating onchange="value = $a + $b"></output>
+    =<output for="a b" be-calculating onchange="value = $.a + $.b"></output>
 </form>
 ```
 

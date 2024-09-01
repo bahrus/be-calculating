@@ -25,12 +25,14 @@ class BeCalculating extends BE {
             categorized: false,
             remSpecifierLen: 0,
             eventArg: '$',
+            hasInlineEvent: false,
         },
         propInfo:{
             ...propInfo,
             forAttr: {},
             forArgs: {},
             remoteSpecifiers: {},
+            publishEventType: {},
             defaultEventType: {},
             scriptEl: {},
             isOutputEl: {},
@@ -38,20 +40,21 @@ class BeCalculating extends BE {
             propToAO: {},
         },
         compacts: {
-            //when_forAttr_changes_invoke_parseForAttr: 0
-            when_enhElLocalName_changes_invoke_getDefltEvtType: 0,
             when_enhElLocalName_changes_invoke_categorizeEl: 0,
             pass_length_of_remoteSpecifiers_to_remSpecifierLen: 0,
         },
         actions: {
+            getDefltEvtType: {
+                ifAllOf: ['enhElLocalName', 'categorized'],
+            },
             parseForAttr: {
                 ifAllOf: ['forAttr', 'isOutputEl']
             },
             genRemoteSpecifiers: {
-                ifAllOf: ['forArgs', 'defaultEventType']
+                ifAllOf: ['forArgs', 'publishEventType']
             },
             seek: {
-                ifAllOf: ['defaultEventType', 'remSpecifierLen']
+                ifAllOf: ['publishEventType', 'defaultEventType', 'remSpecifierLen']
             },
             hydrate: {
                 ifAllOf: ['propToAO']
@@ -65,9 +68,10 @@ class BeCalculating extends BE {
      */
     categorizeEl(self){
         //TODO Make this logic compactible?
-        const {enhElLocalName} = self;
+        const {enhElLocalName, enhancedElement} = self;
         return /** @type {PAP} */({
             isOutputEl: enhElLocalName === 'output',
+            hasInlineEvent: !!(enhancedElement.onload || enhancedElement.oninput || enhancedElement.onload),
             categorized: true,
         });
     }
@@ -77,30 +81,35 @@ class BeCalculating extends BE {
      * @param {BAP} self 
      */
     getDefltEvtType(self){
-        const {enhElLocalName, enhancedElement} = self;
+        const {enhElLocalName, enhancedElement, hasInlineEvent} = self;
+        const deflt = /** @type {PAP} */({
+            publishEventType: 'load',
+            defaultEventType: 'input'
+        })
+        if(!hasInlineEvent){
+            return deflt;            
+        }
         switch(enhElLocalName){
             case 'output':
                 if(self.forAttr === undefined){
-                    return /** @type {PAP} */({
-                        defaultEventType: 'load'
-                    });
+                    return deflt;
                 }else{
                     if(enhancedElement.oninput){
                         return /** @type {PAP} */({
-                            defaultEventType: 'input'
+                            publishEventType: 'input',
+                            defaultEventType: 'input',
                         });
                     }else if(enhancedElement.onchange){
                         return /** @type {PAP} */({
-                            defaultEventType: 'change'
+                            publishEventType: 'change',
+                            defaultEventType: 'input'
                         });
                     }
 
                 }
 
         }
-        return /** @type {PAP} */({
-            defaultEventType: 'load'
-        });
+        return deflt;
     }
 
     #ignoreForAttr = false;
@@ -124,13 +133,13 @@ class BeCalculating extends BE {
      * @param {BAP} self 
      */
     genRemoteSpecifiers(self){
-        const {forArgs, defaultEventType} = self;
+        const {forArgs, publishEventType} = self;
         return /** @type {PAP} */ ({
             remoteSpecifiers: forArgs.map(fa  => ({
                 elS: fa,
                 prop: fa,
                 s: '#',
-                evt: defaultEventType
+                evt: publishEventType
             })),
         });
     }
@@ -143,7 +152,7 @@ class BeCalculating extends BE {
         const {remoteSpecifiers, enhancedElement, defaultEventType} = self;
         const {find} = await import('trans-render/dss/find.js');
         const {ASMR} = await import('trans-render/asmr/asmr.js');
-        const eventTypeToListen = defaultEventType !== 'load' ? defaultEventType || 'input' : 'input';
+        //const eventTypeToListen = publishEventType !== 'load' ? publishEventType || 'input' : 'input';
         /**
          * @type {{[key: string]: AbsorbingObject}}
          */
@@ -154,7 +163,7 @@ class BeCalculating extends BE {
             const {prop} = remoteSpecifier;
             if(prop === undefined) throw 'NI';
             const ao = await ASMR.getAO(remoteEl, {
-                evt: eventTypeToListen
+                evt: defaultEventType
             });
             propToAO[prop] = ao;
         }
@@ -210,7 +219,7 @@ class BeCalculating extends BE {
 
     async handleEvent() {
         const self = /** @type {BAP} */(/** @type {any} */ (this));
-        const {enhancedElement, defaultEventType, propToAO, isOutputEl, eventArg} = self;
+        const {enhancedElement, publishEventType, propToAO, eventArg} = self;
         if(eventArg in enhancedElement){
             throw `${eventArg} classes with exisitng element.  Specify alternative eventArg.`;
         }
@@ -222,7 +231,7 @@ class BeCalculating extends BE {
         }
         enhancedElement[eventArg] = arg;
         try{
-            self.channelEvent(new Event(defaultEventType));
+            self.channelEvent(new Event(publishEventType));
         }finally{
             delete enhancedElement[eventArg];
         }
