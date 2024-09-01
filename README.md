@@ -185,7 +185,7 @@ The output element can also get in on the sharing act.
 > ![NOTE]
 > In the example above, data is "flowing" both up and down.  In general, I think it is more natural and easier on the end user for data to flow in a downward direction, as most literary languages flow in that direction.  However, if that is not possible, do map out mentally or on (virtual) paper the dependency tree to make sure there aren't any cyclic loops that could result in an infinite loop catastrophe.
 
-## Example 3b - Gain full access to the element
+## Example 3b - Gain full access to the element [TODO]
 
 In the examples above, we engaged in "mind reading" in order to pass to the event handler the precise values we want to use in order to calculate the result.
 
