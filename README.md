@@ -213,7 +213,7 @@ If we want to share our calculating code with the world, we might package it as 
 
 But as things stand, we will need to specify the name of the calculator thusly:
 
-## Example 4a [TODO]
+## Example 4a
 
 ```JavaScript
 //file calculator.js
@@ -233,7 +233,7 @@ export class Calculator {
 
 If we wish to give it a different name, *be-calculating* needs to know about that:
 
-## Example 4b [TODO]
+## Example 4b
 
 ```JavaScript
 //file TuringAwardDeservingAlgorithm.js

@@ -1,3 +1,5 @@
-export const TuringAwardDeservingAlgorithm = ({a, b}) => ({
-    value: a + b
-});
+export class TuringAwardDeservingAlgorithm {
+    handleEvent(e){
+        e.target.value = e.factors.a + e.factors.b;
+    }
+}
