@@ -11,12 +11,10 @@
 
 Calculate value of the output element from peer input elements.
 
-<details>
-    <summary>Alternatives</summary>
+*be-calculating* is basically the counter point to the declarative [*be-observant*](https://github.com/bahrus/be-observant). 
 
-*be-calculating* is a very specialized alternative to [*be-observant*](https://github.com/bahrus/be-observant), in case you were wondering.  Unlike *be-observing*, *be-calculating* can only adorn the output and meta elements and skips any attempt at avoiding JavaScript expressions.  *be-calculating* allows for much more compact JavaScript expressions, by taking more liberties with what the platform provides.
+## Inspiration
 
-</details>
 
 *be-calculating* can't help but admire the brevity and sorcery on [display here](https://www.w3schools.com/TAGs/tag_output.asp):
 
@@ -63,9 +61,9 @@ Think of what we've accomplished here!  We have now purified the JavaScript's do
 
 Code that we can patent and earn Turing Awards with!
 
-Because now, with a little more tender loving care (described below), we can start to see that we can create a reusable class that can be used in multiple contexts -- anywhere we need to add two numbers together. We've been showing inline examples, but the code can be imported via ES classes located in ESM modules, which is discussed below. 
+Because now, with a little more tender loving care (described below), we will see that we can create a reusable class that can be used in multiple contexts -- anywhere we need to add two numbers together. We've been showing inline examples, but the code can be imported via ES classes located in ESM modules, which is discussed below. 
 
-We can move the script out of the oninput attribute and into a previous script element:
+We can get a glimpse of what that will look like by moving the script out of the oninput attribute and into a previous script element:
 
 ## Example 1b
 
