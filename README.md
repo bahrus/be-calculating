@@ -183,9 +183,32 @@ The output element can also get in on the sharing act.
 ```
 
 > ![NOTE]
-> In the example above, data is "flowing" both up and down.  In general, I think it is more natural and easier on the end user for data to flow in a downward direction, as most languages flow in that direction.  However, if that is not possible, do map out mentally or on (virtual) paper the dependency tree to make sure there aren't any cyclic loops that could result in an infinite loop catastrophe.
+> In the example above, data is "flowing" both up and down.  In general, I think it is more natural and easier on the end user for data to flow in a downward direction, as most literary languages flow in that direction.  However, if that is not possible, do map out mentally or on (virtual) paper the dependency tree to make sure there aren't any cyclic loops that could result in an infinite loop catastrophe.
 
-# Part IV External Module Renaming
+## Example 3b - Gain full access to the element
+
+In the examples above, we engaged in "mind reading" in order to pass to the event handler the precise values we want to use in order to calculate the result.
+
+The DSS syntax this package relies on allows us to override these mind readings, and specify which property to pass.  The DSS feature [TODO] that seems most useful in this context is probably:
+
+> Thanks but no thanks to all your "mind reading" -- could you please just pass in the dependent elements when they change, since I have full, unfettered access to the JavaScript engine, and I would like to extract things out of the elements that I please without your help?
+
+To do so, specify this as follows:
+
+```html
+<form>
+    <span itemprop=sum 🧮=@c onload="textContent = $.c"></span>
+    <input type="range" id="a" value="50">
+    +<input type="number" id="b" value="25">
+    =<output name=c 🧮="#a:$0 #b:$0" oninput="value=$.a.valueAsNumber + $.b.valueAsNumber"></output>
+</form>
+```
+
+In particular, DSS now [TODO] supports :$0 to specify the element itself as the thing that needs passing.
+
+
+
+# Part IV External Module Renaming [TODO]
 
 If we want to share our calculating code with the world, we might package it as an npm package.  Note that the code is library neutral, so doesn't need to be accompanied by 17 black-hole-o-grams of dependencies, and a cottage industry of boot camps to master.  Just saying.
 
