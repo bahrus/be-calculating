@@ -106,7 +106,7 @@ Since *be-calculating* seems like a highly useful enhancement that would appear 
 <form>
     <input type="range" id=a value="50">
     +<input type="number" id=b value="25">
-    =<output for="a b" 🧮 oninput="value=$a + $b"></output>
+    =<output for="a b" 🧮 oninput="value=$.a + $.b"></output>
 </form>
 ```
 
@@ -124,7 +124,7 @@ Anything that requires subscribing to alternative or mixed event names, and/or t
 <form>
     <input type="range" name=a value="50">
     +<input type="number" name=b value="25">
-    =<output 🧮="@a @b" onload="value = $a + $b"></output>
+    =<output 🧮="@a @b" onload="value = $.a + $.b"></output>
 </form>
 ```
 
@@ -165,7 +165,7 @@ To code defensively, check for the enh property of the event:
 </a>
 ```
 
-# Part III Sharing the output element, and other binding examples [WIP]
+# Part III Sharing the value of output element, and other binding examples [WIP]
 
 Trigger alert:  Allow for a little head spinning below.  It takes a little getting used to.
 
@@ -175,7 +175,7 @@ The output element can also get in on the sharing act.
 
 ```html
 <form>
-    <span itemprop=sum 🧮=@c oninput="textContent = for.c.value"></span>
+    <span itemprop=sum 🧮=@c onload="textContent = $.c"></span>
     <input type="range" id="a" value="50">
     +<input type="number" id="b" value="25">
     =<output name=c for="a b" 🧮 oninput="value=for.a + for.b"></output>
