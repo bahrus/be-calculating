@@ -213,13 +213,13 @@ If we want to share our calculating code with the world, we might package it as 
 
 But as things stand, we will need to specify the name of the calculator thusly:
 
-## Example 4a
+## Example 4a [TODO]
 
 ```JavaScript
 //file calculator.js
 export class Calculator {
     handleEvent(e){
-        e.target.value = e.factors.a + e.actors.b;
+        e.target.value = e.factors.a + e.factors.b;
     }
 }
 ```
