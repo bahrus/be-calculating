@@ -19,7 +19,7 @@ Calculate value of the output element from peer input elements.
 *be-calculating* can't help but admire the brevity and sorcery on [display here](https://www.w3schools.com/TAGs/tag_output.asp):
 
 ```html
-<form oninput="x.value=parseInt(a.value)+parseInt(b.value)">
+<form oninput="result.value=parseInt(a.value)+parseInt(b.value)">
      <input type=range id=a name=a value=50>
     +<input type=number id=b name=b value=25>
     =<output name=result for="a b"></output>
@@ -28,7 +28,10 @@ Calculate value of the output element from peer input elements.
 
 It is unclear how to leverage that magic outside the confines of this example. How does the context of the names get passed so elegantly into the expression?
 
-Anyway, be-calculating vows to match, if not exceed, the brevity of the markup above, while also providing more flexible options.
+> ![NOTE]
+> Due to a lack of -- I'm not sure what -- the platform engineers have apparently failed to find a way to support brevity like this, even for trusted content coming from the host -- i.e. most "minimal" security measures throw the baby out with the bathwater, blocking our ability to do this (sigh).
+
+Anyway, be-calculating vows to match, if not exceed, the brevity of the markup above, while also providing more flexible options, for those environments that can tolerate such "risk", while imposing as little of a burden as possible to achieve the same effect within the more common place restriction.
 
 One critique of the example above is that it recalculates and rebinds the value of the sum anytime any form element inside is modified by the user.
 
@@ -54,7 +57,7 @@ Here, we are "commandeering" the oninput built-in attribute (which isn't applica
 
 Why?
 
-We consider it safe to include free-ranging JavaScript expressions inside such attributes, having confidence that sanitizing algorithms will strip such attributes if not explicitly permitted by parties who should have a say-so in the matter.
+~We consider it safe to include free-ranging JavaScript expressions inside such attributes, having confidence that sanitizing algorithms will strip such attributes if not explicitly permitted by parties who should have a say-so in the matter.~  Maybe if the platform ever agrees to a sanitizing protocol, this retreat from simplicity can be reexamined. 
 
 
 Think of what we've accomplished here!  We have now purified the JavaScript's domain to be independent of the UI, if one squints hard enough.  
@@ -163,7 +166,7 @@ To code defensively, check for the enh property of the event:
 </a>
 ```
 
-# Part III Sharing the value of output element, and other binding examples [WIP]
+# Part III Sharing the value of output element, and other binding examples
 
 Trigger alert:  Allow for a little head spinning below.  It takes a little getting used to.
 
