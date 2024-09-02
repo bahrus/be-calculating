@@ -29,9 +29,9 @@ Calculate value of the output element from peer input elements.
 It is unclear how to leverage that magic outside the confines of this example. How does the context of the names get passed so elegantly into the expression?
 
 > ![NOTE]
-> Due to a lack of -- I'm not sure what -- the platform engineers have apparently failed to find a way to support brevity like this, even for trusted content coming from the host -- i.e. most "minimal" security measures throw the baby out with the bathwater, blocking our ability to do this (sigh).
+> Due to a lack of -- I'm not sure what -- the platform engineers have apparently failed to find a way to support brevity like this, even for trusted content coming from the host -- i.e. most "minimal" security measures throw the baby out with the bathwater, blocking our ability to do this (sigh).  How could they have supported it?  I *think* by allowing the nonce attribute to apply to the parent element that contains inline scripts.  Maybe that was looked at and found problematic, who knows?
 
-Anyway, be-calculating vows to match, if not exceed, the brevity of the markup above, while also providing more flexible options, for those environments that can tolerate such "risk", while imposing as little of a burden as possible to achieve the same effect within the more common place restriction.
+Anyway, be-calculating can no long match the brevity of the markup above due to this limitation.
 
 One critique of the example above is that it recalculates and rebinds the value of the sum anytime any form element inside is modified by the user.
 

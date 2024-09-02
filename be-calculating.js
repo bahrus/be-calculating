@@ -80,11 +80,18 @@ class BeCalculating extends BE {
     categorizeEl(self){
         //TODO Make this logic compactible?
         const {enhElLocalName, enhancedElement} = self;
+        let hasInlineEvent = false;
+        try{
+            hasInlineEvent = !!(
+                enhancedElement.onload || enhancedElement.oninput || enhancedElement.onchange
+            )
+        }catch(e){
+
+        }
+        finally{}
         return /** @type {PAP} */({
             isOutputEl: enhElLocalName === 'output',
-            hasInlineEvent: !!(
-                enhancedElement.onload || enhancedElement.oninput || enhancedElement.onchange
-            ),
+            hasInlineEvent,
             categorized: true,
         });
     }

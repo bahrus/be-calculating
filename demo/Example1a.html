@@ -5,17 +5,20 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Example 1a</title>
+    <!-- <meta 
+        http-equiv="Content-Security-Policy" 
+        content="script-src: 'self' 'unsafe-inline' http://localhost:3030" /> -->
     <meta 
         http-equiv="Content-Security-Policy" 
-        content="script-src: 'self' 'unsafe-inline' http://localhost:3030" />
+        content="script-src 'nonce-rAnd0m' 'strict-dynamic'; default-src 'self';" />
 </head>
 <body>
     <form>
         <input type="range" id="a" value="50">
         +<input type="number" id="b" value="25">
-        =<output for="a b" be-calculating oninput="value = $.a + $.b"></output>
+        =<output for="a b" be-calculating oninput="value = $.a + $.b" nonce="rAnd0m"></output>
     </form>
-    <script type=importmap nonce="a123">
+    <script type=importmap nonce="rAnd0m">
         {
             "imports": {
                 "be-enhanced/": "/node_modules/be-enhanced/",
@@ -26,7 +29,7 @@
             }
         }
     </script>
-    <script type=module src=/behivior.js></script>
+    <script type=module src=/behivior.js nonce="rAnd0m"></script>
 
 </body>
 </html>
