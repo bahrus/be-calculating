@@ -16,7 +16,9 @@ Calculate value of the output element from peer input elements.
 ## Inspiration
 
 
-*be-calculating* can't help but admire the brevity and sorcery on [display here](https://www.w3schools.com/TAGs/tag_output.asp):
+*be-calculating* can't help but admire the brevity and sorcery on [display here](https://www.w3schools.com/TAGs/tag_output.asp) (formerly also on MDN, but MDN abandoned simplicity for seemingly nonsensical security reasons (perhaps I'm wrong, thinking this through)).
+
+
 
 ```html
 <form oninput="result.value=parseInt(a.value)+parseInt(b.value)">
@@ -58,6 +60,12 @@ Here, we are "commandeering" the oninput built-in attribute (which isn't applica
 Why?
 
 ~We consider it safe to include free-ranging JavaScript expressions inside such attributes, having confidence that sanitizing algorithms will strip such attributes if not explicitly permitted by parties who should have a say-so in the matter.~  Maybe if the platform ever agrees to a sanitizing protocol, this retreat from simplicity can be reexamined. 
+
+## Security concerns - Nonce in userland?
+
+Suppose the (ShadowDOM) root node got assigned a GUID (private key) that can only be read by already permissioned  JavaScript. 
+
+In order to activate the script (in this case, compile the event handler), this library needs to read that private key, which can only be done if JavaScript is activated.  The element with the inline script has to have: 1)  an id and 2) an attribute -- hash-ish ? that is the digest of the id.  If and only if that passes does the inline script get compiled. 
 
 
 Think of what we've accomplished here!  We have now purified the JavaScript's domain to be independent of the UI, if one squints hard enough.  
