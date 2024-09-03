@@ -10,7 +10,7 @@
         content="script-src: 'self' 'unsafe-inline' http://localhost:3030" /> -->
     <meta 
         http-equiv="Content-Security-Policy" 
-        content="script-src 'nonce-rAnd0m' 'strict-dynamic'; default-src 'self';" />
+        content="script-src 'nonce-rAnd0m' 'sha256-ZjMG5woK/J0uIVjPhdP+p+71uRMa6jvEP4gJu16JeV4=' 'unsafe-hashes' 'strict-dynamic'; default-src 'self';" />
 </head>
 <body>
     <form>
@@ -18,7 +18,7 @@
         +<input type="number" id="b" value="25">
         =<output for="a b" be-calculating oninput="value = $.a + $.b" nonce="rAnd0m"></output>
     </form>
-    <script type=importmap nonce="rAnd0m">
+    <script type=importmap >
         {
             "imports": {
                 "be-enhanced/": "/node_modules/be-enhanced/",

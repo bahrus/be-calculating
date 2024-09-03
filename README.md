@@ -31,7 +31,7 @@ Calculate value of the output element from peer input elements.
 It is unclear how to leverage that magic outside the confines of this example. How does the context of the names get passed so elegantly into the expression?
 
 > ![NOTE]
-> Due to a lack of -- I'm not sure what -- the platform engineers have apparently failed to find a way to support brevity like this, even for trusted content coming from the host -- i.e. most "minimal" security measures throw the baby out with the bathwater, blocking our ability to do this (sigh).  How could they have supported it?  I *think* by allowing the nonce attribute to apply to the parent element that contains inline scripts.  Maybe that was looked at and found problematic, who knows?
+> Due to a lack of -- I'm not sure what -- the platform engineers have apparently failed to find a way to support brevity like this, even for trusted content coming from the host -- i.e. most "minimal" security measures throw the baby out with the bathwater, blocking our ability to do this (sigh).  How could they have supported it?  I *think* by allowing the nonce / hash attribute to apply to the parent element that contains inline scripts.  Maybe that was looked at and found problematic, who knows?  All I know is it is deeply unfortunate, and it appears to be resulting in solutions adopting makeshift handler syntax that is probably just as vulnerable to similar attacks as the native inline handlers are, only reduced by lack of widespread adoption.  And not solving this problem appears to me to driving a stake through the idea of progressive enhancement.
 
 Anyway, be-calculating can no long match the brevity of the markup above due to this limitation.
 
