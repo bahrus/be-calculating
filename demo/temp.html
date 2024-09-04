@@ -6,13 +6,14 @@
   <title>Document</title>
 </head>
 <body>
-  <output for="a b" itemscope=ish id=test onchange="hello()" oninput="value= ish.a+ish.b">
-  </output>
+  <template id=test>
+    <output for="a b" id=test onchange="hello()" oninput="value=ish.a+ish.b">
+    </output>
+  </template>
+
   <script>
-    test.ish = {};
-    test.ish.a = 7;
-    test.ish.b = 2;
-    console.log(test.oninput())
+    const clone = test.content.cloneNode(true);
+    console.log(clone.querySelector('output').oninput)
   </script>
 </body>
 </html>
