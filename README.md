@@ -1,4 +1,4 @@
-# be-calculating (🧮)
+# be-calculating (🧮) [TODO]
 
 [![The Plan](https://www.berfrois.com/uploads/2011/06/rr3.jpg)](https://www.berfrois.com/2011/06/wile-e-coyote-pursues-road-runner/)
 
@@ -21,10 +21,27 @@ Calculate value of the output element from peer input elements.
 
 
 ```html
+<script type=module>
+    import {Registry} from 'beCalculating/Registry.js'
+
+    //option 1
+    Registry.define('+', new class {
+        handleEvent(e){
+            e.target.value = e.args.reduce((acc, arg) => acc + arg)
+        }
+    }),
+
+    //option 2
+    Registry.define('+', e => e.target.value = e.args.reduce((acc, arg) => acc + arg));
+
+    
+</script>
 <form oninput="result.value=parseInt(a.value)+parseInt(b.value)">
      <input type=range id=a name=a value=50>
     +<input type=number id=b name=b value=25>
-    =<output name=result for="a b"></output>
+    =
+
+    <output name=result for="a b" 🧮=+></output>
 </form>
 ```
 
