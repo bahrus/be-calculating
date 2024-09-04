@@ -34,7 +34,7 @@ Calculate value of the output element from peer input elements.
     //option 2
     Registry.define('+', e => e.target.value = e.args.reduce((acc, arg) => acc + arg));
 
-    
+
 </script>
 <form oninput="result.value=parseInt(a.value)+parseInt(b.value)">
      <input type=range id=a name=a value=50>
@@ -44,6 +44,8 @@ Calculate value of the output element from peer input elements.
     <output name=result for="a b" 🧮=+></output>
 </form>
 ```
+
+Inherits registry from parent Shadow Root
 
 It is unclear how to leverage that magic outside the confines of this example. How does the context of the names get passed so elegantly into the expression?
 
