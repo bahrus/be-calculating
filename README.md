@@ -15,8 +15,6 @@ Calculate value of the output element from peer input elements.
 
 ## Example 1a Global Registry, class based
 
-
-
 ```html
 <script type=module>
     import {Registry} from 'beHive/Registry.js'
