@@ -13,7 +13,9 @@
 
 Calculate value of the output element from peer input elements.
 
-## Example 1a
+## Example 1a Global Registry, class based
+
+
 
 ```html
 <script type=module>
@@ -37,7 +39,7 @@ Calculate value of the output element from peer input elements.
 </form>
 ```
 
-## Example 1b
+## Example 1b Global registry, function based
 
 ```html
 <script type=module>
@@ -58,7 +60,10 @@ Calculate value of the output element from peer input elements.
 </form>
 ```
 
+The problem is:
 
+1.  This universal adder assumes the target has a value property
+2.  We need a mechanism to block / add new handlers just like we do for enhancements
 
 ## Example 1a -- Almost the most compact notation
 
