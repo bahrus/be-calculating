@@ -7,36 +7,28 @@
 <img src="http://img.badgesize.io/https://cdn.jsdelivr.net/npm/be-calculating?compression=gzip">
 [![NPM version](https://badge.fury.io/js/be-calculating.png)](http://badge.fury.io/js/be-calculating)
 
+*be-calculating* is basically the code-first counterpoint to the declarative [*be-observant*](https://github.com/bahrus/be-observant) enhancement, when the full power of the JavaScript run time engine is needed.
+
 # Part I  Enhancing the output element
 
 Calculate value of the output element from peer input elements.
 
-*be-calculating* is basically the counter point to the declarative [*be-observant*](https://github.com/bahrus/be-observant). 
-
-## Inspiration
-
-
-*be-calculating* can't help but admire the brevity and sorcery on [display here](https://www.w3schools.com/TAGs/tag_output.asp) (formerly also on MDN, but MDN abandoned simplicity for seemingly nonsensical security reasons (perhaps I'm wrong, thinking this through)).
-
-
+## Example 1a
 
 ```html
 <script type=module>
-    import {Registry} from 'beCalculating/Registry.js'
+    import {Registry} from 'beHive/Registry.js'
 
     //option 1
-    Registry.define('+', new class {
+    Registry.define('+', class {
         handleEvent(e){
             e.target.value = e.args.reduce((acc, arg) => acc + arg)
         }
     }),
 
-    //option 2
-    Registry.define('+', e => e.target.value = e.args.reduce((acc, arg) => acc + arg));
-
 
 </script>
-<form oninput="result.value=parseInt(a.value)+parseInt(b.value)">
+<form>
      <input type=range id=a name=a value=50>
     +<input type=number id=b name=b value=25>
     =
@@ -45,24 +37,28 @@ Calculate value of the output element from peer input elements.
 </form>
 ```
 
-Inherits registry from parent Shadow Root
+## Example 1b
 
-It is unclear how to leverage that magic outside the confines of this example. How does the context of the names get passed so elegantly into the expression?
+```html
+<script type=module>
+    import {Registry} from 'beHive/Registry.js'
 
-> ![NOTE]
-> Due to a lack of -- I'm not sure what -- the platform engineers have apparently failed to find a way to support brevity like this, even for trusted content coming from the host -- i.e. most "minimal" security measures throw the baby out with the bathwater, blocking our ability to do this (sigh).  How could they have supported it?  I *think* by allowing the nonce / hash attribute to apply to the parent element that contains inline scripts.  Maybe that was looked at and found problematic, who knows?  All I know is it is deeply unfortunate, and it appears to be resulting in solutions adopting makeshift handler syntax that is probably just as vulnerable to similar attacks as the native inline handlers are, only reduced by lack of widespread adoption.  And not solving this problem appears to me to driving a stake through the idea of progressive enhancement.
+    //option 2
+    Registry.define('+', e => e.target.value = e.args.reduce((acc, arg) => acc + arg));
 
-Anyway, be-calculating can no long match the brevity of the markup above due to this limitation.
 
-One critique of the example above is that it recalculates and rebinds the value of the sum anytime any form element inside is modified by the user.
+</script>
 
-That means if the form has 8 more input elements, the sum will be recalculated, and the value passed to output, even when editing the 8 input elements that aren't part of the sum.
+<form>
+     <input type=range id=a name=a value=50>
+    +<input type=number id=b name=b value=25>
+    =
 
-be-calculating doesn't suffer from this scalability limitation.
+    <output name=result for="a b" 🧮=+></output>
+</form>
+```
 
-And what if we want to pass the sum to multiple places?  be-calculating can do that as well.
 
-So what *be-calculating* is wanting to do with this example is shown below:
 
 ## Example 1a -- Almost the most compact notation
 
