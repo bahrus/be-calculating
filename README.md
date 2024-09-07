@@ -17,10 +17,10 @@ Calculate value of the output element from peer input elements.
 
 ```html
 <script type=module>
-    import {Registry} from 'beHive/Registry.js'
-
+    import {Registry} from 'be-hive/Registry.js';
+    import {emc} from 'be-calculating/🧮.js';
     //option 1
-    Registry.define('+', class {
+    Registry.register(emc, '+', class {
         handleEvent(e){
             e.target.value = e.args.reduce((acc, arg) => acc + arg)
         }

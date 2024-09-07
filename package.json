@@ -26,12 +26,12 @@
   "dependencies": {
     "be-enhanced": "0.0.138",
     "be-exportable": "0.0.130",
-    "be-hive": "0.0.207",
+    "be-hive": "0.0.208",
     "trans-render": "0.0.833"
   },
   "devDependencies": {
     "may-it-serve": "0.0.8",
-    "@playwright/test": "1.46.1"
+    "@playwright/test": "1.47.0"
   },
   "scripts": {
     "test": "playwright test",
