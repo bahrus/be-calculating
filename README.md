@@ -68,8 +68,8 @@ In order to define a handler or multiple handlers, limited to your current Shado
 </be-hive>
 <script type=module>
     import {Registry} from 'beHive/Registry.js';
-    const beHive = document.querySelector('#be-hive.🧮');
-    const emc = 
+    const 🧮 = document.querySelector('#be-hive.🧮');
+    const emc = 🧮.synConfig;
     Registry.register(emc, '+', e => e.target.value = e.args.reduce((acc, arg) => acc + arg));
 </script>
 ```
@@ -79,28 +79,10 @@ Anyway...
 
 Think of what we've accomplished here!  We have now purified the JavaScript's domain to be independent of the UI, if one squints hard enough.  
 
-Code that we can patent and earn Turing Awards with!  We can create a reusable class  that can be used in multiple contexts -- anywhere we need to add multiple numbers together. We've been showing inline examples, but the code can be imported via ES classes located in ESM modules, which is discussed below. 
+Code that we can patent and earn Turing Awards with!  We can create a reusable class  that can be used in multiple contexts -- anywhere we need to add multiple numbers together. We've been showing inline examples, but the code can be imported via ES classes located in ESM modules. 
 
-We can get a glimpse of what that will look like by moving the script out of the oninput attribute and into a previous script element:
 
-## Example 1b
-
-```html
-<form>
-    <input type=range id=a value=50>
-    +<input type=number id=b value=25>
-    <script nomodule>
-        export class Calculator {
-            handleEvent(e){
-                e.target.value = e.factors.a + e.factors.b;
-            }
-        }
-    </script>
-    =<output for="a b" be-calculating></output>
-</form>
-```
-
-*be-calculating* supports specific syntax for switching to the change event, rather than the input event:
+*be-calculating* supports specific syntax for switching to the change event, rather than the input event, which is the default:
 
 ## Example 1c
 
@@ -108,31 +90,17 @@ We can get a glimpse of what that will look like by moving the script out of the
 <form>
     <input type="range" id=a value="50">
     +<input type="number" id=b value="25">
-    =<output for="a b" be-calculating onchange="value = $.a + $.b"></output>
+    =<output for="a b" 🧮=+ 🧮-defaultEventType=change></output>
 </form>
 ```
 
-## Walk like an Egyptian
+If the 🧮 emoji conflicts with another enhancement in the ShadowDOM root, look to [this file](https://github.com/bahrus/be-calculating/blob/baseline/%F0%9F%A7%AE.js) to see how easy it is to take ownership of your own name.
 
-Since *be-calculating* seems like a highly useful enhancement that would appear multiple times in a template / html stream, it seems desirable to support an alternative, shorter name, perhaps for less formal settings, where clashes between libraries can be contained.  For example, this package supports the following alternative (by referencing 🧮.js).
-
-## Example 1d The most compact notation
-
-```html
-<form>
-    <input type="range" id=a value="50">
-    +<input type="number" id=b value="25">
-    =<output for="a b" 🧮 oninput="value=$.a + $.b"></output>
-</form>
-```
-
-If you prefer some other emoji or (shorter?) name, look to [this file](https://github.com/bahrus/be-calculating/blob/baseline/%F0%9F%A7%AE.js) to see how easy it is to take ownership of your own name.
-
-So everywhere you see 🧮 below, please map this hieroglyph in your mind to the expression "be calculating".
+BTW, the canonical name for this enhancement is the name of this package, *be-calculating* for more formal settings.
 
 ## Alternative element references and/or event names
 
-Anything that requires subscribing to alternative or mixed event names, and/or that requires referencing nearby elements using something other than id's, needs to use an alternative to the *for* attribute, and use neither the oninput nor the onchange event.  We do so by adopting [DSS](https://github.com/bahrus/trans-render/wiki/VIII.--Directed-Scoped-Specifiers-(DSS)) to describe what to observe, and the more neutral "onload" event.
+Anything that requires subscribing to alternative or mixed event names, and/or that requires referencing nearby elements using something other than id's, needs to use an alternative to the *for* attribute.  We do so by adopting [DSS](https://github.com/bahrus/trans-render/wiki/VIII.--Directed-Scoped-Specifiers-(DSS)) to describe what to observe, and optionally when to act.
 
 ## Example 1e
 
@@ -140,7 +108,7 @@ Anything that requires subscribing to alternative or mixed event names, and/or t
 <form>
     <input type="range" name=a value="50">
     +<input type="number" name=b value="25">
-    =<output 🧮="@a @b" onload="value = $.a + $.b"></output>
+    =<output 🧮-for="@a @b" 🧮=+></output>
 </form>
 ```
 
