@@ -13,7 +13,7 @@
 
 Calculate value of the output element from peer input elements.
 
-## Example 1a Global Registry, class based
+## Example 1a Global Registry, class based [TODO]
 
 ```html
 <script type=module>
@@ -37,7 +37,7 @@ Calculate value of the output element from peer input elements.
 </form>
 ```
 
-## Example 1b Global registry, function based
+## Example 1b Global registry, function based [TODO]
 
 ```html
 <script type=module>
@@ -68,8 +68,8 @@ In order to define a handler or multiple handlers, limited to your current Shado
 </be-hive>
 <script type=module>
     import {Registry} from 'beHive/Registry.js';
-    const 🧮 = document.querySelector('#be-hive.🧮');
-    const emc = 🧮.synConfig;
+    //TODO figure out the logic to get emc
+    const emc = ???;
     Registry.register(emc, '+', e => e.target.value = e.args.reduce((acc, arg) => acc + arg));
 </script>
 ```
