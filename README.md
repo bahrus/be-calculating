@@ -79,7 +79,7 @@ Anyway...
 
 Think of what we've accomplished here!  We have now purified the JavaScript's domain to be independent of the UI, if one squints hard enough.  
 
-Code that we can patent and earn Turing Awards with!  We can create a reusable class  that can be used in multiple contexts -- anywhere we need to add multiple numbers together. We've been showing inline examples, but the code can be imported via ES classes located in ESM modules. 
+Code that we can patent and earn Turing Awards with!  We can create a reusable class  that can be used in multiple contexts -- anywhere we need to add multiple numbers together. We've been showing inline examples, but the code can be imported via ES classes or functions located in ESM modules. 
 
 
 *be-calculating* supports specific syntax for switching to the change event, rather than the input event, which is the default:
@@ -112,7 +112,7 @@ Anything that requires subscribing to alternative or mixed event names, and/or t
 </form>
 ```
 
-This still happens to assume, by default, that the "input" event is what we should listen for, but having adopted DSS syntax, we can specify any other event name we may want.   While "onload" isn't the most semantic name, perhaps, think "onload of (changes) to these elements, do this...".  Id's and the *for* attribute are generated automatically by *be-calculating* in order to optimize our accessibility experience.
+This still happens to assume, by default, that the "input" event is what we should listen for, but having adopted DSS syntax, we can specify any other event name we may want.   Id's and the *for* attribute are generated automatically by *be-calculating* in order to optimize our accessibility experience (if the for attribute/htmlFor property is found to null/undefined).
 
 # Part II Applied to non output elements
 
