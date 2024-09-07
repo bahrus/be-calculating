@@ -56,10 +56,17 @@ Calculate value of the output element from peer input elements.
 </form>
 ```
 
-The problem is:
+In order to define a handler limited to your current Shadow Scope, you will need to define a unique (to any parent Shadow Roots, within the context of this enhancement) "handlerKey" in the 'be-hive" instance that you plop within your shadow realm:
 
-1.  This universal adder assumes the target has a value property
-2.  We need a mechanism to block / add new handlers just like we do for enhancements
+```html
+<be-hive>
+    <script type=mountobserver id=be-hive.🧮>
+        {
+            "handlerKey": "myScopedHandlers"
+        }
+    </script>
+</be-hive>
+```
 
 ## Example 1a -- Almost the most compact notation
 
