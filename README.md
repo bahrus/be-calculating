@@ -56,46 +56,30 @@ Calculate value of the output element from peer input elements.
 </form>
 ```
 
-In order to define a handler limited to your current Shadow Scope, you will need to define a unique (to any parent Shadow Roots, within the context of this enhancement) "handlerKey" in the 'be-hive" instance that you plop within your shadow realm:
+In order to define a handler or multiple handlers, limited to your current ShadowDOM Realm (and inheriting ShadowDOM Realms), you will need to define a unique (to any parent Shadow Roots, within the context of this enhancement) "handlerKey" in the 'be-hive" instance that you plop within your shadow realm:
 
 ```html
-<be-hive>
+<be-hive id=my-scoped-be-hive>
     <script type=mountobserver id=be-hive.🧮>
         {
             "handlerKey": "myScopedHandlers"
         }
     </script>
 </be-hive>
+<script type=module>
+    import {Registry} from 'beHive/Registry.js';
+    const beHive = document.querySelector('#be-hive.🧮');
+    const emc = 
+    Registry.register(emc, '+', e => e.target.value = e.args.reduce((acc, arg) => acc + arg));
+</script>
 ```
 
-## Example 1a -- Almost the most compact notation
 
-```html
-<form>
-    <input type=range id=a value=50>
-    +<input type=number id=b value=25>
-    =<output for="a b" be-calculating oninput="value = $.a + $.b"></output>
-</form>
-```
-
-Here, we are "commandeering" the oninput built-in attribute (which isn't applicable to the output element anyway).  
-
-Why?
-
-~We consider it safe to include free-ranging JavaScript expressions inside such attributes, having confidence that sanitizing algorithms will strip such attributes if not explicitly permitted by parties who should have a say-so in the matter.~  Maybe if the platform ever agrees to a sanitizing protocol, this retreat from simplicity can be reexamined. 
-
-## Security concerns - Nonce in userland?
-
-Suppose the (ShadowDOM) root node got assigned a GUID (private key) that can only be read by already permissioned  JavaScript. 
-
-In order to activate the script (in this case, compile the event handler), this library needs to read that private key, which can only be done if JavaScript is activated.  The element with the inline script has to have: 1)  an id and 2) an attribute -- hash-ish ? that is the digest of the id.  If and only if that passes does the inline script get compiled. 
-
+Anyway...
 
 Think of what we've accomplished here!  We have now purified the JavaScript's domain to be independent of the UI, if one squints hard enough.  
 
-Code that we can patent and earn Turing Awards with!
-
-Because now, with a little more tender loving care (described below), we will see that we can create a reusable class that can be used in multiple contexts -- anywhere we need to add two numbers together. We've been showing inline examples, but the code can be imported via ES classes located in ESM modules, which is discussed below. 
+Code that we can patent and earn Turing Awards with!  We can create a reusable class  that can be used in multiple contexts -- anywhere we need to add multiple numbers together. We've been showing inline examples, but the code can be imported via ES classes located in ESM modules, which is discussed below. 
 
 We can get a glimpse of what that will look like by moving the script out of the oninput attribute and into a previous script element:
 
