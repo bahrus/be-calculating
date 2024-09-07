@@ -41,12 +41,10 @@ Calculate value of the output element from peer input elements.
 
 ```html
 <script type=module>
-    import {Registry} from 'beHive/Registry.js'
-
+    import {Registry} from 'beHive/Registry.js';
+    import {emc} from 'be-calculating/🧮.js';
     //option 2
-    Registry.define('+', e => e.target.value = e.args.reduce((acc, arg) => acc + arg));
-
-
+    Registry.register(emc, '+', e => e.target.value = e.args.reduce((acc, arg) => acc + arg));
 </script>
 
 <form>
