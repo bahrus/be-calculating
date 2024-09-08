@@ -58,20 +58,21 @@ Calculate value of the output element from peer input elements.
 
 In order to define a handler or multiple handlers, limited to your current ShadowDOM Realm (and inheriting ShadowDOM Realms), you will need to define a unique (to any parent Shadow Roots, within the context of this enhancement) "handlerKey" in the 'be-hive" instance that you plop within your shadow realm:
 
+## Example 1c Locally scoped handler
+
 ```html
 <be-hive id=my-scoped-be-hive>
-    <script type=mountobserver id=be-hive.🧮>
+    <script type=mountobserver id=be-hive.🧮 onload="
+        //if the browser engineers can't figure out how to secure this, we are truly lost.
+        const emc = synConfig;
+        Registry.register(emc, '+', e => e.target.value = e.args.reduce((acc, arg) => acc + arg));
+    ">
         {
             "handlerKey": "myScopedHandlers"
         }
     </script>
 </be-hive>
-<script type=module>
-    import {Registry} from 'beHive/Registry.js';
-    //TODO figure out the logic to get emc
-    const emc = ???;
-    Registry.register(emc, '+', e => e.target.value = e.args.reduce((acc, arg) => acc + arg));
-</script>
+
 ```
 
 
@@ -84,7 +85,7 @@ Code that we can patent and earn Turing Awards with!  We can create a reusable c
 
 *be-calculating* supports specific syntax for switching to the change event, rather than the input event, which is the default:
 
-## Example 1c
+## Example 1d [TODO]
 
 ```html
 <form>
@@ -123,6 +124,7 @@ This enhancement also supports other elements.  The script will need to be a bit
 If no other enhancements are overloading the onload event, script away bravely
 
 ```html
+<script type=module></script>
 <input name=domain value=emojipedia.org>
 <input name=search value=calculator>
 <a 
