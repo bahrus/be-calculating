@@ -9,16 +9,16 @@ import { BeHive, seed, MountObserver } from 'be-hive/be-hive.js';
 export const emc = {
     hostInstanceOf: [HTMLElement],
     base: 'be-calculating',
-    branches: ['', 'name-of-calculator', 'event-arg'],
+    branches: ['', 'for', 'on'],
     enhPropKey: 'beCalculating',
     map: {
         '0.0': {
-            instanceOf: 'DSSArray',
-            arrValMapsTo: 'remoteSpecifiers'
+            instanceOf: 'String',
+            mapsTo: 'handler'
         },
         '1.0': {
             instanceOf: 'String',
-            mapsTo: 'nameOfCalculator'
+            mapsTo: 'forAttr'
         },
         '2.0': {
             instanceOf: 'String',

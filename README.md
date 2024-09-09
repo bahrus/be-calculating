@@ -24,7 +24,7 @@ Calculate value of the output element from peer input elements.
         handleEvent(e){
             e.target.value = e.args.reduce((acc, arg) => acc + arg)
         }
-    }),
+    });
 
 
 </script>
@@ -91,7 +91,7 @@ Code that we can patent and earn Turing Awards with!  We can create a reusable c
 <form>
     <input type="range" id=a value="50">
     +<input type="number" id=b value="25">
-    =<output for="a b" 🧮=+ 🧮-defaultEventType=change></output>
+    =<output for="a b" 🧮=+ 🧮-on=change></output>
 </form>
 ```
 
