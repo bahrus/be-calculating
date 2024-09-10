@@ -159,7 +159,6 @@ class BeCalculating extends BE {
         if(handlerObj.toString().substring(0, 5) === 'class'){
             handlerObj = new handlerObj();
         }
-        console.log(handlerObj);
         return {
             handlerObj
         }
@@ -252,6 +251,8 @@ class BeCalculating extends BE {
         const event = new CalcEvent(args, obj);
         if('handleEvent' in handlerObj){
             handlerObj.handleEvent(event);
+        }else{
+            handlerObj(event);
         }
         enhancedElement.value = event.r;
     }
