@@ -5,31 +5,37 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Example 1a</title>
-    <!-- <meta 
-        http-equiv="Content-Security-Policy" 
-        content="script-src: 'self' 'unsafe-inline' http://localhost:3030" /> -->
-    <meta 
-        http-equiv="Content-Security-Policy" 
-        content="script-src 'nonce-rAnd0m' 'sha256-ZjMG5woK/J0uIVjPhdP+p+71uRMa6jvEP4gJu16JeV4=' 'unsafe-hashes' 'strict-dynamic'; default-src 'self';" />
-</head>
-<body>
-    <form>
-        <input type="range" id="a" value="50">
-        +<input type="number" id="b" value="25">
-        =<output for="a b" be-calculating oninput="value = $.a + $.b" nonce="rAnd0m"></output>
-    </form>
     <script type=importmap >
         {
             "imports": {
                 "be-enhanced/": "/node_modules/be-enhanced/",
                 "be-exportable/": "/node_modules/be-exportable/",
-                "be-hive/":  "/node_modules/be-hive/",
+                "be-hive/":  "/be-hive/",
                 "mount-observer/": "/node_modules/mount-observer/",
                 "trans-render/": "/node_modules/trans-render/"
             }
         }
     </script>
-    <script type=module src=/behivior.js nonce="rAnd0m"></script>
+</head>
+<body>
+    <script type=module>
+        import {Registry} from 'be-hive/Registry.js';
+        import {emc} from '../🧮.js';
+        Registry.register(emc, '+', class {
+            handleEvent(e){
+                e.target.value = e.args.reduce((acc, arg) => acc + arg);
+            }
+        });
+    </script>
+    <form>
+        <input type="range" id="a" value="50">
+        +<input type="number" id="b" value="25">
+        =<output for="a b" 🧮=+ ></output>
+    </form>
+
+    <script type=module>
+        import '../🧮.js';
+    </script>
 
 </body>
 </html>

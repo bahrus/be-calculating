@@ -26,7 +26,7 @@
   "dependencies": {
     "be-enhanced": "0.0.139",
     "be-exportable": "0.0.130",
-    "be-hive": "0.0.209",
+    "be-hive": "0.0.210",
     "trans-render": "0.0.834"
   },
   "devDependencies": {
