@@ -156,10 +156,9 @@ class BeCalculating extends BE {
         const {handler} = self;
         let handlerObj = this.#customHandlers.get(handler);
         if(handlerObj === undefined) return {};
-        if(handlerObj.constructor){
+        if(handlerObj.constructor && handlerObj.constructor.toString().substring(0, 5) === 'class'){
             handlerObj = new handlerObj();
         }
-        console.log({handlerObj});
         return {
             handlerObj
         }

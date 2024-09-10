@@ -20,7 +20,7 @@ Calculate value of the output element from peer input elements.
     import {Registry} from 'be-hive/Registry.js';
     import {emc} from 'be-calculating/🧮.js';
     //option 1
-    Registry.register(emc, '+', class {
+    Registry.register(emc, '+', {
         handleEvent(e){
             e.r = e.args.reduce((acc, arg) => acc + arg)
         }
