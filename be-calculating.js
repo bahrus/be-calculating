@@ -21,23 +21,34 @@ class BeCalculating extends BE {
     static config = {
         propInfo:{
             ...propInfo,
+            categorized: {},
             forAttr: {},
             forArgs: {},
             handler: {},
+            defaultEventType: {},
             remoteSpecifiers: {},
+            remSpecifierLen: {},
             enhElLocalName: {},
             propToAO: {},
+            isOutputEl: {},
         },
         compacts: {
             when_enhElLocalName_changes_invoke_categorizeEl: 0,
             when_handler_changes_invoke_getEvtHandler: 0,
+            pass_length_of_remoteSpecifiers_to_remSpecifierLen: 0,
         },
         actions: {
+            getDefltEvtType: {
+                ifAllOf: ['enhElLocalName', 'categorized']
+            },
             parseForAttr: {
                 ifAllOf: ['forAttr', 'isOutputEl']
             },
             genRemoteSpecifiers:{
-                ifAllOf: ['forArgs']
+                ifAllOf: ['forArgs', 'defaultEventType']
+            },
+            seek: {
+                ifAllOf: ['defaultEventType', 'remSpecifierLen']
             }
         }
     }
@@ -69,6 +80,40 @@ class BeCalculating extends BE {
         this.#customHandlers = handlers;
     }
 
+    /**
+     * 
+     * @param {BAP} self 
+     */
+    getDefltEvtType(self){
+        const {enhElLocalName, enhancedElement} = self;
+        const deflt = /** @type {PAP} */({
+            //publishEventType: 'load',
+            defaultEventType: 'input'
+        });
+
+        // switch(enhElLocalName){
+        //     case 'output':
+        //         if(self.forAttr === undefined){
+        //             return deflt;
+        //         }else{
+        //             if(enhancedElement.oninput){
+        //                 return /** @type {PAP} */({
+        //                     publishEventType: 'input',
+        //                     defaultEventType: 'input',
+        //                 });
+        //             }else if(enhancedElement.onchange){
+        //                 return /** @type {PAP} */({
+        //                     publishEventType: 'change',
+        //                     defaultEventType: 'change'
+        //                 });
+        //             }
+
+        //         }
+
+        // }
+        return deflt;
+    }
+
     #ignoreForAttr = false;
     /**
      * 
@@ -92,18 +137,9 @@ class BeCalculating extends BE {
     categorizeEl(self){
         //TODO Make this logic compactible?
         const {enhElLocalName, enhancedElement} = self;
-        let hasInlineEvent = false;
-        try{
-            hasInlineEvent = !!(
-                enhancedElement.onload || enhancedElement.oninput || enhancedElement.onchange
-            )
-        }catch(e){
 
-        }
-        finally{}
         return /** @type {PAP} */({
             isOutputEl: enhElLocalName === 'output',
-            hasInlineEvent,
             categorized: true,
         });
     }
@@ -117,7 +153,7 @@ class BeCalculating extends BE {
         const handlerObj = this.#customHandlers.get(handler);
         console.log({handlerObj});
         return {
-
+            handlerObj
         }
     }
 
@@ -182,12 +218,11 @@ class BeCalculating extends BE {
      */
     async hydrate(self){
         this.disconnect();
+        const ac = this.#ac = new AbortController();
         const {propToAO} = self;
         const aos = Object.values(propToAO);
         for(const ao of aos){
-            const ac = this.#ac = new AbortController();
             ao.addEventListener('.', this, {signal: ac.signal});
-
         }
         this.handleEvent();
         return {
@@ -195,7 +230,9 @@ class BeCalculating extends BE {
         }
     }
     async handleEvent() {
-
+        const self = /** @type {BAP} */(/** @type {any} */ (this));
+        const {enhancedElement, propToAO, eventArg} = self;
+        console.log({enhancedElement, propToAO, eventArg})
     }
 
         /**
