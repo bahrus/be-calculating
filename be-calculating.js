@@ -25,6 +25,7 @@ class BeCalculating extends BE {
             forAttr: {},
             forArgs: {},
             handler: {},
+            handlerObj: {},
             defaultEventType: {},
             remoteSpecifiers: {},
             remSpecifierLen: {},
@@ -49,6 +50,9 @@ class BeCalculating extends BE {
             },
             seek: {
                 ifAllOf: ['defaultEventType', 'remSpecifierLen']
+            },
+            hydrate: {
+                ifAllOf: ['propToAO', 'handlerObj']
             }
         }
     }
