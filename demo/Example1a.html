@@ -23,6 +23,7 @@
         import {emc} from '../🧮.js';
         Registry.register(emc, '+', class {
             handleEvent(e){
+                debugger;
                 e.r = e.args.reduce((acc, arg) => acc + arg);
             }
         });

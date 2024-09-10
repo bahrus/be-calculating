@@ -154,7 +154,11 @@ class BeCalculating extends BE {
      */
     getEvtHandler(self){
         const {handler} = self;
-        const handlerObj = this.#customHandlers.get(handler);
+        let handlerObj = this.#customHandlers.get(handler);
+        if(handlerObj === undefined) return {};
+        if(handlerObj.constructor){
+            handlerObj = new handlerObj();
+        }
         console.log({handlerObj});
         return {
             handlerObj
