@@ -22,7 +22,7 @@ Calculate value of the output element from peer input elements.
     //option 1
     Registry.register(emc, '+', class {
         handleEvent(e){
-            e.target.value = e.args.reduce((acc, arg) => acc + arg)
+            e.r = e.args.reduce((acc, arg) => acc + arg)
         }
     });
 

@@ -235,8 +235,8 @@ class BeCalculating extends BE {
     }
     async handleEvent() {
         const self = /** @type {BAP} */(/** @type {any} */ (this));
-        const {enhancedElement, propToAO, eventArg} = self;
-        console.log({enhancedElement, propToAO, eventArg})
+        const {enhancedElement, propToAO} = self;
+        console.log({enhancedElement, propToAO})
     }
 
         /**
