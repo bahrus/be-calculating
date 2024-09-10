@@ -23,7 +23,7 @@
         import {emc} from '../🧮.js';
         Registry.register(emc, '+', class {
             handleEvent(e){
-                e.target.value = e.args.reduce((acc, arg) => acc + arg);
+                e.r = e.args.reduce((acc, arg) => acc + arg);
             }
         });
     </script>

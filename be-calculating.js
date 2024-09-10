@@ -235,11 +235,24 @@ class BeCalculating extends BE {
     }
     async handleEvent() {
         const self = /** @type {BAP} */(/** @type {any} */ (this));
-        const {enhancedElement, propToAO} = self;
-        console.log({enhancedElement, propToAO})
+        const {enhancedElement, propToAO, handlerObj} = self;
+        //console.log({enhancedElement, propToAO, handlerObj});
+        const obj = {};
+        const args = [];
+        for(const prop in propToAO){
+            const ao = propToAO[prop];
+            const val = await ao.getValue();
+            args.push(val);
+            obj[prop] = val;
+        }
+        const event = new CalcEvent(args, obj);
+        if('handleEvent' in handlerObj){
+            handlerObj.handleEvent(event);
+        }
+        enhancedElement.value = event.r;
     }
 
-        /**
+    /**
      * @param {Element} enhancedElement
      * @override
      */
@@ -258,3 +271,26 @@ class BeCalculating extends BE {
 
 await BeCalculating.bootUp();
 export {BeCalculating};
+
+export class CalcEvent extends Event {
+    static eventName = 'calc';
+    /** @type {any} */
+    r;
+    /** @type {Array<any>} */
+    args;
+    /** 
+     * Event view model
+     * @type {{[key: string]: any}} 
+    */
+    evm;
+    /**
+     * 
+     * @param {Array<any>} args 
+     * @param {{[key: string]: any}} evm 
+     */
+    constructor(args, evm){
+        super(CalcEvent.eventName);
+        this.args = args;
+        this.evm = evm;
+    }
+}
