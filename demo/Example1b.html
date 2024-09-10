@@ -4,21 +4,8 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Example 1b</title>
-</head>
-<body>
-    <form>
-        <input type="range" id="a" value="50">
-        +<input type="number" id="b" value="25">
-        =<script nomodule>
-            export class Calculator {
-                handleEvent(e){
-                    e.target.value = e.factors.a + e.factors.b;
-                }
-            }
-        </script><output for="a b" be-calculating></output>
-    </form>
-    <script type=importmap>
+    <title>Example 1a</title>
+    <script type=importmap >
         {
             "imports": {
                 "be-enhanced/": "/node_modules/be-enhanced/",
@@ -29,8 +16,25 @@
             }
         }
     </script>
+</head>
+<body>
     <script type=module>
-        import '/behivior.js'
+        import {Registry} from 'be-hive/Registry.js';
+        import {emc} from '../🧮.js';
+        Registry.register(emc, '+', {
+            handleEvent(e){
+                e.r = e.args.reduce((acc, arg) => acc + arg);
+            }
+        });
+    </script>
+    <form>
+        <input type="range" id="a" value="50">
+        +<input type="number" id="b" value="25">
+        =<output for="a b" 🧮=+ ></output>
+    </form>
+
+    <script type=module>
+        import '../🧮.js';
     </script>
 
 </body>

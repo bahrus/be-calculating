@@ -21,7 +21,7 @@
     <script type=module>
         import {Registry} from 'be-hive/Registry.js';
         import {emc} from '../🧮.js';
-        Registry.register(emc, '+', {
+        Registry.register(emc, '+', class {
             handleEvent(e){
                 e.r = e.args.reduce((acc, arg) => acc + arg);
             }

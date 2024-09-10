@@ -20,6 +20,30 @@ Calculate value of the output element from peer input elements.
     import {Registry} from 'be-hive/Registry.js';
     import {emc} from 'be-calculating/🧮.js';
     //option 1
+    Registry.register(emc, '+', class {
+        handleEvent(e){
+            e.r = e.args.reduce((acc, arg) => acc + arg)
+        }
+    });
+
+
+</script>
+<form>
+     <input type=range id=a name=a value=50>
+    +<input type=number id=b name=b value=25>
+    =
+
+    <output name=result for="a b" 🧮=+></output>
+</form>
+```
+
+## Example 1b Global Registry, object based
+
+```html
+<script type=module>
+    import {Registry} from 'be-hive/Registry.js';
+    import {emc} from 'be-calculating/🧮.js';
+    //option 1
     Registry.register(emc, '+', {
         handleEvent(e){
             e.r = e.args.reduce((acc, arg) => acc + arg)
@@ -37,7 +61,7 @@ Calculate value of the output element from peer input elements.
 </form>
 ```
 
-## Example 1b Global registry, function based [TODO]
+## Example 1c Global registry, function based [TODO]
 
 ```html
 <script type=module>
