@@ -264,7 +264,7 @@ class BeCalculating extends BE {
         const event = new CalcEvent(args, obj);
         if(handlerObj !== undefined){
             if('handleEvent' in handlerObj){
-                handlerObj.handleEvent(event);
+                /** @type {EventListenerObject} */ (handlerObj).handleEvent(event);
             }else{
                 handlerObj(event);
             }
