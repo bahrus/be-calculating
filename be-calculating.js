@@ -279,7 +279,7 @@ await BeCalculating.bootUp();
 export {BeCalculating};
 
 export class CalcEvent extends Event {
-    static eventName = 'calc';
+    static eventName = 'calculate';
     /** @type {any} */
     r;
     /** @type {Array<any>} */
