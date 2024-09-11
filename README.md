@@ -79,20 +79,27 @@ Calculate value of the output element from peer input elements.
 
 In order to define a handler or multiple handlers, limited to your current ShadowDOM Realm (and inheriting ShadowDOM Realms), you will need to define a unique (to any parent Shadow Roots, within the context of this enhancement) "handlerKey" in the 'be-hive" instance that you plop within your shadow realm:
 
-## Example 1c Locally scoped handler
+## Example 1d Locally scoped handler
 
 ```html
 <be-hive id=my-scoped-be-hive>
     <script type=mountobserver id=be-hive.🧮 onload="
         //if the browser engineers can't figure out how to secure this, we are truly lost.
         const emc = synConfig;
-        Registry.register(emc, '+', e => e.target.value = e.args.reduce((acc, arg) => acc + arg));
+        Registry.register(emc, '+', e => e.r = e.args.reduce((acc, arg) => acc + arg));
     ">
         {
             "handlerKey": "myScopedHandlers"
         }
     </script>
 </be-hive>
+<form>
+     <input type=range id=a name=a value=50>
+    +<input type=number id=b name=b value=25>
+    =
+
+    <output name=result for="a b" 🧮=+></output>
+</form>
 
 ```
 

@@ -254,6 +254,7 @@ class BeCalculating extends BE {
         }else{
             handlerObj(event);
         }
+        this.channelEvent(event);
         enhancedElement.value = event.r;
     }
 
