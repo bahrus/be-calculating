@@ -116,7 +116,7 @@ If the 🧮 emoji conflicts with another enhancement in the ShadowDOM root, look
 
 BTW, the canonical name for this enhancement is the name of this package, *be-calculating* for more formal settings.
 
-## Specify change event [TODO]
+## Specify change event
 
 ```html
 <form>
