@@ -77,33 +77,9 @@ Calculate value of the output element from peer input elements.
 </form>
 ```
 
-In order to define a handler or multiple handlers, limited to your current ShadowDOM Realm (and inheriting ShadowDOM Realms), you will need to define a unique (to any parent Shadow Roots, within the context of this enhancement) "handlerKey" in the 'be-hive" instance that you plop within your shadow realm:
 
-## Example 1d Locally scoped handler [TODO]
 
-```html
-<be-hive id=my-scoped-be-hive>
-    <script type=mountobserver id=be-hive.🧮 onload="
-        //if the browser engineers can't figure out how to secure this, we are truly lost.
-        const emc = synConfig;
-        Registry.register(emc, '+', e => e.r = e.args.reduce((acc, arg) => acc + arg));
-    ">
-        {
-            "handlerKey": "myScopedHandlers"
-        }
-    </script>
-</be-hive>
-<form>
-     <input type=range id=a name=a value=50>
-    +<input type=number id=b name=b value=25>
-    =
-
-    <output name=result for="a b" 🧮=+></output>
-</form>
-
-```
-
-## Example 1e  Traditional local event handler [Untested]
+## Example 1d  Traditional local event handler
 
 A framework or custom element host or local script element can attach a local event listener to the output element and compute the value
 
@@ -127,8 +103,6 @@ Think of what we've accomplished here!  We have now purified the JavaScript's do
 
 Code that we can patent and earn Turing Awards with!  We can create a reusable class  that can be used in multiple contexts -- anywhere we need to add multiple numbers together.  
 
-
-*be-calculating* supports specific syntax for switching to the change event, rather than the input event, which is the default:
 
 If the 🧮 emoji conflicts with another enhancement in the ShadowDOM root, look to [this file](https://github.com/bahrus/be-calculating/blob/baseline/%F0%9F%A7%AE.js) to see how easy it is to take ownership of your own name.
 
@@ -186,13 +160,41 @@ To code defensively, check for the enh property of the event:
 </a>
 ```
 
-# Part III Sharing the value of output element, and other binding examples
+# Part III [TODO]
+
+In order to define a handler or multiple handlers, limited to your current ShadowDOM Realm (and inheriting ShadowDOM Realms), you will need to define a unique (to any parent Shadow Roots, within the context of this enhancement) "handlerKey" in the 'be-hive" instance that you plop within your shadow realm:
+
+## Example 3a Locally scoped handler [TODO]
+
+```html
+<be-hive id=my-scoped-be-hive>
+    <script type=mountobserver id=be-hive.🧮 onload="
+        //if the browser engineers can't figure out how to secure this, we are truly lost.
+        const emc = synConfig;
+        Registry.register(emc, '+', e => e.r = e.args.reduce((acc, arg) => acc + arg));
+    ">
+        {
+            "handlerKey": "myScopedHandlers"
+        }
+    </script>
+</be-hive>
+<form>
+     <input type=range id=a name=a value=50>
+    +<input type=number id=b name=b value=25>
+    =
+
+    <output name=result for="a b" 🧮=+></output>
+</form>
+
+```
+
+# Part IV Sharing the value of output element, and other binding examples [TODO]
 
 Trigger alert:  Allow for a little head spinning below.  It takes a little getting used to.
 
 The output element can also get in on the sharing act.
 
-## Example 3a Responding to changes of the output element
+## Example 4a Responding to changes of the output element
 
 ```html
 <form>
@@ -206,7 +208,7 @@ The output element can also get in on the sharing act.
 > ![NOTE]
 > In the example above, data is "flowing" both up and down.  In general, I think it is more natural and easier on the end user for data to flow in a downward direction, as most literary languages flow in that direction.  However, if that is not possible, do map out mentally or on (virtual) paper the dependency tree to make sure there aren't any cyclic loops that could result in an infinite loop catastrophe.
 
-## Example 3b - Gain full access to the element
+## Example 4b - Gain full access to the element
 
 In the examples above, we engaged in "mind reading" in order to pass to the event handler the precise values we want to use in order to calculate the result.
 

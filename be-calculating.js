@@ -53,7 +53,7 @@ class BeCalculating extends BE {
                 ifAllOf: ['defaultEventType', 'remSpecifierLen']
             },
             hydrate: {
-                ifAllOf: ['checkedRegistry', 'propToAO', 'handlerObj']
+                ifAllOf: ['checkedRegistry', 'propToAO']
             }
         }
     }

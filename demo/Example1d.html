@@ -5,14 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Example 1d</title>
-</head>
-<body>
-    <form>
-        <input type="range" id=a value="50">
-        +<input type="number" id=b value="25">
-        =<output for="a b" 🧮 oninput="value=$.a + $.b"></output>
-    </form>
-    <script type=importmap>
+    <script type=importmap >
         {
             "imports": {
                 "be-enhanced/": "/node_modules/be-enhanced/",
@@ -23,8 +16,19 @@
             }
         }
     </script>
+</head>
+<body>
+    <form>
+        <input type="range" id="a" value="50">
+        +<input type="number" id="b" value="25">
+        =<output id=output for="a b" 🧮></output>
+    </form>
+    <script>
+        output.addEventListener('calculate', e => e.r = e.args.reduce((acc, arg) => acc + arg));
+    </script>
+    
     <script type=module>
-        import '/🧮.js'
+        import '../🧮.js';
     </script>
 
 </body>
