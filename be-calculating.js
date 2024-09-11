@@ -156,6 +156,12 @@ class BeCalculating extends BE {
     getEvtHandler(self){
         const {handler} = self;
         const checkedRegistry = true;
+        if(handler === undefined){
+            return /** @type {BAP} */ ({
+                checkedRegistry
+            });
+        }
+        
         let handlerObj = this.#customHandlers.get(handler);
         if(handlerObj === undefined) return /** @type {BAP} */ ({
             checkedRegistry
@@ -254,11 +260,14 @@ class BeCalculating extends BE {
             obj[prop] = val;
         }
         const event = new CalcEvent(args, obj);
-        // if('handleEvent' in handlerObj){
-        //     handlerObj.handleEvent(event);
-        // }else{
-        //     handlerObj(event);
-        // }
+        if(handlerObj !== undefined){
+            if('handleEvent' in handlerObj){
+                handlerObj.handleEvent(event);
+            }else{
+                handlerObj(event);
+            }
+        }
+
         this.channelEvent(event);
         enhancedElement.value = event.r;
     }
