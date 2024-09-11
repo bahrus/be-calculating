@@ -5,7 +5,7 @@ import { propInfo } from 'be-enhanced/cc.js';
 /** @import {BEConfig, IEnhancement, BEAllProps} from './ts-refs/be-enhanced/types.d.ts' */
 /** @import {Actions, PAP,  AP, BAP} from './ts-refs/be-calculating/types' */;
 /** @import {CustomHandlers, EnhancementInfo} from './ts-refs/trans-render/be/types.d.ts' */
-/** @import {AbsorbingObject} from './ts-refs/trans-render/asmr/types.d.ts' */
+/** @import {AbsorbingObject, SharingObject} from './ts-refs/trans-render/asmr/types.d.ts' */
 /** @import {AllProps as BeExportableAllProps} from  './ts-refs/be-exportable/types.d.ts' */
 
 let cnt = 0;
@@ -247,9 +247,11 @@ class BeCalculating extends BE {
             resolved: true
         }
     }
+    /** @type {SharingObject | undefined} */
+    #so;
     async handleEvent() {
         const self = /** @type {BAP} */(/** @type {any} */ (this));
-        const {enhancedElement, propToAO, handlerObj} = self;
+        const {enhancedElement, propToAO, handlerObj, isOutputEl} = self;
         //console.log({enhancedElement, propToAO, handlerObj});
         const obj = {};
         const args = [];
@@ -269,7 +271,20 @@ class BeCalculating extends BE {
         }
 
         this.channelEvent(event);
-        enhancedElement.value = event.r;
+        const {r} = event;
+        if(r !== rguid){
+            if(isOutputEl){
+                /** @type {HTMLOutputElement} */(enhancedElement).value = r;
+            }else{
+                if(this.#so === undefined){
+                    const {ASMR} = await import('trans-render/asmr/asmr.js');
+                    this.#so =  await ASMR.getSO(enhancedElement);
+                }
+                this.#so.setValue(r);
+            }
+            
+        }
+        
     }
 
     /**
@@ -292,10 +307,11 @@ class BeCalculating extends BE {
 await BeCalculating.bootUp();
 export {BeCalculating};
 
+const rguid = 'XM5dz7tqZkeFCtytNXHPzw';
 export class CalcEvent extends Event {
     static eventName = 'calculate';
     /** @type {any} */
-    r;
+    r = rguid;
     /** @type {Array<any>} */
     args;
     /** 
