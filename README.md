@@ -79,7 +79,7 @@ Calculate value of the output element from peer input elements.
 
 In order to define a handler or multiple handlers, limited to your current ShadowDOM Realm (and inheriting ShadowDOM Realms), you will need to define a unique (to any parent Shadow Roots, within the context of this enhancement) "handlerKey" in the 'be-hive" instance that you plop within your shadow realm:
 
-## Example 1d Locally scoped handler
+## Example 1d Locally scoped handler [TODO]
 
 ```html
 <be-hive id=my-scoped-be-hive>

@@ -32,6 +32,7 @@ class BeCalculating extends BE {
             enhElLocalName: {},
             propToAO: {},
             isOutputEl: {},
+            checkedRegistry: {},
         },
         compacts: {
             when_enhElLocalName_changes_invoke_categorizeEl: 0,
@@ -52,7 +53,7 @@ class BeCalculating extends BE {
                 ifAllOf: ['defaultEventType', 'remSpecifierLen']
             },
             hydrate: {
-                ifAllOf: ['propToAO', 'handlerObj']
+                ifAllOf: ['checkedRegistry', 'propToAO', 'handlerObj']
             }
         }
     }
@@ -71,7 +72,7 @@ class BeCalculating extends BE {
         super.attach(enhancedElement, enhancementInfo);
         const {synConfig, mountCnfg} = enhancementInfo;
         const {handlerKey} = synConfig;
-        console.log({handlerKey})
+        //console.log({handlerKey})
         const {registeredHandlers} = await import('be-hive/be-hive.js');
         const cluster = registeredHandlers.get(synConfig);
         if(cluster === undefined) throw 404;
@@ -154,14 +155,18 @@ class BeCalculating extends BE {
      */
     getEvtHandler(self){
         const {handler} = self;
+        const checkedRegistry = true;
         let handlerObj = this.#customHandlers.get(handler);
-        if(handlerObj === undefined) return {};
+        if(handlerObj === undefined) return /** @type {BAP} */ ({
+            checkedRegistry
+        });
         if(handlerObj.toString().substring(0, 5) === 'class'){
             handlerObj = new handlerObj();
         }
-        return {
-            handlerObj
-        }
+        return /** @type {BAP} */({
+            handlerObj,
+            checkedRegistry
+        });
     }
 
     /**
@@ -249,11 +254,11 @@ class BeCalculating extends BE {
             obj[prop] = val;
         }
         const event = new CalcEvent(args, obj);
-        if('handleEvent' in handlerObj){
-            handlerObj.handleEvent(event);
-        }else{
-            handlerObj(event);
-        }
+        // if('handleEvent' in handlerObj){
+        //     handlerObj.handleEvent(event);
+        // }else{
+        //     handlerObj(event);
+        // }
         this.channelEvent(event);
         enhancedElement.value = event.r;
     }
