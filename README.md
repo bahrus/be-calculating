@@ -103,7 +103,7 @@ In order to define a handler or multiple handlers, limited to your current Shado
 
 ```
 
-## Example 1e  Traditional local event handler [TODO]
+## Example 1e  Traditional local event handler [Untested]
 
 A framework or custom element host or local script element can attach a local event listener to the output element and compute the value
 
@@ -125,20 +125,10 @@ Anyway...
 
 Think of what we've accomplished here!  We have now purified the JavaScript's domain to be independent of the UI, if one squints hard enough.  
 
-Code that we can patent and earn Turing Awards with!  We can create a reusable class  that can be used in multiple contexts -- anywhere we need to add multiple numbers together. We've been showing inline examples, but the code can be imported via ES classes or functions located in ESM modules. 
+Code that we can patent and earn Turing Awards with!  We can create a reusable class  that can be used in multiple contexts -- anywhere we need to add multiple numbers together.  
 
 
 *be-calculating* supports specific syntax for switching to the change event, rather than the input event, which is the default:
-
-## Example 1d [TODO]
-
-```html
-<form>
-    <input type="range" id=a value="50">
-    +<input type="number" id=b value="25">
-    =<output for="a b" 🧮=+ 🧮-on=change></output>
-</form>
-```
 
 If the 🧮 emoji conflicts with another enhancement in the ShadowDOM root, look to [this file](https://github.com/bahrus/be-calculating/blob/baseline/%F0%9F%A7%AE.js) to see how easy it is to take ownership of your own name.
 
