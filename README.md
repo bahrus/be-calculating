@@ -77,16 +77,6 @@ Calculate value of the output element from peer input elements.
 </form>
 ```
 
-[TODO]
-This is such a useful function, that in fact, the following pre-defined functions are built in to be-calculating, so need to define the "+" operator, it is built in already, as are:
-
-| Operator |  Notes                |
-|----------|-----------------------|
-| +        | Sums the args         |
-| *        | Product of the args   |
-| max      | Maximum f the args    |
-| min      | Minimum of the args   
-
 ## Example 1d  Traditional local event handler
 
 A framework or custom element host or local script element can attach a local event listener to the output element and compute the value
@@ -103,6 +93,18 @@ A framework or custom element host or local script element can attach a local ev
     output.addEventListener('calculate', e => e.r = e.args.reduce((acc, arg) => acc + arg))
 </script>
 ```
+
+[TODO]
+This is such a useful function, that in fact, the following pre-defined functions are built in to be-calculating, so need to define the "+" operator like we-ve been doing, it is built in already, as are:
+
+| Operator |  Notes                |
+|----------|-----------------------|
+| +        | Sums the args         |
+| *        | Product of the args   |
+| max      | Maximum f the args    |
+| min      | Minimum of the args   
+
+But of course, if you need to define your own custom function, now you know how to do it.
 
 
 Anyway...
