@@ -77,7 +77,15 @@ Calculate value of the output element from peer input elements.
 </form>
 ```
 
+[TODO]
+This is such a useful function, that in fact, the following pre-defined functions are built in to be-calculatin, so need to define the "+" operator, it is built in already, as are:
 
+| Operator |  Notes                |
+|----------|-----------------------|
+| +        | Sums the args         |
+| *        | Product of the args   |
+| max      | Maximum f the args    |
+| min      | Minimum of the args   
 
 ## Example 1d  Traditional local event handler
 
@@ -107,6 +115,10 @@ Code that we can patent and earn Turing Awards with!  We can create a reusable c
 If the 🧮 emoji conflicts with another enhancement in the ShadowDOM root, look to [this file](https://github.com/bahrus/be-calculating/blob/baseline/%F0%9F%A7%AE.js) to see how easy it is to take ownership of your own name.
 
 BTW, the canonical name for this enhancement is the name of this package, *be-calculating* for more formal settings.
+
+## Specify change event
+
+
 
 ## Alternative element references and/or event names
 
