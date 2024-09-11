@@ -19,6 +19,9 @@ class BeCalculating extends BE {
      * @type {BEConfig<AP & BEAllProps, Actions & IEnhancement, any>}
      */
     static config = {
+        propDefaults: {
+            eventArg: 'input',
+        },
         propInfo:{
             ...propInfo,
             categorized: {},
@@ -90,10 +93,10 @@ class BeCalculating extends BE {
      * @param {BAP} self 
      */
     getDefltEvtType(self){
-        const {enhElLocalName, enhancedElement} = self;
+        const {enhElLocalName, enhancedElement, eventArg} = self;
         const deflt = /** @type {PAP} */({
             //publishEventType: 'load',
-            defaultEventType: 'input'
+            defaultEventType: eventArg
         });
 
         // switch(enhElLocalName){

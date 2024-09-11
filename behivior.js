@@ -17,8 +17,8 @@ export const emc = {
             mapsTo: 'handler'
         },
         '1.0': {
-            instanceOf: 'String',
-            mapsTo: 'forAttr'
+            instanceOf: 'DSSArray',
+            arrValMapsTo: 'remoteSpecifiers'
         },
         '2.0': {
             instanceOf: 'String',

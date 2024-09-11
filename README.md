@@ -112,17 +112,19 @@ BTW, the canonical name for this enhancement is the name of this package, *be-ca
 
 Anything that requires subscribing to alternative or mixed event names, and/or that requires referencing nearby elements using something other than id's, needs to use an alternative to the *for* attribute.  We do so by adopting [DSS](https://github.com/bahrus/trans-render/wiki/VIII.--Directed-Scoped-Specifiers-(DSS)) to describe what to observe, and optionally when to act.
 
-## Example 1e
+## Example 1f
 
 ```html
 <form>
     <input type="range" name=a value="50">
     +<input type="number" name=b value="25">
-    =<output 🧮-for="@a @b" 🧮=+></output>
+    =<output 🧮-for="@a and @b" 🧮=+></output>
 </form>
 ```
 
 This still happens to assume, by default, that the "input" event is what we should listen for, but having adopted DSS syntax, we can specify any other event name we may want.   Id's and the *for* attribute are generated automatically by *be-calculating* in order to optimize our accessibility experience (if the for attribute/htmlFor property is found to null/undefined).
+
+[TODO] eliminate need for and, check why seems to parse 3 times.
 
 # Part II Applied to non output elements
 
