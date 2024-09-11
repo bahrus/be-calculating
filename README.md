@@ -116,7 +116,7 @@ If the 🧮 emoji conflicts with another enhancement in the ShadowDOM root, look
 
 BTW, the canonical name for this enhancement is the name of this package, *be-calculating* for more formal settings.
 
-## Specify change event
+## Specify change (or other) default event
 
 ```html
 <form>
@@ -126,7 +126,7 @@ BTW, the canonical name for this enhancement is the name of this package, *be-ca
 </form>
 ```
 
-## Alternative element references and/or event names
+## Alternative element references and/or event names for each observed element
 
 Anything that requires subscribing to alternative or mixed event names, and/or that requires referencing nearby elements using something other than id's, needs to use an alternative to the *for* attribute.  We do so by adopting [DSS](https://github.com/bahrus/trans-render/wiki/VIII.--Directed-Scoped-Specifiers-(DSS)) to describe what to observe, and optionally when to act.
 
