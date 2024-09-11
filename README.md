@@ -144,26 +144,32 @@ Anything that requires subscribing to alternative or mixed event names, and/or t
 
 This still happens to assume, by default, that the "input" event is what we should listen for, but having adopted DSS syntax, we can specify any other event name we may want.   Id's and the *for* attribute are generated automatically by *be-calculating* in order to optimize our accessibility experience (if the for attribute/htmlFor property is found to null/undefined).
 
-[TODO] eliminate need for and, check why seems to parse 3 times.
+[TODO] eliminate need for "and", check why seems to parse 3 times.
 
-# Part II Applied to non output elements
+# Part II Applied to non output elements [TODO]
 
-This enhancement also supports other elements.  The script will need to be a bit more verbose though:
+This enhancement also supports other elements. 
 
-## Example 2a - Brave syntax
+Let's go in the opposite direction from before -- local to more global
 
-If no other enhancements are overloading the onload event, script away bravely
+## Example 2a - Local script
+
+A framework or custom element host or local script can work in partnership with *be-calculating*:
 
 ```html
-<script type=module></script>
+
 <input name=domain value=emojipedia.org>
 <input name=search value=calculator>
-<a 
-    🧮="@domain @search" 
-    onload="href = `https://${event.factors.domain}/search?q=${event.factors.search}`">
+<a id=link 🧮-for="@domain @search">
     Emoji link
 </a>
+<script>
+    link.addEventListener('calculate', e => e.r = `https://${e.evm.domain}/search?q=${e.evm.search}`)
+</script>
 ```
+
+"evm" stands for "event model".
+
 
 ## Example 2b - Defensive syntax
 
