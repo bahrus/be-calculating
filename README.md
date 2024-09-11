@@ -9,24 +9,13 @@
 
 *be-calculating* is basically the code-first counterpoint to the declarative [*be-observant*](https://github.com/bahrus/be-observant) enhancement, when the full power of the JavaScript run time engine is needed.
 
-# Part I  Enhancing the output element
+# Part I  Enhancing the output element with built in aggregators
 
 Calculate value of the output element from peer input elements.
 
-## Example 1a Global Registry, class based
+## Example 1a Summing up
 
 ```html
-<script type=module>
-    import {Registry} from 'be-hive/Registry.js';
-    import {emc} from 'be-calculating/🧮.js';
-    Registry.register(emc, '+', class {
-        handleEvent(e){
-            e.r = e.args.reduce((acc, arg) => acc + arg)
-        }
-    });
-
-
-</script>
 <form>
      <input type=range id=a name=a value=50>
     +<input type=number id=b name=b value=25>
@@ -36,26 +25,29 @@ Calculate value of the output element from peer input elements.
 </form>
 ```
 
-## Example 1b Global Registry, object based
+What this does:  The output element displays the sume of a and b, updated the moment the user changes either one of them.  I.e. it is listening to the input events for a and b (and no other elements).
+
+## Example 1b Multiplying [TODO]
 
 ```html
-<script type=module>
-    import {Registry} from 'be-hive/Registry.js';
-    import {emc} from 'be-calculating/🧮.js';
-    Registry.register(emc, '+', {
-        handleEvent(e){
-            e.r = e.args.reduce((acc, arg) => acc + arg)
-        }
-    });
-
-
-</script>
 <form>
      <input type=range id=a name=a value=50>
     +<input type=number id=b name=b value=25>
     =
 
-    <output name=result for="a b" 🧮=+></output>
+    <output name=result for="a b" 🧮=*></output>
+</form>
+```
+
+## Example 1c Maximizing [TODO]
+
+```html
+<form>
+     <input type=range id=a name=a value=50>
+    +<input type=number id=b name=b value=25>
+    =
+
+    <output name=result for="a b" 🧮=max></output>
 </form>
 ```
 
