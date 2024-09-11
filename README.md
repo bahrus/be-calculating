@@ -103,6 +103,23 @@ In order to define a handler or multiple handlers, limited to your current Shado
 
 ```
 
+## Example 1e  Traditional local event handler
+
+A framework or custom element host or local script element can attach a local event listener to the output element and compute the value
+
+```html
+<form>
+     <input type=range id=a name=a value=50>
+    +<input type=number id=b name=b value=25>
+    =
+
+    <output id=output name=result for="a b" 🧮=+></output>
+</form>
+<script>
+    output.addEventListener('calculate', e => e.r = e.args.reduce((acc, arg) => acc + arg))
+</script>
+```
+
 
 Anyway...
 
