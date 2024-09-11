@@ -78,7 +78,7 @@ Calculate value of the output element from peer input elements.
 ```
 
 [TODO]
-This is such a useful function, that in fact, the following pre-defined functions are built in to be-calculatin, so need to define the "+" operator, it is built in already, as are:
+This is such a useful function, that in fact, the following pre-defined functions are built in to be-calculating, so need to define the "+" operator, it is built in already, as are:
 
 | Operator |  Notes                |
 |----------|-----------------------|
@@ -116,9 +116,15 @@ If the 🧮 emoji conflicts with another enhancement in the ShadowDOM root, look
 
 BTW, the canonical name for this enhancement is the name of this package, *be-calculating* for more formal settings.
 
-## Specify change event
+## Specify change event [TODO]
 
-
+```html
+<form>
+    <input type="range" id="a" value="50">
+    +<input type="number" id="b" value="25">
+    =<output for="a b" 🧮=+ 🧮-on=change ></output>
+</form>
+```
 
 ## Alternative element references and/or event names
 
