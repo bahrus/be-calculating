@@ -43,3 +43,13 @@ Registry.register(emc, 'max', {
         e.r = e.args.reduce((acc, arg) => Math.max(acc, arg));
     }
 });
+
+Registry.register(emc, 'min', {
+    /**
+     * 
+     * @param {CalcEvent} e 
+     */
+    handleEvent(e){
+        e.r = e.args.reduce((acc, arg) => Math.min(acc, arg));
+    }
+});

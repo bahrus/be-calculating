@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Example 2b</title>
+    <title>Example 1c</title>
     <script type=importmap >
         {
             "imports": {
@@ -19,28 +19,11 @@
 </head>
 <body>
     <form>
-        <label>
-            m
-         <input type=number id=m value=2>
-        </label>
-        <label>
-            x
-            <input type=number id=x value=2>
-        </label>
-         
-        + <label>
-            b
-            <input type=number id=b value=25>
-        </label>
-        =
-    
-        <output id=output name=result for="m x b" 🧮></output>
+        <input type="range" id="a" value="50">
+        +<input type="number" id="b" value="25">
+        =<output for="a b" 🧮=min ></output>
     </form>
 
-    <script>
-        output.addEventListener('calculate', e => e.r = e.f.m * e.f.x + e.f.b);
-    </script>
-    
     <script type=module>
         import '../🧮.js';
     </script>
