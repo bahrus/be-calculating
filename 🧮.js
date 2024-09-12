@@ -14,42 +14,9 @@ const mose = seed(emc);
 MountObserver.synthesize(document, BeHive, mose);
 
 
-Registry.register(emc, '+', {
-    /**
-     * 
-     * @param {CalcEvent} e 
-     */
-    handleEvent(e){
-        e.r = e.args.reduce((acc, arg) => acc + arg);
-    }
-});
+Registry.register(emc, '+', e => e.r = e.args.reduce((acc, arg) => acc + arg));
+Registry.register(emc, '*', e => e.r = e.args.reduce((acc, arg) => acc * arg));
+Registry.register(emc, 'max', e => e.r = e.args.reduce((acc, arg) => Math.max(acc, arg)));
+Registry.register(emc, 'min', e => e.r = e.args.reduce((acc, arg) => Math.min(acc, arg)));
 
-Registry.register(emc, '*', {
-    /**
-     * 
-     * @param {CalcEvent} e 
-     */
-    handleEvent(e){
-        e.r = e.args.reduce((acc, arg) => acc * arg);
-    }
-});
 
-Registry.register(emc, 'max', {
-    /**
-     * 
-     * @param {CalcEvent} e 
-     */
-    handleEvent(e){
-        e.r = e.args.reduce((acc, arg) => Math.max(acc, arg));
-    }
-});
-
-Registry.register(emc, 'min', {
-    /**
-     * 
-     * @param {CalcEvent} e 
-     */
-    handleEvent(e){
-        e.r = e.args.reduce((acc, arg) => Math.min(acc, arg));
-    }
-});

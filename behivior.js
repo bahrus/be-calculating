@@ -1,5 +1,7 @@
 // @ts-check
 import { BeHive, seed, MountObserver } from 'be-hive/be-hive.js';
+import {Registry} from 'be-hive/Registry.js';
+import {CalcEvent} from './Events.js';
 /** @import {EMC} from './ts-refs/trans-render/be/types.d.ts' */
 /** @import {Actions, PAP,  AP} from './ts-refs/be-calculating/types' */;
 
@@ -42,3 +44,8 @@ export const emc = {
 };
 const mose = seed(emc);
 MountObserver.synthesize(document, BeHive, mose);
+
+Registry.register(emc, '+', e => e.r = e.args.reduce((acc, arg) => acc + arg));
+Registry.register(emc, '*', e => e.r = e.args.reduce((acc, arg) => acc * arg));
+Registry.register(emc, 'max', e => e.r = e.args.reduce((acc, arg) => Math.max(acc, arg)));
+Registry.register(emc, 'min', e => e.r = e.args.reduce((acc, arg) => Math.min(acc, arg)));
