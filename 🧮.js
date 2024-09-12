@@ -23,3 +23,23 @@ Registry.register(emc, '+', {
         e.r = e.args.reduce((acc, arg) => acc + arg);
     }
 });
+
+Registry.register(emc, '*', {
+    /**
+     * 
+     * @param {CalcEvent} e 
+     */
+    handleEvent(e){
+        e.r = e.args.reduce((acc, arg) => acc * arg);
+    }
+});
+
+Registry.register(emc, 'max', {
+    /**
+     * 
+     * @param {CalcEvent} e 
+     */
+    handleEvent(e){
+        e.r = e.args.reduce((acc, arg) => Math.max(acc, arg));
+    }
+});

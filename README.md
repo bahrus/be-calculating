@@ -51,16 +51,19 @@ What this does:  The output element displays the sume of a and b, updated the mo
 </form>
 ```
 
+# Part II Custom calculations
+
 ## Example 1c Global registry, function based
 
 ```html
 <script type=module>
     import {Registry} from 'beHive/Registry.js';
     import {emc} from 'be-calculating/🧮.js';
-    Registry.register(emc, '+', e => e.r = e.args.reduce((acc, arg) => acc + arg));
+    Registry.register(emc, 'linear', e => e.r = e.args.reduce((acc, arg) => acc + arg));
 </script>
 
 <form>
+    <label>
      <input type=range id=a name=a value=50>
     +<input type=number id=b name=b value=25>
     =
