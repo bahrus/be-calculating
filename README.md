@@ -93,18 +93,14 @@ The developer can create a custom calculating function, as shown below.  Doing s
 </form>
 ```
 
-f stands for "factors".
+In the javascript expression at the top, "f" stands for "factors", "r" for "result" or "return".
 
 So the event provides the "f" property, which is basically factors we want to calculate based on -- the names (id's in this case) of the values.
 
 But in some cases, we just want the array of arguments.  In fact, the examples in part I were using reducers based on the args property of the event.  So built in to 🧮 are registered event handlers such as
 
 ```JavaScript
-Registry.register(emc, '+', {
-    handleEvent(e){
-        e.r = e.args.reduce((acc, arg) => acc + arg);
-    }
-});
+Registry.register(emc, '+', e => e.r = e.args.reduce((acc, arg) => acc + arg));
 ```
 
 ## Example 2b  Traditional local event handler
@@ -124,24 +120,15 @@ A framework or custom element host or local script element can attach a local ev
 </script>
 ```
 
-
-
-
-But of course, if you need to define your own custom function, now you know how to do it.
-
-
-Anyway...
-
-Think of what we've accomplished here!  We have now purified the JavaScript's domain to be independent of the UI, if one squints hard enough.  
-
-Code that we can patent and earn Turing Awards with!  We can create a reusable class  that can be used in multiple contexts -- anywhere we need to add multiple numbers together.  
-
-
 If the 🧮 emoji conflicts with another enhancement in the ShadowDOM root, look to [this file](https://github.com/bahrus/be-calculating/blob/baseline/%F0%9F%A7%AE.js) to see how easy it is to take ownership of your own name.
 
 BTW, the canonical name for this enhancement is the name of this package, *be-calculating* for more formal settings.
 
-## Specify change (or other) default event
+# Part III - Customizing the dependencies
+
+## Example 3a Specify change (or other) default event
+
+Up to now, we've been defaulting the event type to "input" as far as knowing when to update the calculation.  But we can tweak that as shown below:
 
 ```html
 <form>
@@ -155,7 +142,7 @@ BTW, the canonical name for this enhancement is the name of this package, *be-ca
 
 Anything that requires subscribing to alternative or mixed event names, and/or that requires referencing nearby elements using something other than id's, needs to use an alternative to the *for* attribute.  We do so by adopting [DSS](https://github.com/bahrus/trans-render/wiki/VIII.--Directed-Scoped-Specifiers-(DSS)) to describe what to observe, and optionally when to act.
 
-## Example 1f
+## Example 3b
 
 ```html
 <form>
@@ -165,11 +152,11 @@ Anything that requires subscribing to alternative or mixed event names, and/or t
 </form>
 ```
 
-This still happens to assume, by default, that the "input" event is what we should listen for, but having adopted DSS syntax, we can specify any other event name we may want.   Id's and the *for* attribute are generated automatically by *be-calculating* in order to optimize our accessibility experience (if the for attribute/htmlFor property is found to null/undefined).
+This still happens to assume, by default, that the "input" event is what we should listen for, but having adopted DSS syntax, we can specify any other event name we may want.   Id's and the *for* attribute are generated automatically by *be-calculating* in order to optimize our accessibility experience (if the for attribute/htmlFor property is found to be null/undefined).
 
 [TODO] eliminate need for "and", check why seems to parse 3 times.
 
-# Part II Applied to non output elements [TODO]
+# Part III Applied to non output elements [TODO]
 
 This enhancement also supports other elements. 
 

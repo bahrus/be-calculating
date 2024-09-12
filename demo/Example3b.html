@@ -4,15 +4,8 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Example 1d</title>
-</head>
-<body>
-    <form>
-        <input type="range" id="a" value="50">
-        +<input type="number" id="b" value="25">
-        =<output 🧮="#a:$0 #b:$0" onload="value=$.a.valueAsNumber + $.b.valueAsNumber"></output>
-    </form>
-    <script type=importmap>
+    <title>Example 1f</title>
+    <script type=importmap >
         {
             "imports": {
                 "be-enhanced/": "/node_modules/be-enhanced/",
@@ -23,8 +16,16 @@
             }
         }
     </script>
+</head>
+<body>
+    <form>
+        <input type="range" name="a" value="50">
+        +<input type="number" name="b" value="25">
+        =<output 🧮-for="@a and @b" 🧮=+ ></output>
+    </form>
+
     <script type=module>
-        import '/🧮.js'
+        import '../🧮.js';
     </script>
 
 </body>
