@@ -27,7 +27,7 @@ Calculate value of the output element from peer input elements.
 
 What this does:  The output element displays the sume of a and b, updated the moment the user changes either one of them.  I.e. it is listening to the input events for a and b (and no other elements).
 
-## Example 1b Multiplying [TODO]
+## Example 1b Multiplying
 
 ```html
 <form>
@@ -39,7 +39,7 @@ What this does:  The output element displays the sume of a and b, updated the mo
 </form>
 ```
 
-## Example 1c Maximizing [TODO]
+## Example 1c Maximizing 
 
 ```html
 <form>
