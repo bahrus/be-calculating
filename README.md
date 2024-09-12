@@ -142,7 +142,7 @@ Up to now, we've been defaulting the event type to "input" as far as knowing whe
 
 Anything that requires subscribing to alternative or mixed event names, and/or that requires referencing nearby elements using something other than id's, needs to use an alternative to the *for* attribute.  We do so by adopting [DSS](https://github.com/bahrus/trans-render/wiki/VIII.--Directed-Scoped-Specifiers-(DSS)) to describe what to observe, and optionally when to act.
 
-## Example 3b
+## Example 3b - References by n@me
 
 ```html
 <form>
