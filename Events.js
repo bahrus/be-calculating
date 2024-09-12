@@ -9,15 +9,15 @@ export class CalcEvent extends Event {
      * Event view model
      * @type {{[key: string]: any}} 
     */
-    evm;
+    f;
     /**
      * 
      * @param {Array<any>} args 
-     * @param {{[key: string]: any}} evm 
+     * @param {{[key: string]: any}} f 
      */
-    constructor(args, evm){
+    constructor(args, f){
         super(CalcEvent.eventName);
         this.args = args;
-        this.evm = evm;
+        this.f = f;
     }
 }

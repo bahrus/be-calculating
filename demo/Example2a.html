@@ -5,15 +5,6 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Example 2a</title>
-</head>
-<body>
-    <input name=domain value=emojipedia.org>
-    <input name=search value=calculator>
-    <a 
-        🧮="@domain @search" 
-        onload="href = `https://${event.factors.domain}/search?q=${event.factors.search}`">
-        Emoji link
-    </a>
     <script type=importmap>
         {
             "imports": {
@@ -25,6 +16,33 @@
             }
         }
     </script>
+</head>
+<body>
+    <script type=module>
+        import {Registry} from 'be-hive/Registry.js';
+        import {emc} from '../🧮.js';
+        Registry.register(emc, 'linear', e => e.r = e.evm.m * e.evm.x + e.evm.b );
+    </script>
+    
+    <form>
+        <label>
+            m
+         <input type=number id=m value=2>
+        </label>
+        <label>
+            x
+            <input type=number id=x value=2>
+        </label>
+         
+        + <label>
+            b
+            <input type=number id=b value=25>
+        </label>
+        =
+    
+        <output name=result for="m x b" 🧮=linear></output>
+    </form>
+
     <script type=module>
         import '/🧮.js'
     </script>

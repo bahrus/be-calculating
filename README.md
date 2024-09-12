@@ -53,24 +53,40 @@ What this does:  The output element displays the sume of a and b, updated the mo
 
 # Part II Custom calculations
 
-## Example 1c Global registry, function based
+## Example 2a Global registry, function based
+
+The developer can create a custom calculating function, as shown below.  Doing so will cascade through the page into any ShadowDOM realms.  The advantages is it makes it highly reusable.  The thing to be cautious about is that it is "global" within the confines of all the elements adorned by the 🧮 attribute.
 
 ```html
 <script type=module>
-    import {Registry} from 'beHive/Registry.js';
+    import {Registry} from 'be-hive/Registry.js';
     import {emc} from 'be-calculating/🧮.js';
-    Registry.register(emc, 'linear', e => e.r = e.args.reduce((acc, arg) => acc + arg));
+    Registry.register(emc, 'linear', e => e.r = e.f.m * e.f.x + e.f.b );
 </script>
 
 <form>
     <label>
-     <input type=range id=a name=a value=50>
-    +<input type=number id=b name=b value=25>
+        m
+        <input type=number id=m value=2>
+    </label>
+    <label>
+        x
+        <input type=number id=x value=2>
+    </label>
+        
+    + <label>
+        b
+        <input type=number id=b value=25>
+    </label>
     =
 
-    <output name=result for="a b" 🧮=+></output>
+    <output name=result for="m x b" 🧮=linear></output>
 </form>
 ```
+
+f stands for "factors".
+
+
 
 ## Example 1d  Traditional local event handler
 
