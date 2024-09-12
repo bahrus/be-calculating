@@ -88,7 +88,7 @@ f stands for "factors".
 
 So the event provides the "f" property, which is basically factors we want to calculate based on -- the names (id's in this case) of the values.
 
-But in some cases, we just want the array of arguments.  In fact, the examples in part I were using reducers based on the args property of the event.  So built in to *be-calculating* are registered event handlers such as
+But in some cases, we just want the array of arguments.  In fact, the examples in part I were using reducers based on the args property of the event.  So built in to 🧮 are registered event handlers such as
 
 ```JavaScript
 Registry.register(emc, '+', {
@@ -98,7 +98,7 @@ Registry.register(emc, '+', {
 });
 ```
 
-## Example 1d  Traditional local event handler
+## Example 2b  Traditional local event handler
 
 A framework or custom element host or local script element can attach a local event listener to the output element and compute the value
 

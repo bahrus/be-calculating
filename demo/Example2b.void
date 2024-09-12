@@ -4,8 +4,20 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Example 1d</title>
-    <script type=importmap >
+    <title>Example 2b</title>
+</head>
+<body>
+    <input name=domain value=emojipedia.org>
+    <input name=search value=calculator>
+    <a 
+        🧮="@domain @search" 
+        onload="
+        const {enh, factors: f} = event;
+        if(enh !== '🧮') return;
+        href = `https://${f.domain}/search?q=${f.search}`">
+        Emoji link
+    </a>
+    <script type=importmap>
         {
             "imports": {
                 "be-enhanced/": "/node_modules/be-enhanced/",
@@ -16,19 +28,8 @@
             }
         }
     </script>
-</head>
-<body>
-    <form>
-        <input type="range" id="a" value="50">
-        +<input type="number" id="b" value="25">
-        =<output id=output for="a b" 🧮></output>
-    </form>
-    <script>
-        output.addEventListener('calculate', e => e.r = e.args.reduce((acc, arg) => acc + arg));
-    </script>
-    
     <script type=module>
-        import '../🧮.js';
+        import '/🧮.js'
     </script>
 
 </body>
