@@ -68,9 +68,8 @@ The developer can create a custom calculating function, as shown below.  Doing s
 
 ```html
 <script type=module>
-    import {Registry} from 'be-hive/Registry.js';
-    import {emc} from 'be-calculating/🧮.js';
-    Registry.register(emc, 'linear', e => e.r = e.f.m * e.f.x + e.f.b );
+    import {register} from '../🧮.js';
+    register('linear', e => e.r = e.f.m * e.f.x + e.f.b );
 </script>
 
 <form>
