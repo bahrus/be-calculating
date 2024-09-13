@@ -4,14 +4,8 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Example 4a</title>
-</head>
-<body>
-    <input type="range" id="a" value="23">
-    +<input type="number" id="b" value="252334">
-    =<script nomodule src="./TuringAwardDeservingAlgorithm.js"></script>
-    <output for="a b" 🧮-name-of-calculator=TuringAwardDeservingAlgorithm></output>
-    <script type=importmap>
+    <title>Example 4b</title>
+    <script type=importmap >
         {
             "imports": {
                 "be-enhanced/": "/node_modules/be-enhanced/",
@@ -22,8 +16,19 @@
             }
         }
     </script>
+</head>
+<body>
+    <form>
+        <input type="range" id="a" value="50">
+        +<input type="number" id="b" value="25">
+        =<output id=output 🧮-for="#a:$0 and #b:$0"></output>
+        <script>
+            output.addEventListener('calculate', e => e.r = e.f.a.valueAsNumber + e.f.b.valueAsNumber);
+        </script>
+    </form>
+
     <script type=module>
-        import '/🧮.js';
+        import '../🧮.js';
     </script>
 
 </body>

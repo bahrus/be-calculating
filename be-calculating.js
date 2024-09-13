@@ -24,13 +24,16 @@ class BeCalculating extends BE {
     static config = {
         propDefaults: {
             eventArg: 'input',
+            
         },
         propInfo:{
             ...propInfo,
             categorized: {},
             forAttr: {},
             forArgs: {},
-            handler: {},
+            handler: {
+                def: ''
+            },
             handlerObj: {},
             defaultEventType: {},
             remoteSpecifiers: {},
@@ -162,7 +165,7 @@ class BeCalculating extends BE {
     getEvtHandler(self){
         const {handler} = self;
         const checkedRegistry = true;
-        if(handler === undefined){
+        if(!handler){
             return /** @type {BAP} */ ({
                 checkedRegistry
             });
@@ -267,7 +270,7 @@ class BeCalculating extends BE {
             args.push(val);
             obj[prop] = val;
         }
-        const event = new CalcEvent(args, obj);
+        const event = new CalcEvent(args, obj, enhancedElement);
         if(handlerObj !== undefined){
             if('handleEvent' in handlerObj){
                 /** @type {EventListenerObject} */ (handlerObj).handleEvent(event);

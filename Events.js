@@ -11,11 +11,15 @@ export class CalcEvent extends Event {
     */
     f;
     /**
+     * @type {Element}
+     */
+    target 
+    /**
      * 
      * @param {Array<any>} args 
      * @param {{[key: string]: any}} f 
      */
-    constructor(args, f){
+    constructor(args, f, target){
         super(CalcEvent.eventName);
         this.args = args;
         this.f = f;

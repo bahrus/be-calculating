@@ -154,76 +154,82 @@ Anything that requires subscribing to alternative or mixed event names, and/or t
 
 This still happens to assume, by default, that the "input" event is what we should listen for, but having adopted DSS syntax, we can specify any other event name we may want.   Id's and the *for* attribute are generated automatically by *be-calculating* in order to optimize our accessibility experience (if the for attribute/htmlFor property is found to be null/undefined).
 
-[TODO] eliminate need for "and".
 
-# Part III Applied to non output elements [TODO]
+# Part IV Applied to non output elements
 
 This enhancement also supports other elements. 
 
 Let's go in the opposite direction from before -- local to more global
 
-## Example 2a - Local script
+## Example 4a - Local script
 
-A framework or custom element host or local script can work in partnership with *be-calculating*:
+Once again, a framework or custom element host or local script can work in partnership with *be-calculating/🧮*:
 
 ```html
 
 <input name=domain value=emojipedia.org>
 <input name=search value=calculator>
-<a id=link 🧮-for="@domain @search">
+<a id=link 🧮-for="@domain and @search">
     Emoji link
 </a>
 <script>
-    link.addEventListener('calculate', e => e.r = `https://${e.evm.domain}/search?q=${e.evm.search}`)
+    link.addEventListener('calculate', e => e.r = `https://${e.f.domain}/search?q=${e.f.search}`)
 </script>
 ```
 
-"evm" stands for "event model".
+## Example 4b - Gain full access to the element
 
+In the examples above, we engaged in "mind reading" in order to pass to the event handler the precise values we want to use in order to calculate the result.
 
-## Example 2b - Defensive syntax
+The DSS syntax this package relies on allows us to override these mind readings, and specify which property to pass.  The DSS feature that seems most useful in this context is probably:
 
-To code defensively, check for the enh property of the event:
+> Thanks but no thanks to all your "mind reading" -- could you please just pass in the dependent elements when they change, since I have full, unfettered access to the JavaScript engine, and I would like to extract things out of the elements that I please without your help?
+
+To do so, specify this as follows:
 
 ```html
-<input name=domain value=emojipedia.org>
-<input name=search value=calculator>
-<a 
-    🧮="@domain @search" 
-    onload="
-    const {enh, factors: f} = event;
-    if(enh !== '🧮') return;
-    href = `https://${f.domain}/search?q=${f.search}`">
-    Emoji link
-</a>
+<form>
+    <input type="range" id="a" value="50">
+    +<input type="number" id="b" value="25">
+    =<output id=output 🧮-for="#a:$0 and #b:$0"></output>
+    <script>
+        output.addEventListener('calculate', e => e.r = e.f.a.valueAsNumber + e.f.b.valueAsNumber);
+    </script>
+</form>
 ```
 
-# Part III [TODO]
+In particular, DSS now supports :$0 to specify the element itself as the thing that needs passing.
 
-In order to define a handler or multiple handlers, limited to your current ShadowDOM Realm (and inheriting ShadowDOM Realms), you will need to define a unique (to any parent Shadow Roots, within the context of this enhancement) "handlerKey" in the 'be-hive" instance that you plop within your shadow realm:
 
-## Example 3a Locally scoped handler [TODO]
+
+
+
+# Part V [TODO]
+
+Suppose you want to create reusable logic, but confined to the Shadow DOM Realm you are working with (and, by default, child Shadow DOM realms). 
+
+## Example 5a Locally scoped handler [TODO]
 
 ```html
-<be-hive id=my-scoped-be-hive>
-    <script type=mountobserver id=be-hive.🧮 onload="
-        //if the browser engineers can't figure out how to secure this, we are truly lost.
-        const emc = synConfig;
-        Registry.register(emc, '+', e => e.r = e.args.reduce((acc, arg) => acc + arg));
-    ">
-        {
-            "handlerKey": "myScopedHandlers"
-        }
-    </script>
-</be-hive>
-<form>
-     <input type=range id=a name=a value=50>
-    +<input type=number id=b name=b value=25>
-    =
-
-    <output name=result for="a b" 🧮=+></output>
-</form>
-
+<div>
+    <template shadowrootmode=open>
+    <be-hive id=my-scoped-be-hive>
+        <script type=mountobserver id=be-hive.🧮 onload="
+            //if the browser engineers can't figure out how to secure this, we are truly lost.
+            Registry.register(synConfig, '++', e => e.r = e.args.reduce((acc, arg) => acc + 2 * arg));
+        ">
+            {
+                "handlerKey": "myScopedHandlers"
+            }
+        </script>
+    </be-hive>
+    <form>
+        <input type=range id=a name=a value=50>
+        +<input type=number id=b name=b value=25>
+        =
+        <output name=result for="a b" 🧮=++></output>
+    </form>
+</div>
 ```
 
 # Part IV Sharing the value of output element, and other binding examples [TODO]
@@ -245,26 +251,6 @@ The output element can also get in on the sharing act.
 
 > ![NOTE]
 > In the example above, data is "flowing" both up and down.  In general, I think it is more natural and easier on the end user for data to flow in a downward direction, as most literary languages flow in that direction.  However, if that is not possible, do map out mentally or on (virtual) paper the dependency tree to make sure there aren't any cyclic loops that could result in an infinite loop catastrophe.
-
-## Example 4b - Gain full access to the element
-
-In the examples above, we engaged in "mind reading" in order to pass to the event handler the precise values we want to use in order to calculate the result.
-
-The DSS syntax this package relies on allows us to override these mind readings, and specify which property to pass.  The DSS feature that seems most useful in this context is probably:
-
-> Thanks but no thanks to all your "mind reading" -- could you please just pass in the dependent elements when they change, since I have full, unfettered access to the JavaScript engine, and I would like to extract things out of the elements that I please without your help?
-
-To do so, specify this as follows:
-
-```html
-<form>
-    <input type="range" id="a" value="50">
-    +<input type="number" id="b" value="25">
-    =<output 🧮="#a:$0 #b:$0" onload="value=$.a.valueAsNumber + $.b.valueAsNumber"></output>
-</form>
-```
-
-In particular, DSS now supports :$0 to specify the element itself as the thing that needs passing.
 
 
 
