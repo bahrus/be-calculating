@@ -29,4 +29,8 @@ export function register(handlerName, handler){
     Registry.register(emc, handlerName, handler);
 }
 
+export function within(id){
+    
+}
+
 
