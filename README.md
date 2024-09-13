@@ -154,7 +154,7 @@ Anything that requires subscribing to alternative or mixed event names, and/or t
 
 This still happens to assume, by default, that the "input" event is what we should listen for, but having adopted DSS syntax, we can specify any other event name we may want.   Id's and the *for* attribute are generated automatically by *be-calculating* in order to optimize our accessibility experience (if the for attribute/htmlFor property is found to be null/undefined).
 
-[TODO] eliminate need for "and", check why seems to parse 3 times.
+[TODO] eliminate need for "and".
 
 # Part III Applied to non output elements [TODO]
 
