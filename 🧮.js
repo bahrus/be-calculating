@@ -4,6 +4,7 @@ import { emc as baseEMC } from './behivior.js';
 import {Registry} from 'be-hive/Registry.js';
 import {CalcEvent} from './Events.js';
 /** @import  {EMC, EventListenerOrFn} from './ts-refs/trans-render/be/types' */;
+/** @import {CSSQuery} from './ts-refs/trans-render/types.js' */
 
 export const emc = {
     ...baseEMC,
@@ -29,8 +30,8 @@ export function register(handlerName, handler){
     Registry.register(emc, handlerName, handler);
 }
 
-export function within(id){
-    
+export function within(q, handlerName, handler){
+    Registry.within(emc, q, handlerName, handler);
 }
 
 

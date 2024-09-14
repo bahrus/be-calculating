@@ -213,7 +213,7 @@ Suppose you want to create reusable logic, but confined to the (repeatedly clone
         <form id=QkV8sbnus0SQPVBMxKuVLw>
             <script type=module>
                 import {within} from 'be-calculating/🧮.js';
-                within('QkV8sbnus0SQPVBMxKuVLw', '^', e => e.r = e.f.a^e.f.b);
+                within('#QkV8sbnus0SQPVBMxKuVLw', '^', e => e.r = e.f.a^e.f.b);
             </script>
             <input type=range id=a name=a value=50>
             +<input type=number id=b name=b value=25>
