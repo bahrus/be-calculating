@@ -1,7 +1,8 @@
 // @ts-check
 import { BE } from 'be-enhanced/BE.js';
 import { propInfo } from 'be-enhanced/cc.js';
-import {CalcEvent, rguid} from './Events.js';
+//import {CalcEvent, rguid} from './Events.js';
+import {AggEvent, rguid} from 'be-hive/aggEvt.js';
 
 /** @import {BEConfig, IEnhancement, BEAllProps} from './ts-refs/be-enhanced/types.d.ts' */
 /** @import {Actions, PAP,  AP, BAP} from './ts-refs/be-calculating/types' */;
@@ -340,6 +341,29 @@ class BeCalculating extends BE {
 
 await BeCalculating.bootUp();
 export {BeCalculating};
+
+export class CalcEvent extends AggEvent {
+    static eventName = 'calculate';
+
+
+    /** 
+     * Event view model
+     * @type {{[key: string]: any}} 
+    */
+    f;
+
+    /**
+     * 
+     * @param {Array<any>} args 
+     * @param {{[key: string]: any}} f 
+     * @param {Element} target
+     */
+    constructor(args, f, target){
+        super(CalcEvent.eventName, args, target);
+        this.args = args;
+        this.f = f;
+    }
+}
 
 
 
