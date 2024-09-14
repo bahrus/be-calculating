@@ -200,35 +200,29 @@ To do so, specify this as follows:
 In particular, DSS now supports :$0 to specify the element itself as the thing that needs passing.
 
 
+# Part V Scoped Handlers
 
-
-
-# Part V [TODO]
-
-Suppose you want to create reusable logic, but confined to the Shadow DOM Realm you are working with (and, by default, child Shadow DOM realms). 
+Suppose you want to create reusable logic, but confined to the (repeatedly cloned) Shadow DOM Realm you are working with. 
 
 ## Example 5a Locally scoped handler [TODO]
 
 ```html
-<div>
+<my-element>
     <template shadowrootmode=open>
-    <be-hive id=my-scoped-be-hive>
-        <script type=mountobserver id=be-hive.🧮 onload="
-            //if the browser engineers can't figure out how to secure this, we are truly lost.
-            Registry.register(synConfig, '++', e => e.r = e.args.reduce((acc, arg) => acc + 2 * arg));
-        ">
-            {
-                "handlerKey": "myScopedHandlers"
-            }
-        </script>
-    </be-hive>
-    <form>
-        <input type=range id=a name=a value=50>
-        +<input type=number id=b name=b value=25>
-        =
-        <output name=result for="a b" 🧮=++></output>
-    </form>
-</div>
+        <be-hive></be-hive>
+        <form id=QkV8sbnus0SQPVBMxKuVLw>
+            <script type=module>
+                import {within} from 'be-calculating/🧮.js';
+                within('QkV8sbnus0SQPVBMxKuVLw', '^', e => e.r = e.f.a^e.f.b);
+            </script>
+            <input type=range id=a name=a value=50>
+            +<input type=number id=b name=b value=25>
+            =
+            <output name=result for="a b" 🧮=^></output>
+
+        </form>
+    </template>
+</my-element>
 ```
 
 # Part IV Sharing the value of output element, and other binding examples [TODO]
