@@ -225,32 +225,6 @@ Suppose you want to create reusable logic, but confined to the (repeatedly clone
 </my-element>
 ```
 
-# Part VI Sharing the value of output element, and other binding examples [TODO]
-
-Trigger alert:  Allow for a little head spinning below.  It takes a little getting used to.
-
-The output element can also get in on the sharing act.
-
-
-
-
-
-# Part IV External Module Renaming
-
-If we want to share our calculating code with the world, we might package it as an npm package.  Note that the code is library neutral, so doesn't need to be accompanied by 17 black-hole-o-grams of dependencies, and a cottage industry of boot camps to master.  Just saying.
-
-But as things stand, we will need to specify the name of the calculator thusly:
-
-## Example 4a
-
-```JavaScript
-//file calculator.js
-export class Calculator {
-    handleEvent(e){
-        e.target.value = e.factors.a + e.factors.b;
-    }
-}
-```
 
 
 ## [Demo](https://codepen.io/bahrus/pen/NWMjxYV)
