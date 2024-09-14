@@ -4,35 +4,28 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Test 1</title>
-</head>
-<body>
-    <form>
-        <input type="range" id="a" value="50">
-        +<input type="number" id="b" value="25">
-        =<script nomodule>
-            export class Calculator {
-                handleEvent(e){
-                    e.target.value = e.factors.a + e.factors.b;
-                }
-            }
-        </script><output for="a b" be-calculating></output>
-    </form>
-    <div id='target'></div>
-    <script type=importmap>
+    <title>Example 1a</title>
+    <script type=importmap >
         {
             "imports": {
                 "be-enhanced/": "/node_modules/be-enhanced/",
                 "be-exportable/": "/node_modules/be-exportable/",
                 "be-hive/":  "/node_modules/be-hive/",
-                "be-linked/": "/node_modules/be-linked/",
                 "mount-observer/": "/node_modules/mount-observer/",
                 "trans-render/": "/node_modules/trans-render/"
             }
         }
     </script>
+</head>
+<body>
+    <form>
+        <input type="range" id="a" value="50">
+        +<input type="number" id="b" value="25">
+        =<output for="a b" 🧮=+></output>
+    </form>
+    <div id=target></div>
     <script type=module>
-        import '/behivior.js'
+        import '../🧮.js';
     </script>
     <script>
         function runScript(){
