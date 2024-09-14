@@ -1,4 +1,4 @@
-# be-calculating (🧮) [TODO]
+# be-calculating (🧮)
 
 [![The Plan](https://www.berfrois.com/uploads/2011/06/rr3.jpg)](https://www.berfrois.com/2011/06/wile-e-coyote-pursues-road-runner/)
 
