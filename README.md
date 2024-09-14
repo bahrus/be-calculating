@@ -204,7 +204,7 @@ In particular, DSS now supports :$0 to specify the element itself as the thing t
 
 Suppose you want to create reusable logic, but confined to the (repeatedly cloned) Shadow DOM Realm you are working with. 
 
-## Example 5a Locally scoped handler [TODO]
+## Example 5a Locally scoped handler 
 
 ```html
 <my-element>
@@ -213,7 +213,7 @@ Suppose you want to create reusable logic, but confined to the (repeatedly clone
         <form id=QkV8sbnus0SQPVBMxKuVLw>
             <script type=module>
                 import {within} from 'be-calculating/🧮.js';
-                within('#QkV8sbnus0SQPVBMxKuVLw', '^', e => e.r = e.f.a^e.f.b);
+                within('#QkV8sbnus0SQPVBMxKuVLw', '^', e => e.r = e.f.a ** e.f.b);
             </script>
             <input type=range id=a name=a value=50>
             +<input type=number id=b name=b value=25>
@@ -225,25 +225,13 @@ Suppose you want to create reusable logic, but confined to the (repeatedly clone
 </my-element>
 ```
 
-# Part IV Sharing the value of output element, and other binding examples [TODO]
+# Part VI Sharing the value of output element, and other binding examples [TODO]
 
 Trigger alert:  Allow for a little head spinning below.  It takes a little getting used to.
 
 The output element can also get in on the sharing act.
 
-## Example 4a Responding to changes of the output element
 
-```html
-<form>
-    <span itemprop=sum 🧮=@c onload="textContent = $.c"></span>
-    <input type="range" id="a" value="50">
-    +<input type="number" id="b" value="25">
-    =<output name=c for="a b" 🧮 oninput="value=$.a + $.b"></output>
-</form>
-```
-
-> ![NOTE]
-> In the example above, data is "flowing" both up and down.  In general, I think it is more natural and easier on the end user for data to flow in a downward direction, as most literary languages flow in that direction.  However, if that is not possible, do map out mentally or on (virtual) paper the dependency tree to make sure there aren't any cyclic loops that could result in an infinite loop catastrophe.
 
 
 
@@ -264,32 +252,6 @@ export class Calculator {
 }
 ```
 
-```html
-<input type="range" id="a" value="23">
-+<input type="number" id="b" value="252334">
-=<script nomodule src="./calculator.js"></script>
-<output for="a b" 🧮></output>
-```
-
-If we wish to give it a different name, *be-calculating* needs to know about that:
-
-## Example 4b
-
-```JavaScript
-//file TuringAwardDeservingAlgorithm.js
-export class TuringAwardDeservingAlgorithm {
-    handleEvent(e){
-        e.target.value = e.factors.a + e.factors.b;
-    }
-}
-```
-
-```html
-<input type="range" id="a" value="23">
-+<input type="number" id="b" value="252334">
-=<script nomodule src="./TuringAwardDeservingAlgorithm.js"></script>
-<output for="a b" 🧮-name-of-calculator=TuringAwardDeservingAlgorithm></output>
-```
 
 ## [Demo](https://codepen.io/bahrus/pen/NWMjxYV)
 

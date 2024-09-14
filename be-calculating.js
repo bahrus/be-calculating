@@ -308,6 +308,7 @@ class BeCalculating extends BE {
         if(r !== rguid){
             if(isOutputEl){
                 /** @type {HTMLOutputElement} */(enhancedElement).value = r;
+                enhancedElement.dispatchEvent(new Event('output'));
             }else{
                 if(this.#so === undefined){
                     const {ASMR} = await import('trans-render/asmr/asmr.js');
