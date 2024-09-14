@@ -5,7 +5,7 @@ import {CalcEvent, rguid} from './Events.js';
 
 /** @import {BEConfig, IEnhancement, BEAllProps} from './ts-refs/be-enhanced/types.d.ts' */
 /** @import {Actions, PAP,  AP, BAP} from './ts-refs/be-calculating/types' */;
-/** @import {CustomHandlers, EnhancementInfo} from './ts-refs/trans-render/be/types.d.ts' */
+/** @import {CustomHandlers, EnhancementInfo, ScopedCustomHandlers} from './ts-refs/trans-render/be/types.d.ts' */
 /** @import {AbsorbingObject, SharingObject} from './ts-refs/trans-render/asmr/types.d.ts' */
 /** @import {AllProps as BeExportableAllProps} from  './ts-refs/be-exportable/types.d.ts' */
 
@@ -73,6 +73,11 @@ class BeCalculating extends BE {
     #customHandlers;
 
     /**
+     * @type {ScopedCustomHandlers}
+     */
+    #scopedHandlers;
+
+    /**
      * @param {Element} enhancedElement
      * @param {EnhancementInfo} enhancementInfo 
      * @override
@@ -81,9 +86,8 @@ class BeCalculating extends BE {
         super.attach(enhancedElement, enhancementInfo);
         const {synConfig, mountCnfg} = enhancementInfo;
         const {handlerKey} = synConfig;
-        //console.log({handlerKey})
-        const {registeredHandlers} = await import('be-hive/be-hive.js');
-        const cluster = registeredHandlers.get(synConfig);
+        const {registeredHandlers, scopedHandlers} = await import('be-hive/be-hive.js');
+        const cluster = registeredHandlers.get(synConfig.top);
         if(cluster === undefined) throw 404;
         const {enhPropKey} = mountCnfg;
         const handlers = cluster.get(enhPropKey);
@@ -92,6 +96,15 @@ class BeCalculating extends BE {
             return
         }
         this.#customHandlers = handlers;
+        const scopedCluster = scopedHandlers.get(synConfig.top);
+        if(scopedCluster === undefined) throw 404;
+        const scopedCustomHandlers = scopedCluster.get(enhPropKey);
+        if(scopedCustomHandlers === undefined){
+            console.warn(404);
+            return;
+        }
+        this.#scopedHandlers = scopedCustomHandlers;
+        
     }
 
     /**
@@ -163,14 +176,25 @@ class BeCalculating extends BE {
      * @param {BAP} self 
      */
     getEvtHandler(self){
-        const {handler} = self;
+        const {handler, enhancedElement} = self;
         const checkedRegistry = true;
         if(!handler){
             return /** @type {BAP} */ ({
                 checkedRegistry
             });
         }
-        
+        /** first check for local */
+        let scopedHandlerObj = this.#scopedHandlers.get(handler);
+        if(scopedHandlerObj !== undefined){
+            for(const item of scopedHandlerObj){
+                if(enhancedElement.closest(item[0])){
+                    return ({
+                        handlerObj: item[1],
+                        checkedRegistry
+                    });
+                }
+            }
+        }
         let handlerObj = this.#customHandlers.get(handler);
         if(handlerObj === undefined) return /** @type {BAP} */ ({
             checkedRegistry
