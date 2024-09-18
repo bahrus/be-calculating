@@ -8,7 +8,7 @@ import {AggEvent, rguid} from 'be-hive/aggEvt.js';
 /** @import {Actions, PAP,  AP, BAP} from './ts-refs/be-calculating/types' */;
 /** @import {CustomHandlers, EnhancementInfo, ScopedCustomHandlers} from './ts-refs/trans-render/be/types.d.ts' */
 /** @import {AbsorbingObject, SharingObject} from './ts-refs/trans-render/asmr/types.d.ts' */
-/** @import {AllProps as BeExportableAllProps} from  './ts-refs/be-exportable/types.d.ts' */
+/** @import {Handlers} from './ts-refs/be-hive/types.d.ts' */
 
 
 
@@ -17,10 +17,11 @@ let cnt = 0;
  * @implements {Actions}
  * @implements {EventListenerObject}
  * 
+ * 
  */
 class BeCalculating extends BE {
     /**
-     * @type {BEConfig<AP & BEAllProps, Actions & IEnhancement, any>}
+     * @type {BEConfig<BAP, Actions & IEnhancement, any>}
      */
     static config = {
         propDefaults: {
@@ -43,6 +44,8 @@ class BeCalculating extends BE {
             propToAO: {},
             isOutputEl: {},
             checkedRegistry: {},
+            customHandlers: {},
+            scopedCustomHandlers: {},
         },
         compacts: {
             when_enhElLocalName_changes_invoke_categorizeEl: 0,
@@ -68,45 +71,45 @@ class BeCalculating extends BE {
         }
     }
 
-    /**
-     * @type {CustomHandlers}
-     */
-    #customHandlers;
+    // /**
+    //  * @type {CustomHandlers}
+    //  */
+    // #customHandlers;
 
-    /**
-     * @type {ScopedCustomHandlers}
-     */
-    #scopedHandlers;
+    // /**
+    //  * @type {ScopedCustomHandlers}
+    //  */
+    // #scopedHandlers;
 
-    /**
-     * @param {Element} enhancedElement
-     * @param {EnhancementInfo} enhancementInfo 
-     * @override
-     */
-    async attach(enhancedElement, enhancementInfo){
-        super.attach(enhancedElement, enhancementInfo);
-        const {synConfig, mountCnfg} = enhancementInfo;
-        const {handlerKey} = synConfig;
-        const {registeredHandlers, scopedHandlers} = await import('be-hive/be-hive.js');
-        const cluster = registeredHandlers.get(synConfig.top);
-        if(cluster === undefined) throw 404;
-        const {enhPropKey} = mountCnfg;
-        const handlers = cluster.get(enhPropKey);
-        if(handlers === undefined){
-            console.warn(404);
-            return
-        }
-        this.#customHandlers = handlers;
-        const scopedCluster = scopedHandlers.get(synConfig.top);
-        if(scopedCluster === undefined) throw 404;
-        const scopedCustomHandlers = scopedCluster.get(enhPropKey);
-        if(scopedCustomHandlers === undefined){
-            console.warn(404);
-            return;
-        }
-        this.#scopedHandlers = scopedCustomHandlers;
+    // /**
+    //  * @param {Element} enhancedElement
+    //  * @param {EnhancementInfo} enhancementInfo 
+    //  * @override
+    //  */
+    // async attach(enhancedElement, enhancementInfo){
+    //     super.attach(enhancedElement, enhancementInfo);
+    //     const {synConfig, mountCnfg} = enhancementInfo;
+    //     const {handlerKey} = synConfig;
+    //     const {registeredHandlers, scopedHandlers} = await import('be-hive/be-hive.js');
+    //     const cluster = registeredHandlers.get(synConfig.top);
+    //     if(cluster === undefined) throw 404;
+    //     const {enhPropKey} = mountCnfg;
+    //     const handlers = cluster.get(enhPropKey);
+    //     if(handlers === undefined){
+    //         console.warn(404);
+    //         return
+    //     }
+    //     this.#customHandlers = handlers;
+    //     const scopedCluster = scopedHandlers.get(synConfig.top);
+    //     if(scopedCluster === undefined) throw 404;
+    //     const scopedCustomHandlers = scopedCluster.get(enhPropKey);
+    //     if(scopedCustomHandlers === undefined){
+    //         console.warn(404);
+    //         return;
+    //     }
+    //     this.#scopedHandlers = scopedCustomHandlers;
         
-    }
+    // }
 
     /**
      * 
@@ -185,7 +188,7 @@ class BeCalculating extends BE {
             });
         }
         /** first check for local */
-        let scopedHandlerObj = this.#scopedHandlers.get(handler);
+        let scopedHandlerObj = self.scopedCustomHandlers?.get(handler);
         if(scopedHandlerObj !== undefined){
             for(const item of scopedHandlerObj){
                 if(enhancedElement.closest(item[0])){
@@ -196,7 +199,7 @@ class BeCalculating extends BE {
                 }
             }
         }
-        let handlerObj = this.#customHandlers.get(handler);
+        let handlerObj = self.customHandlers.get(handler);
         if(handlerObj === undefined) return /** @type {BAP} */ ({
             checkedRegistry
         });
