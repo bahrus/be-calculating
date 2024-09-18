@@ -71,45 +71,7 @@ class BeCalculating extends BE {
         }
     }
 
-    // /**
-    //  * @type {CustomHandlers}
-    //  */
-    // #customHandlers;
 
-    // /**
-    //  * @type {ScopedCustomHandlers}
-    //  */
-    // #scopedHandlers;
-
-    // /**
-    //  * @param {Element} enhancedElement
-    //  * @param {EnhancementInfo} enhancementInfo 
-    //  * @override
-    //  */
-    // async attach(enhancedElement, enhancementInfo){
-    //     super.attach(enhancedElement, enhancementInfo);
-    //     const {synConfig, mountCnfg} = enhancementInfo;
-    //     const {handlerKey} = synConfig;
-    //     const {registeredHandlers, scopedHandlers} = await import('be-hive/be-hive.js');
-    //     const cluster = registeredHandlers.get(synConfig.top);
-    //     if(cluster === undefined) throw 404;
-    //     const {enhPropKey} = mountCnfg;
-    //     const handlers = cluster.get(enhPropKey);
-    //     if(handlers === undefined){
-    //         console.warn(404);
-    //         return
-    //     }
-    //     this.#customHandlers = handlers;
-    //     const scopedCluster = scopedHandlers.get(synConfig.top);
-    //     if(scopedCluster === undefined) throw 404;
-    //     const scopedCustomHandlers = scopedCluster.get(enhPropKey);
-    //     if(scopedCustomHandlers === undefined){
-    //         console.warn(404);
-    //         return;
-    //     }
-    //     this.#scopedHandlers = scopedCustomHandlers;
-        
-    // }
 
     /**
      * 
@@ -122,26 +84,7 @@ class BeCalculating extends BE {
             defaultEventType: eventArg
         });
 
-        // switch(enhElLocalName){
-        //     case 'output':
-        //         if(self.forAttr === undefined){
-        //             return deflt;
-        //         }else{
-        //             if(enhancedElement.oninput){
-        //                 return /** @type {PAP} */({
-        //                     publishEventType: 'input',
-        //                     defaultEventType: 'input',
-        //                 });
-        //             }else if(enhancedElement.onchange){
-        //                 return /** @type {PAP} */({
-        //                     publishEventType: 'change',
-        //                     defaultEventType: 'change'
-        //                 });
-        //             }
 
-        //         }
-
-        // }
         return deflt;
     }
 
