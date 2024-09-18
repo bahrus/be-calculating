@@ -343,14 +343,7 @@ await BeCalculating.bootUp();
 export {BeCalculating};
 
 export class CalcEvent extends AggEvent {
-    static eventName = 'calculate';
-
-
-    /** 
-     * Event view model
-     * @type {{[key: string]: any}} 
-    */
-    f;
+    static eventName = 'be-calculating';
 
     /**
      * 
@@ -359,9 +352,7 @@ export class CalcEvent extends AggEvent {
      * @param {Element} target
      */
     constructor(args, f, target){
-        super(CalcEvent.eventName, args, target);
-        this.args = args;
-        this.f = f;
+        super(CalcEvent.eventName, args, f, target);
     }
 }
 

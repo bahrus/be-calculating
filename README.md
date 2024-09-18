@@ -115,7 +115,7 @@ A framework or custom element host or local script element can attach a local ev
     <output id=output name=result for="a b" 🧮></output>
 </form>
 <script>
-    output.addEventListener('calculate', e => e.r = e.f.m * e.f.x + e.f.b);
+    output.addEventListener('be-calculating', e => e.r = e.f.m * e.f.x + e.f.b);
 </script>
 ```
 
@@ -172,7 +172,7 @@ Once again, a framework or custom element host or local script can work in partn
     Emoji link
 </a>
 <script>
-    link.addEventListener('calculate', e => e.r = `https://${e.f.domain}/search?q=${e.f.search}`)
+    link.addEventListener('be-calculating', e => e.r = `https://${e.f.domain}/search?q=${e.f.search}`)
 </script>
 ```
 
@@ -192,7 +192,7 @@ To do so, specify this as follows:
     +<input type="number" id="b" value="25">
     =<output id=output 🧮-for="#a:$0 and #b:$0"></output>
     <script>
-        output.addEventListener('calculate', e => e.r = e.f.a.valueAsNumber + e.f.b.valueAsNumber);
+        output.addEventListener('be-calculating', e => e.r = e.f.a.valueAsNumber + e.f.b.valueAsNumber);
     </script>
 </form>
 ```
