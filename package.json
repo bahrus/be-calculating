@@ -7,7 +7,7 @@
     "custom-element",
     "custom-elements"
   ],
-  "description": "",
+  "description": "Set the value of an element based on peer elements or the host",
   "main": "be-calculating.js",
   "module": "be-calculating.js",
   "exports": {
