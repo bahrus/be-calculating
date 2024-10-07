@@ -25,8 +25,8 @@
   },
   "dependencies": {
     "be-enhanced": "0.0.146",
-    "be-exportable": "0.0.130",
     "be-hive": "0.0.222",
+    "mount-observer": "0.0.38",
     "trans-render": "0.0.847"
   },
   "devDependencies": {
