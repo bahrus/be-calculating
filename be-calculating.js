@@ -1,7 +1,6 @@
 // @ts-check
 import { BE } from 'be-enhanced/BE.js';
 import { propInfo } from 'be-enhanced/cc.js';
-//import {CalcEvent, rguid} from './Events.js';
 import {AggEvent, rguid} from 'be-hive/aggEvt.js';
 
 /** @import {BEConfig, IEnhancement, BEAllProps} from './ts-refs/be-enhanced/types.d.ts' */
