@@ -24,14 +24,14 @@
     "url": "git+https://github.com/bahrus/be-calculating.git"
   },
   "dependencies": {
-    "be-enhanced": "0.0.142",
+    "be-enhanced": "0.0.146",
     "be-exportable": "0.0.130",
-    "be-hive": "0.0.219",
-    "trans-render": "0.0.838"
+    "be-hive": "0.0.222",
+    "trans-render": "0.0.847"
   },
   "devDependencies": {
     "may-it-serve": "0.0.8",
-    "@playwright/test": "1.47.1"
+    "@playwright/test": "1.47.2"
   },
   "scripts": {
     "test": "playwright test",
