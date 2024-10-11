@@ -30,7 +30,7 @@
     "trans-render": "0.0.847"
   },
   "devDependencies": {
-    "ssi-server": "0.0.0",
+    "ssi-server": "0.0.1",
     "@playwright/test": "1.48.0"
   },
   "scripts": {
