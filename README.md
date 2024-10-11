@@ -67,7 +67,7 @@ Other "built in" calculators are shown below:
 The developer can create a custom calculating function, as shown below.  Doing so will cascade through the page into any ShadowDOM realms.  The advantages is it makes it highly reusable.  The thing to be cautious about is that it is "global" within the confines of all the elements adorned by the 🧮 attribute.
 
 ```html
-<script type=module>
+<script type=module blocking=render>
     import {register} from '../🧮.js';
     register('linear', e => e.r = e.f.m * e.f.x + e.f.b );
 </script>

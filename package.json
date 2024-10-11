@@ -25,13 +25,13 @@
   },
   "dependencies": {
     "be-enhanced": "0.0.146",
-    "be-hive": "0.0.222",
+    "be-hive": "0.0.223",
     "mount-observer": "0.0.38",
     "trans-render": "0.0.847"
   },
   "devDependencies": {
-    "may-it-serve": "0.0.8",
-    "@playwright/test": "1.47.2"
+    "ssi-server": "0.0.0",
+    "@playwright/test": "1.48.0"
   },
   "scripts": {
     "test": "playwright test",
