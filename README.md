@@ -211,7 +211,9 @@ Suppose you want to create reusable logic, but confined to the (repeatedly clone
     <template shadowrootmode=open>
         <be-hive></be-hive>
         <script type=module blocking=render>
-            (await import('be-calculating/🧮.js')).w('#QkV8sbnus0SQPVBMxKuVLw').s({
+            (await import('be-calculating/🧮.js'))
+            .w('#QkV8sbnus0SQPVBMxKuVLw')
+            .s({
                 handlerObj: e => e.r = e.f.a**e.f.b
             })
         </script>
