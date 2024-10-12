@@ -44,7 +44,6 @@ class BeCalculating extends BE {
             isOutputEl: {},
             checkedRegistry: {},
             customHandlers: {},
-            scopedCustomHandlers: {},
         },
         compacts: {
             when_enhElLocalName_changes_invoke_categorizeEl: 0,
@@ -122,24 +121,12 @@ class BeCalculating extends BE {
      * @param {BAP} self 
      */
     getEvtHandler(self){
-        const {handler, enhancedElement} = self;
+        const {handler, enhancedElement, handlerObj: ho} = self;
         const checkedRegistry = true;
-        if(!handler){
+        if(!handler || ho){
             return /** @type {BAP} */ ({
                 checkedRegistry
             });
-        }
-        /** first check for local */
-        let scopedHandlerObj = self.scopedCustomHandlers?.get(handler);
-        if(scopedHandlerObj !== undefined){
-            for(const item of scopedHandlerObj){
-                if(enhancedElement.closest(item[0])){
-                    return ({
-                        handlerObj: item[1],
-                        checkedRegistry
-                    });
-                }
-            }
         }
         let handlerObj = self.customHandlers.get(handler);
         if(handlerObj === undefined) return /** @type {BAP} */ ({
