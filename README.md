@@ -210,16 +210,17 @@ Suppose you want to create reusable logic, but confined to the (repeatedly clone
 <my-element>
     <template shadowrootmode=open>
         <be-hive></be-hive>
-        <form id=QkV8sbnus0SQPVBMxKuVLw>
-            <script type=module>
-                import {within} from 'be-calculating/🧮.js';
-                within('#QkV8sbnus0SQPVBMxKuVLw', '^', e => e.r = e.f.a ** e.f.b);
-            </script>
+        <script type=module blocking=render>
+            import {w} from '/🧮.js';
+            w('#QkV8sbnus0SQPVBMxKuVLw').s({
+                handlerObj: e => e.r = e.f.a**e.f.b
+            });
+        </script>
+        <form >
             <input type=range id=a name=a value=50>
             +<input type=number id=b name=b value=25>
             =
-            <output name=result for="a b" 🧮=^></output>
-
+            <output id=QkV8sbnus0SQPVBMxKuVLw name=result for="a b" 🧮></output>
         </form>
     </template>
 </my-element>
