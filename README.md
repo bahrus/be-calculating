@@ -242,7 +242,7 @@ Any web server that serves static files will do but...
 5.  Open command window to folder where you cloned this repo.
 6.  > npm install
 7.  > npm run serve
-8.  Open http://localhost:3030/demo in a modern browser.
+8.  Open http://localhost:8000/demo in a modern browser.
 
 ## Importing in ES Modules:
 
