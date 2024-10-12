@@ -211,10 +211,9 @@ Suppose you want to create reusable logic, but confined to the (repeatedly clone
     <template shadowrootmode=open>
         <be-hive></be-hive>
         <script type=module blocking=render>
-            import {w} from '/🧮.js';
-            w('#QkV8sbnus0SQPVBMxKuVLw').s({
+            (await import('/🧮.js')).w('#QkV8sbnus0SQPVBMxKuVLw').s({
                 handlerObj: e => e.r = e.f.a**e.f.b
-            });
+            })
         </script>
         <form >
             <input type=range id=a name=a value=50>
