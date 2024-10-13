@@ -174,7 +174,7 @@ class BeCalculating extends BE {
         for(const remoteSpecifier of remoteSpecifiers){
             const remoteEl = await find(enhancedElement, remoteSpecifier);
             if(!(remoteEl instanceof Element)) continue;
-            if(enhancedElement instanceof HTMLOutputElement && !remoteEl.id){
+            if(enhancedElement instanceof HTMLOutputElement && !enhancedElement.matches(`[for~="${remoteEl.id}"]`)){
                 const id = `be-calculating-${cnt}`;
                 remoteEl.id = id;
                 enhancedElement.htmlFor.add(id);

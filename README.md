@@ -220,6 +220,8 @@ Once again, a framework or custom element host or local script can work in partn
 </script>
 ```
 
+(Using a form for the above example may be the better way to go).
+
 ## Example 4b - Gain full access to the element
 
 In the examples above, we engaged in "mind reading" in order to pass to the event handler the precise values we want to use in order to calculate the result.
