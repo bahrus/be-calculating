@@ -221,12 +221,10 @@ Suppose you want to create reusable logic, but confined to the (repeatedly clone
 <my-element>
     <template shadowrootmode=open>
         <be-hive></be-hive>
-        <script type=module blocking=render>
+        <script blow-dry-remove type=module blocking=render>
             (await import('be-calculating/🧮.js'))
             .w('#QkV8sbnus0SQPVBMxKuVLw')
-            .s({
-                handlerObj: e => e.r = e.f.a**e.f.b
-            })
+            .p(e => e.r = e.f.a**e.f.b)
         </script>
         <form >
             <input type=range id=a name=a value=50>
@@ -238,7 +236,11 @@ Suppose you want to create reusable logic, but confined to the (repeatedly clone
 </my-element>
 ```
 
+"w" stands for "where" and is a standard css matches query
 
+"p" can stand for "primary prop", which in this case is "handlerObj".  It could also stand for "process" if you prefer.
+
+The blow-dry-remove attribute is entirely optional, but is useful if using [xtal-element](https://github.com/bahrus/xtal-element) to create, on the fly, a custom element from a server-rendered instance.  "blow-dry-dry" signifies to remove the element from the template that *xtal-element* infers from the server-rendered instance.
 
 ## [Demo](https://codepen.io/bahrus/pen/NWMjxYV)
 
