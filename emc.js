@@ -44,6 +44,7 @@ export const emc = {
     },
     mapLocalNameTo: 'enhElLocalName',
     ws: [],
+    primaryProp: 'handlerObj'
 };
 const mose = seed(emc);
 MountObserver.synthesize(document, BeHive, mose);
