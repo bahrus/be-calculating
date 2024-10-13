@@ -67,5 +67,5 @@ export function register(handlerName, handler){
  * @param {CSSQuery} q 
  */
 export function w(q){
-    return bw(q, emc.ws);
+    return bw(q, emc.ws, w);
 }
