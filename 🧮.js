@@ -6,7 +6,11 @@ import {aggs} from 'be-hive/aggEvt.js';
 import { w as bw } from 'be-hive/w.js';
 /** @import  {EMC, EventListenerOrFn} from './ts-refs/trans-render/be/types' */;
 /** @import {CSSQuery} from './ts-refs/trans-render/types.js' */
+/** @import {Actions, PAP,  AP} from './ts-refs/be-calculating/types' */;
 
+/**
+ * @type {Partial<EMC<any, AP>>}
+ */
 export const emc = {
     ...baseEMC,
     base: '🧮',
