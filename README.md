@@ -108,11 +108,22 @@ A framework or custom element host or local script element can attach a local ev
 
 ```html
 <form>
-     <input type=range id=a name=a value=50>
-    +<input type=number id=b name=b value=25>
+    <label>
+        m
+        <input type=number id=m value=2>
+    </label>
+    <label>
+        x
+        <input type=number id=x value=2>
+    </label>
+        
+    + <label>
+        b
+        <input type=number id=b value=25>
+    </label>
     =
 
-    <output id=output name=result for="a b" 🧮></output>
+    <output id=output name=result for="m x b" 🧮=linear></output>
 </form>
 <script>
     output.addEventListener('be-calculating', e => e.r = e.f.m * e.f.x + e.f.b);
