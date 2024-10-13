@@ -62,6 +62,8 @@ Other "built in" calculators are shown below:
 
 # Part II Custom calculations
 
+Unfortunately, the platform has proven to be quite unfriendly to HTML-first solutions (due to "framework capture" politics, where browser vendors seem much more interested in shmoozing with framework authors than serving end user needs).  I would have preferred supporting inline event handlers (which a previous incarnation supported), however, this is not able to survive "minimal" security settings scrutiny.  A makeshift [userland solution](https://github.com/bahrus/be-hashing-out) could have solved this, but the main benefit of inline event handlers is to allow the browser to parse the handlers, which that solution doesn't solve. So the solutions below (global, local) seem to be the best solution given these headwinds. 
+
 ## Example 2a Global registry, function based
 
 The developer can create a custom calculating function, as shown below.  Doing so will cascade through the page into any ShadowDOM realms.  The advantages is it makes it highly reusable.  The thing to be cautious about is that it is "global" within the confines of all the elements adorned by the 🧮 attribute.
@@ -132,7 +134,38 @@ A framework or custom element host or local script element can attach a local ev
 
 If the 🧮 emoji conflicts with another enhancement in the ShadowDOM root, look to [this file](https://github.com/bahrus/be-calculating/blob/baseline/%F0%9F%A7%AE.js) to see how easy it is to take ownership of your own name.
 
-BTW, the canonical name for this enhancement is the name of this package, *be-calculating* for more formal settings.
+BTW, the canonical name for this enhancement is the name of this package, *be-calculating* for more formal settings, especially where conflicts between libraries can't be easily avoided.
+
+# Scoped Handlers
+
+Suppose you want to create reusable logic, but confined to the (repeatedly cloned) Shadow DOM Realm/CSS Scope you are working with. 
+
+## Example 2c Locally scoped handler 
+
+```html
+<my-element>
+    <template shadowrootmode=open>
+        <be-hive></be-hive>
+        <script blow-dry-remove type=module blocking=render>
+            (await import('be-calculating/🧮.js'))
+            .w('#QkV8sbnus0SQPVBMxKuVLw')
+            .p(e => e.r = e.f.a**e.f.b)
+        </script>
+        <form >
+            <input type=range id=a name=a value=50>
+            +<input type=number id=b name=b value=25>
+            =
+            <output id=QkV8sbnus0SQPVBMxKuVLw name=result for="a b" 🧮></output>
+        </form>
+    </template>
+</my-element>
+```
+
+"w" stands for "where" and is a standard css matches query, including ":has" and container queries.
+
+"p" can stand for "primary prop", which in this case is "handlerObj".  It could also stand for "process" if you prefer.
+
+The blow-dry-remove attribute is entirely optional, but is useful if using [xtal-element](https://github.com/bahrus/xtal-element) to create, on the fly, a custom element from a server-rendered instance.  "blow-dry-remove" signifies to remove the element from the template that *xtal-element* infers from the server-rendered instance.
 
 # Part III - Customizing the dependencies
 
@@ -211,36 +244,7 @@ To do so, specify this as follows:
 In particular, DSS now supports :$0 to specify the element itself as the thing that needs passing.
 
 
-# Part V Scoped Handlers
 
-Suppose you want to create reusable logic, but confined to the (repeatedly cloned) Shadow DOM Realm you are working with. 
-
-## Example 5a Locally scoped handler 
-
-```html
-<my-element>
-    <template shadowrootmode=open>
-        <be-hive></be-hive>
-        <script blow-dry-remove type=module blocking=render>
-            (await import('be-calculating/🧮.js'))
-            .w('#QkV8sbnus0SQPVBMxKuVLw')
-            .p(e => e.r = e.f.a**e.f.b)
-        </script>
-        <form >
-            <input type=range id=a name=a value=50>
-            +<input type=number id=b name=b value=25>
-            =
-            <output id=QkV8sbnus0SQPVBMxKuVLw name=result for="a b" 🧮></output>
-        </form>
-    </template>
-</my-element>
-```
-
-"w" stands for "where" and is a standard css matches query
-
-"p" can stand for "primary prop", which in this case is "handlerObj".  It could also stand for "process" if you prefer.
-
-The blow-dry-remove attribute is entirely optional, but is useful if using [xtal-element](https://github.com/bahrus/xtal-element) to create, on the fly, a custom element from a server-rendered instance.  "blow-dry-dry" signifies to remove the element from the template that *xtal-element* infers from the server-rendered instance.
 
 ## [Demo](https://codepen.io/bahrus/pen/NWMjxYV)
 
