@@ -41,7 +41,7 @@ Other "built in" calculators are shown below:
 ```html
 <form>
      <input type=range id=a name=a value=50>
-    +<input type=number id=b name=b value=25>
+    *<input type=number id=b name=b value=25>
     =
 
     <output name=result for="a b" 🧮=*></output>
@@ -52,8 +52,8 @@ Other "built in" calculators are shown below:
 
 ```html
 <form>
-     <input type=range id=a name=a value=50>
-    +<input type=number id=b name=b value=25>
+    max( <input type=range id=a name=a value=50>
+    ,<input type=number id=b name=b value=25>)
     =
 
     <output name=result for="a b" 🧮=max></output>
