@@ -125,7 +125,7 @@ A framework or custom element host or local script element can attach a local ev
     </label>
     =
 
-    <output id=output name=result for="m x b" 🧮=linear></output>
+    <output id=output name=result for="m x b" 🧮></output>
 </form>
 <script>
     output.addEventListener('be-calculating', e => e.r = e.f.m * e.f.x + e.f.b);
