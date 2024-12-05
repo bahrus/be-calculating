@@ -146,7 +146,7 @@ Suppose you want to create reusable logic, but confined to the (repeatedly clone
 <my-element>
     <template shadowrootmode=open>
         <be-hive></be-hive>
-        <script blow-dry-remove type=module blocking=render>
+        <script blow-dry-remove type=module>
             (await import('be-calculating/🧮.js'))
             .w('#QkV8sbnus0SQPVBMxKuVLw')
             .p(e => e.r = e.f.a**e.f.b)
