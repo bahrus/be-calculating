@@ -153,7 +153,7 @@ Suppose you want to create reusable logic, but confined to the (repeatedly clone
         </script>
         <form >
             <input type=range id=a name=a value=50>
-            +<input type=number id=b name=b value=25>
+            ^<input type=number id=b name=b value=25>
             =
             <output id=QkV8sbnus0SQPVBMxKuVLw name=result for="a b" 🧮></output>
         </form>
