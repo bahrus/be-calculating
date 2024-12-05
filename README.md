@@ -33,7 +33,7 @@ Other "built in" calculators are shown below:
 |----------|-----------------------|
 | +        | Sums the args         |
 | *        | Product of the args   |
-| max      | Maximum f the args    |
+| max      | Maximum of the args    |
 | min      | Minimum of the args   | 
 
 ## Example 1b Multiplying
