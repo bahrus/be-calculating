@@ -126,46 +126,51 @@ A framework or custom element host or local script element can attach a local ev
     =
 
     <output id=output name=result for="m x b" 🧮></output>
+    <script>
+        output.addEventListener('be-calculating', e => e.r = e.f.m * e.f.x + e.f.b);
+    </script>
 </form>
-<script>
-    output.addEventListener('be-calculating', e => e.r = e.f.m * e.f.x + e.f.b);
-</script>
+
 ```
 
 If the 🧮 emoji conflicts with another enhancement in the ShadowDOM root, look to [this file](https://github.com/bahrus/be-calculating/blob/baseline/%F0%9F%A7%AE.js) to see how easy it is to take ownership of your own name.
 
 BTW, the canonical name for this enhancement is the name of this package, *be-calculating* for more formal settings, especially where conflicts between libraries can't be easily avoided.
 
-# Scoped Handlers
+The example above, while simple has a number of issues:
 
-Suppose you want to create reusable logic, but confined to the (repeatedly cloned) Shadow DOM Realm/CSS Scope you are working with. 
+1.  Inside a shadowRoot, element's with id's like "output" don't become a constant, so we need to do document.getElementById.
+2.  It requires defining an id.  If such an id is needed anyway, no harm done.  If it is, then's kind of a pain
+2.  There *may be* a subtle timing concern that might bite once every 1000 tries.
+3.  If this is part of a repeating web component, the script tag would need to parsed for each instance
 
-## Example 2c Locally scoped handler 
+So to do the example above in a  way that addresses these (minor-ish) concerns, leverage the [https://github.com/bahrus/be-eventing](be-eventing) enhancement:
 
 ```html
-<my-element>
-    <template shadowrootmode=open>
-        <be-hive></be-hive>
-        <script blow-dry-remove type=module blocking=render>
-            (await import('be-calculating/🧮.js'))
-            .w('#QkV8sbnus0SQPVBMxKuVLw')
-            .p(e => e.r = e.f.a**e.f.b)
-        </script>
-        <form >
-            <input type=range id=a name=a value=50>
-            ^<input type=number id=b name=b value=25>
-            =
-            <output id=QkV8sbnus0SQPVBMxKuVLw name=result for="a b" 🧮></output>
-        </form>
-    </template>
-</my-element>
+<form>
+    <label>
+        m
+        <input type=number id=m value=2>
+    </label>
+    <label>
+        x
+        <input type=number id=x value=2>
+    </label>
+        
+    + <label>
+        b
+        <input type=number id=b value=25>
+    </label>
+    =
+
+    <output id=output name=result for="m x b" defer-🧮 🧮></output>
+    <script 🏇-nudges=defer-🧮 blow-dry-preserve=on>
+        document.currentScript.on = {'be-calculating': e => e.r = e.f.m * e.f.x + e.f.b};
+    </script>
+</form>
+
 ```
 
-"w" stands for "where" and is a standard css matches query, including ":has" and container queries.
-
-"p" can stand for "primary prop", which in this case is "handlerObj".  It could also stand for "process" if you prefer.
-
-The blow-dry-remove attribute is entirely optional, but is useful if using [xtal-element](https://github.com/bahrus/xtal-element) to create, on the fly, a custom element from a server-rendered instance.  "blow-dry-remove" signifies to remove the element from the template that *xtal-element* infers from the server-rendered instance.
 
 # Part III - Customizing the dependencies
 
