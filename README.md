@@ -139,12 +139,12 @@ BTW, the canonical name for this enhancement is the name of this package, *be-ca
 
 The example above, while simple has a number of issues:
 
-1.  Inside a shadowRoot, element's with id's like "output" don't become a constant, so we need to do document.getElementById.
+1.  Inside a shadowRoot, element's with id's like "output" don't become a constant, so we need to do query within the shadow root for the element.  But how do we get the shadowRoot in our script tag?
 2.  It requires defining an id.  If such an id is needed anyway, no harm done.  If it is, then's kind of a pain
 2.  There *may be* a subtle timing concern that might bite once every 1000 tries.
 3.  If this is part of a repeating web component, the script tag would need to parsed for each instance
 
-So to do the example above in a  way that addresses these (minor-ish) concerns, leverage the [https://github.com/bahrus/be-eventing](be-eventing) enhancement:
+So to do the example above in a  way that addresses these concerns, leverage the [https://github.com/bahrus/be-eventing](be-eventing) enhancement:
 
 ```html
 <form>
@@ -163,7 +163,7 @@ So to do the example above in a  way that addresses these (minor-ish) concerns, 
     </label>
     =
 
-    <output id=output name=result for="m x b" defer-🧮 🧮></output>
+    <output name=result for="m x b" defer-🧮 🧮></output>
     <script 🏇-nudges=defer-🧮 blow-dry-preserve=on>
         document.currentScript.on = {'be-calculating': e => e.r = e.f.m * e.f.x + e.f.b};
     </script>
