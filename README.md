@@ -231,9 +231,11 @@ Once again, a framework or custom element host or local script can work in partn
 
 In the examples above, we engaged in "mind reading" in order to pass to the event handler the precise values we want to use in order to calculate the result.
 
-The DSS syntax this package relies on allows us to override these mind readings, and specify which property to pass.  The DSS feature that seems most useful in this context is probably:
+The DSS syntax this package relies on allows us to override these mind readings, and specify which property to pass.  
 
-> Thanks but no thanks to all your "mind reading" -- could you please just pass in the dependent elements when they change, since I have full, unfettered access to the JavaScript engine, and I would like to extract things out of the elements that I please without your help?
+But what if you encounter this situation:
+
+> Thanks but no thanks to all your "mind reading" -- could you please just pass in the dependent elements when they change? I have full, unfettered access to the JavaScript engine, so I can just extract things out of the elements that I need without your help!
 
 To do so, specify this as follows:
 
