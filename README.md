@@ -33,7 +33,7 @@ Other "built in" calculators are shown below:
 |----------|-----------------------|
 | +        | Sums the args         |
 | *        | Product of the args   |
-| max      | Maximum f the args    |
+| max      | Maximum of the args    |
 | min      | Minimum of the args   | 
 
 ## Example 1b Multiplying
@@ -41,7 +41,7 @@ Other "built in" calculators are shown below:
 ```html
 <form>
      <input type=range id=a name=a value=50>
-    +<input type=number id=b name=b value=25>
+    *<input type=number id=b name=b value=25>
     =
 
     <output name=result for="a b" 🧮=*></output>
@@ -52,8 +52,8 @@ Other "built in" calculators are shown below:
 
 ```html
 <form>
-     <input type=range id=a name=a value=50>
-    +<input type=number id=b name=b value=25>
+    max( <input type=range id=a name=a value=50>
+    ,<input type=number id=b name=b value=25>)
     =
 
     <output name=result for="a b" 🧮=max></output>
@@ -125,7 +125,7 @@ A framework or custom element host or local script element can attach a local ev
     </label>
     =
 
-    <output id=output name=result for="m x b" 🧮=linear></output>
+    <output id=output name=result for="m x b" 🧮></output>
 </form>
 <script>
     output.addEventListener('be-calculating', e => e.r = e.f.m * e.f.x + e.f.b);
@@ -153,7 +153,7 @@ Suppose you want to create reusable logic, but confined to the (repeatedly clone
         </script>
         <form >
             <input type=range id=a name=a value=50>
-            +<input type=number id=b name=b value=25>
+            ^<input type=number id=b name=b value=25>
             =
             <output id=QkV8sbnus0SQPVBMxKuVLw name=result for="a b" 🧮></output>
         </form>
