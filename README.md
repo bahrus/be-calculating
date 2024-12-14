@@ -244,11 +244,11 @@ Each calculated expression should only result in one hash code, regardless of ho
 
 also works.
 
-Each of the approaches above have their advantages and disadvantages.
+Each of the two approaches above have their advantages and disadvantages.
 
 The first approach (peer script tag) gives us out of the box syntax highlighting and error checking without an editor plug-in, feels more transparent as far as safety concerns, and there are no concerns with escape characters as far as living within an attribute.
 
-The second approach benefits from being more concise, adheres more closely to the "locality of behavior" principle, and has easier copy and paste ergonomics.
+The second approach (inline expression) benefits from being more concise, adheres more closely to the "locality of behavior" principle, and has easier copy and paste ergonomics.
 
 # Part III - Customizing the dependencies
 
