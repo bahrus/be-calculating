@@ -213,6 +213,43 @@ Each calculated expression should only result in one hash code, regardless of ho
 
 ## CSP safe inline handler [TODO]
 
+```html
+<form>
+    <label>
+        m
+        <input type=number id=m value=2>
+    </label>
+    <label>
+        x
+        <input type=number id=x value=2>
+    </label>
+        
+    + <label>
+        b
+        <input type=number id=b value=25>
+    </label>
+    =
+
+    <output name=result for="m x b" 🧮-js="
+        textContent = e.f.m * e.f.x + e.f.b
+    "></output>
+</form>
+```
+
+```html
+<output name=result for="m x b" 🧮-js="
+    e.r = e.f.m * e.f.x + e.f.b
+"></output>
+```
+
+also works.
+
+Each of the approaches above have their advantages and disadvantages.
+
+The first approach (peer script tag) gives us out of the box syntax highlighting and error checking without an editor plug-in, feels more transparent as far as safety concerns, and there are no concerns with escape characters as far as living within an attribute.
+
+The second approach benefits from being more concise, adheres more closely to the "locality of behavior" principle, and has easier copy and paste ergonomics.
+
 # Part III - Customizing the dependencies
 
 ## Example 3a Specify change (or other) default event
