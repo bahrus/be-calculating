@@ -12,7 +12,7 @@ import {aggs} from 'be-hive/aggEvt.js';
 export const emc = {
     hostInstanceOf: [HTMLElement],
     base: 'be-calculating',
-    branches: ['', 'for', 'on'],
+    branches: ['', 'for', 'on', 'js'],
     enhPropKey: 'beCalculating',
     map: {
         '0.0': {
@@ -26,7 +26,11 @@ export const emc = {
         '2.0': {
             instanceOf: 'String',
             mapsTo: 'eventArg'
-        }
+        },
+        '3.0': {
+            instanceOf: 'String',
+            mapsTo: 'js'
+        },
     },
     osotas: [
         {
