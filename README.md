@@ -21,6 +21,18 @@ Calculate value of the output element from peer input elements.
     +<input type=number id=b name=b value=25>
     =
 
+    <output name=result for="a b" be-calculating=+></output>
+</form>
+```
+
+*be-calculating* is the canonical name for this enhancement.  In less formal settings, where classes between libraries can be avoided and concerns about HTML5 compliant aren't required, we can make use of alternative names.  This package provides support for one:
+
+```html
+<form>
+     <input type=range id=a name=a value=50>
+    +<input type=number id=b name=b value=25>
+    =
+
     <output name=result for="a b" 🧮=+></output>
 </form>
 ```
@@ -33,7 +45,7 @@ Other "built in" calculators are shown below:
 |----------|-----------------------|
 | +        | Sums the args         |
 | *        | Product of the args   |
-| max      | Maximum of the args    |
+| max      | Maximum of the args   |
 | min      | Minimum of the args   | 
 
 ## Example 1b Multiplying
@@ -62,7 +74,7 @@ Other "built in" calculators are shown below:
 
 # Part II Custom calculations
 
-Unfortunately, the platform has proven to be quite unfriendly to HTML-first solutions (due to "framework capture" politics, where browser vendors seem much more interested in shmoozing with framework authors than serving end user needs).  I would have preferred supporting inline event handlers (which a previous incarnation supported), however, this is not able to survive "minimal" security settings scrutiny.  A makeshift [userland solution](https://github.com/bahrus/be-hashing-out) could have solved this, but the main benefit of inline event handlers is to allow the browser to parse the handlers, which that solution doesn't solve. So the solutions below (global, local) seem to be the best solution given these headwinds. 
+Unfortunately, the platform has proven to be quite unfriendly to HTML-first solutions (due to "framework capture" politics, where browser vendors seem much more interested in shmoozing with framework authors than serving end user needs).  I would have preferred supporting inline event handlers (which a previous incarnation supported), but this is not able to survive "minimal" security settings scrutiny.  A makeshift [userland solution](https://github.com/bahrus/be-hashing-out) could have solved this, but the main benefit of inline event handlers is to allow the browser to parse the handlers, which that solution doesn't solve. So the solutions below (global, local) seem to be the best solution given these headwinds. 
 
 ## Example 2a Global registry, function based
 
@@ -133,18 +145,18 @@ A framework or custom element host or local script element can attach a local ev
 
 ```
 
-If the 🧮 emoji conflicts with another enhancement in the ShadowDOM root, look to [this file](https://github.com/bahrus/be-calculating/blob/baseline/%F0%9F%A7%AE.js) to see how easy it is to take ownership of your own name.
-
-BTW, the canonical name for this enhancement is the name of this package, *be-calculating* for more formal settings, especially where conflicts between libraries can't be easily avoided.
-
 The example above, while simple has a number of issues:
 
-1.  Inside a shadowRoot, element's with id's like "output" don't become a constant, so we need to do query within the shadow root for the element.  But how do we get the shadowRoot in our script tag?
-2.  It requires defining an id.  If such an id is needed anyway, no harm done.  If it is, then's kind of a pain
-2.  There *may be* a subtle timing concern that might bite once every 1000 tries.
+1.  Inside a shadowRoot, elements with id's like "output" don't become global constants, so we need to perform queries within the shadow root for the element.  But how do we get the shadowRoot in our script tag?
+2.  It requires defining an id.  If such an id is needed anyway, no harm done.  If not, that's kind of a pain
+3.  There is likely a subtle timing concern that might bite once every 1000 tries.
 3.  If this is part of a repeating web component, the script tag would need to parsed for each instance
 
-So to do the example above in a  way that addresses these concerns, leverage the [https://github.com/bahrus/be-eventing](be-eventing) enhancement:
+So to do the example above in a  way that addresses these concerns, we can go in one of two ways, each with their advantages and disadvantages:
+
+## CSP Safe Peer script element with self-awareness enhancement
+
+leverage the [https://github.com/bahrus/be-eventing](be-eventing) enhancement:
 
 ```html
 <form>
@@ -164,13 +176,42 @@ So to do the example above in a  way that addresses these concerns, leverage the
     =
 
     <output name=result for="m x b" defer-🧮 🧮></output>
-    <script 🏇-nudges=defer-🧮 blow-dry-preserve=on>
-        document.currentScript.on = {'be-calculating': e => e.r = e.f.m * e.f.x + e.f.b};
-    </script>
+    <script nomodule 🏇=🧮>textContent = e.f.m * e.f.x + e.f.b</script>
 </form>
-
 ```
 
+By the way,
+
+```html
+<script nomodule 🏇=🧮>e.r = e.f.m * e.f.x + e.f.b</script>
+```
+
+also works.
+
+The nomodule attribute is important -- it tells the browser to ignore the expression inside (just don't send your web site into a time machine where "ie" means anything other than "in other words".)  
+
+This is an example of how those of us who want to do the right thing by our users, and use HTML and progressive enhancement, are grateful for the browser vendors or accidentally(?) leaving us some leftover scraps in their pursuit of flashy new toys.  Thanks, browser vendors!!!
+
+By "CSP Safe," I mean that the browser will provide a warning when it doesn't find a matching csp hash value, so that with enough patience, or with a good build engine, http headers or a meta tag such as what we see below can put the browser at ease:
+
+```html
+    <meta http-equiv="Content-Security-Policy" 
+    content="
+        default-src 'self'; style-src 'self'; img-src 'self'; 
+        script-src 
+            'sha256-NdPEJFVQRHzDnDETRYKcvXUeTTDl5bEC5BpjzeA22yE=' 
+            'sha256-i6TvqP2TVtG9MVoQx7msqKMo9N5gKfwHr7cZVV6d4xg='
+            'sha256-kYCKyd++EI0QB9YUHtFWecp5JC9aEMAJXKYs627N97A='
+            'sha256-WKHAJV10n+uRXN4tBgzWP2+xzIHx17UDLYsfih7sDCI='
+            'sha256-NwD1Uj3szNXySAwCTzxmKecgUosm4JX/FH81ae1I92o='
+            'sha256-/0HNY8ZMkctGwbm9m0+ixgmu4QFFJXOLg92huDNwWks='
+        ;
+    ">
+```
+
+Each calculated expression should only result in one hash code, regardless of how many times the JS expression is repeated through the application.
+
+## CSP safe inline handler [TODO]
 
 # Part III - Customizing the dependencies
 
