@@ -20,12 +20,12 @@ let cnt = 0;
  */
 class BeCalculating extends BE {
     /**
-     * @type {BEConfig<BAP, Actions & IEnhancement, any>}
+     * @type {BEConfig<BAP, Actions & IEnhancement>}
      */
     static config = {
         propDefaults: {
             eventArg: 'input',
-            
+            notYetParsedJS: true,
         },
         propInfo:{
             ...propInfo,
@@ -44,6 +44,7 @@ class BeCalculating extends BE {
             isOutputEl: {},
             checkedRegistry: {},
             customHandlers: {},
+            js: {},
         },
         compacts: {
             when_enhElLocalName_changes_invoke_categorizeEl: 0,
@@ -64,7 +65,11 @@ class BeCalculating extends BE {
                 ifAllOf: ['defaultEventType', 'remSpecifierLen']
             },
             hydrate: {
-                ifAllOf: ['checkedRegistry', 'propToAO']
+                ifAllOf: ['checkedRegistry', 'propToAO'],
+                ifNotAllOf: ['js', 'notYetParsedJS']
+            },
+            parseJS: {
+                ifAllOf: ['js', 'notYetParsedJS'],
             }
         }
     }
@@ -100,6 +105,20 @@ class BeCalculating extends BE {
         return {
             forArgs: Array.from(/** @type {HTMLOutputElement} */(enhancedElement).htmlFor)
         }
+    }
+    /**
+     * 
+     * @param {BAP} self
+     * @returns 
+     */
+    async parseJS(self){
+        const {enhKey, enhancedElement, js} = self;
+        const handler = (await import('trans-render/lib/activate.js')).activate(js);
+        if(this.#ac === undefined) this.#ac = new AbortController();
+        enhancedElement.addEventListener(enhKey, handler, {signal: this.#ac.signal});
+        return /** @type {PAP} */({
+            notYetParsedJS: false,
+        });
     }
 
     /**
@@ -217,7 +236,7 @@ class BeCalculating extends BE {
     #so;
     async handleEvent() {
         const self = /** @type {BAP} */(/** @type {any} */ (this));
-        const {enhancedElement, propToAO, handlerObj, isOutputEl} = self;
+        const {enhancedElement, propToAO, handlerObj, isOutputEl, enhKey} = self;
         //console.log({enhancedElement, propToAO, handlerObj});
         const obj = {};
         const args = [];
@@ -227,7 +246,7 @@ class BeCalculating extends BE {
             args.push(val);
             obj[prop] = val;
         }
-        const event = new CalcEvent(args, obj, enhancedElement);
+        const event = new CalcEvent(enhKey, args, obj, enhancedElement);
         if(handlerObj !== undefined){
             if('handleEvent' in handlerObj){
                 /** @type {EventListenerObject} */ (handlerObj).handleEvent(event);
@@ -275,16 +294,16 @@ await BeCalculating.bootUp();
 export {BeCalculating};
 
 export class CalcEvent extends AggEvent {
-    static eventName = 'be-calculating';
+    //static eventName = 'be-calculating';
 
     /**
-     * 
+     * @param {string} eventName
      * @param {Array<any>} args 
      * @param {{[key: string]: any}} f 
      * @param {Element} target
      */
-    constructor(args, f, target){
-        super(CalcEvent.eventName, args, f, target);
+    constructor(eventName, args, f, target){
+        super(eventName, args, f, target);
     }
 }
 

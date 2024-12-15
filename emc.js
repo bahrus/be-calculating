@@ -14,6 +14,7 @@ export const emc = {
     base: 'be-calculating',
     branches: ['', 'for', 'on', 'js'],
     enhPropKey: 'beCalculating',
+    mapEnhKeyTo: 'enhKey',
     map: {
         '0.0': {
             instanceOf: 'String',

@@ -192,7 +192,7 @@ The nomodule attribute is important -- it tells the browser to ignore the expres
 
 This is an example of how those of us who want to do the right thing by our users, and use HTML and progressive enhancement, are grateful for the browser vendors or accidentally(?) leaving us some leftover scraps in their pursuit of flashy new toys.  Thanks, browser vendors!!! (Sorry for "eventing").
 
-By "CSP Safe," I mean that the browser will provide a warning when it doesn't find a matching csp hash value, so that with enough patience, or with a good build engine, http headers or a meta tag such as what we see below can put the browser at ease:
+By "CSP Safe," I mean that with minimal standard protections in place, the browser will provide a blocking error when it doesn't find a matching csp hash value, and provide what that hash value needs to be, so that with enough patience, or with a good build engine, http headers or a meta tag such as what we see below can put the browser at ease:
 
 ```html
     <meta http-equiv="Content-Security-Policy" 
@@ -209,7 +209,7 @@ By "CSP Safe," I mean that the browser will provide a warning when it doesn't fi
     ">
 ```
 
-Each calculated expression should only result in one hash code, regardless of how many times the JS expression is repeated through the application.
+Each calculated expression should only result in one hash code, regardless of how many times the JS expression is repeated throughout the application.
 
 ## CSP safe inline handler [TODO]
 
