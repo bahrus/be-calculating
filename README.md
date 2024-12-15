@@ -82,8 +82,9 @@ The developer can create a custom calculating function, as shown below.  Doing s
 
 ```html
 <script type=module blocking=render>
-    import {register} from '../🧮.js';
-    register('linear', e => e.r = e.f.m * e.f.x + e.f.b );
+    (await (import'be-calculating/🧮.js'))
+        .register('linear', e => e.r = e.f.m * e.f.x + e.f.b)
+    ;
 </script>
 
 <form>
