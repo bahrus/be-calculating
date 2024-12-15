@@ -45,6 +45,7 @@ class BeCalculating extends BE {
             checkedRegistry: {},
             customHandlers: {},
             js: {},
+            enhKey:{},
         },
         compacts: {
             when_enhElLocalName_changes_invoke_categorizeEl: 0,
@@ -220,8 +221,11 @@ class BeCalculating extends BE {
      * @param {BAP} self 
      */
     async hydrate(self){
-        this.disconnect();
-        const ac = this.#ac = new AbortController();
+        //this.disconnect();
+        if(this.#ac === undefined){
+            this.#ac = new AbortController();
+        }
+        const ac = this.#ac;
         const {propToAO} = self;
         const aos = Object.values(propToAO);
         for(const ao of aos){

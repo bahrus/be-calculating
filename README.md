@@ -211,7 +211,7 @@ By "CSP Safe," I mean that with minimal standard protections in place, the brows
 
 Each calculated expression should only result in one hash code, regardless of how many times the JS expression is repeated throughout the application.
 
-## CSP safe inline handler [TODO]
+## CSP safe inline handler
 
 ```html
 <form>
