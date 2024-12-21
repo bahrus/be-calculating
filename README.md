@@ -155,9 +155,8 @@ The example above, while simple has a number of issues:
 
 So to do the example above in a  way that addresses these concerns, we can go in one of two ways, each with their advantages and disadvantages:
 
-## CSP Safe Peer script element with self-awareness enhancement
+## CSP Safe Peer script element with self-awareness enhancement [TODO]
 
-We can leverage the [be-eventing](https://github.com/bahrus/be-eventing) enhancement:
 
 ```html
 <form>
@@ -176,22 +175,11 @@ We can leverage the [be-eventing](https://github.com/bahrus/be-eventing) enhance
     </label>
     =
 
-    <output name=result for="m x b" defer-🧮 🧮></output>
-    <script nomodule 🏇=🧮>textContent = e.f.m * e.f.x + e.f.b</script>
+    <output name=result for="m x b" 🧮-js="textContent = f.m * f.x + f.b"></output>
+    
 </form>
 ```
 
-By the way,
-
-```html
-<script nomodule 🏇=🧮>e.r = e.f.m * e.f.x + e.f.b</script>
-```
-
-also works.
-
-The nomodule attribute is important -- it tells the browser to ignore the expression inside (just don't send your web site into a time machine where "ie" means anything other than "in other words".)  
-
-This is an example of how those of us who want to do the right thing by our users, and use HTML and progressive enhancement, are grateful for the browser vendors or accidentally(?) leaving us some leftover scraps in their pursuit of flashy new toys.  Thanks, browser vendors!!! (Sorry for "eventing").
 
 By "CSP Safe," I mean that with minimal standard protections in place, the browser will provide a blocking error when it doesn't find a matching csp hash value, and provide what that hash value needs to be, so that with enough patience, or with a good build engine, http headers or a meta tag such as what we see below can put the browser at ease:
 
