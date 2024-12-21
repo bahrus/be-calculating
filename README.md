@@ -301,7 +301,7 @@ In particular, DSS now supports :$0 to specify the element itself as the thing t
 
 ## Viewing Locally
 
-Any web server that serves static files will do but...
+Any web server that serves static files and server-side includes will do but...
 
 1.  Install git.
 2.  Fork/clone this repo.
