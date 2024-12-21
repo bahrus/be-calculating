@@ -254,6 +254,17 @@ Once again, a framework or custom element host or local script can work in partn
 </script>
 ```
 
+Or we can use an inline event handler:
+
+```html
+
+<input name=domain value=emojipedia.org>
+<input name=search value=calculator>
+<a id=link 🧮-for="@domain and @search" 🧮-js="`https://${f.domain}/search?q=${f.search}`">
+    Emoji link
+</a>
+```
+
 (Using a form for the above example may be the better way to go).
 
 ## Example 4b - Gain full access to the element
