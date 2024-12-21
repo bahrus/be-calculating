@@ -11,10 +11,7 @@
     <form>
         <input type="range" name="a" value="50">
         +<input type="number" name="b" value="25">
-        =<output 🧮-for="@a and @b" 🧮-js='
-            console.log({e});
-            textContent = e.f.a - e.f.b
-        ' ></output>
+        =<output 🧮-for="@a and @b" 🧮-js='f.a - f.b'></output>
     </form>
 
     <script type=module>

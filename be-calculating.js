@@ -114,7 +114,10 @@ class BeCalculating extends BE {
      */
     async parseJS(self){
         const {enhKey, enhancedElement, js} = self;
-        const handler = (await import('trans-render/lib/activate.js')).activate(js);
+        const fullExpr= `const {f, args} = e;
+e.r = ${js};
+        `;
+        const handler = (await import('trans-render/lib/activate.js')).activate(fullExpr);
         if(this.#ac === undefined) this.#ac = new AbortController();
         enhancedElement.addEventListener(enhKey, handler, {signal: this.#ac.signal});
         return /** @type {PAP} */({
