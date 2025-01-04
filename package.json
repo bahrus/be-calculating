@@ -12,7 +12,9 @@
   "module": "be-calculating.js",
   "exports": {
     ".": "./be-calculating.js",
-    "./be-calculating.js": "./be-calculating.js"
+    "./be-calculating.js": "./be-calculating.js",
+    "./emc.js": "./emc.js",
+    "./🧮.js": "./🧮.js"
   },
   "files": [
     "*.js",
@@ -24,10 +26,10 @@
     "url": "git+https://github.com/bahrus/be-calculating.git"
   },
   "dependencies": {
-    "be-enhanced": "0.0.162",
-    "be-hive": "0.0.242",
+    "be-enhanced": "0.0.163",
+    "be-hive": "0.0.243",
     "mount-observer": "0.0.39",
-    "trans-render": "0.0.873"
+    "trans-render": "0.0.877"
   },
   "devDependencies": {
     "ssi-server": "0.0.1",
