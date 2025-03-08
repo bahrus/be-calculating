@@ -7,6 +7,8 @@
 <img src="http://img.badgesize.io/https://cdn.jsdelivr.net/npm/be-calculating?compression=gzip">
 [![NPM version](https://badge.fury.io/js/be-calculating.png)](http://badge.fury.io/js/be-calculating)
 
+Calculate the (text) value of the adorned element based on peer element (text) values.
+
 *be-calculating* is basically the code-first counterpoint to the declarative [*be-observant*](https://github.com/bahrus/be-observant) enhancement, when the full power of the JavaScript run time engine is needed from the get-go.
 
 # Part I  Enhancing the output element with built in aggregators
@@ -25,7 +27,7 @@ Calculate value of the output element from peer input elements.
 </form>
 ```
 
-*be-calculating* is the canonical name for this enhancement.  In less formal settings, where classes between libraries can be avoided and concerns about HTML5 compliant aren't required, we can make use of alternative names.  This package provides support for one:
+*be-calculating* is the canonical name for this enhancement.  In less formal settings, where clashes between libraries can be avoided and concerns about HTML5 compliance aren't required, we can make use of alternative names.  This package provides support for one:
 
 ```html
 <form>
@@ -111,7 +113,7 @@ In the javascript expression at the top, "f" stands for "factors", "r" for "resu
 
 So the event provides the "f" property, which is basically the factors we want the calculation based on -- the names (id's in this case) of the values.
 
-But in some cases, we just want the array of arguments.  In fact, the examples in part I were using reducers based on the args property of the event.  So built in to 🧮 are registered event handlers such as
+But in some cases, we don't want to base our expression on the names or id's of the elements, but instead on the position (or maybe the arguments are all treated the same). So we can apply our expression to the  the array of arguments corresponding to the elements.  In fact, the examples in part I were using reducers based on the args property of the event.  So built in to 🧮 are registered event handlers such as
 
 ```JavaScript
 Registry.register(emc, '+', e => e.r = e.args.reduce((acc, arg) => acc + arg));
@@ -149,13 +151,13 @@ A framework or custom element host or local script element can attach a local ev
 The example above, while simple has a number of issues:
 
 1.  Inside a shadowRoot, elements with id's like "output" don't become global constants, so we need to perform queries within the shadow root for the element.  But how do we get the shadowRoot in our script tag?
-2.  It requires defining an id.  If such an id is needed anyway, no harm done.  If not, that's kind of a pain
+2.  It requires defining an id.  If such an id is needed anyway, no harm done.  If not, that's kind of a pain.
 3.  There is likely a subtle timing concern that might bite once every 1000 tries.
-3.  If this is part of a repeating web component, the script tag would need to parsed for each instance
+3.  If this is part of a repeating web component, the script tag would need to parsed for each instance.
 
 So to do the example above in a  way that addresses these concerns, we can go in one of two ways, each with their advantages and disadvantages:
 
-## CSP Safe Peer script element with self-awareness enhancement [TODO]
+## Example 3c CSP Safe Peer script element with self-awareness enhancement
 
 
 ```html
