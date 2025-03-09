@@ -292,7 +292,7 @@ To do so, specify this as follows:
 </form>
 ```
 
-In particular, DSS now supports :$0 to specify the element itself as the thing that needs passing.
+In particular, DSS now supports ?.$0 to specify the element itself as the thing that needs passing.
 
 
 
