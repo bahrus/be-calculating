@@ -252,7 +252,7 @@ Once again, a framework or custom element host or local script can work in partn
     Emoji link
 </a>
 <script>
-    link.addEventListener('be-calculating', e => e.r = `https://${e.f.domain}/search?q=${e.f.search}`)
+    link.addEventListener('🧮', e => e.r = `https://${e.f.domain}/search?q=${e.f.search}`)
 </script>
 ```
 
@@ -287,7 +287,7 @@ To do so, specify this as follows:
     +<input type="number" id="b" value="25">
     =<output id=output 🧮-for="#a?.$0 and #b?.$0"></output>
     <script>
-        output.addEventListener('be-calculating', e => e.r = e.f.a.valueAsNumber + e.f.b.valueAsNumber);
+        output.addEventListener('🧮', e => e.r = e.f.a.valueAsNumber + e.f.b.valueAsNumber);
     </script>
 </form>
 ```
