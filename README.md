@@ -285,7 +285,7 @@ To do so, specify this as follows:
 <form>
     <input type="range" id="a" value="50">
     +<input type="number" id="b" value="25">
-    =<output id=output 🧮-for="#a:$0 and #b:$0"></output>
+    =<output id=output 🧮-for="#a?.$0 and #b?.$0"></output>
     <script>
         output.addEventListener('be-calculating', e => e.r = e.f.a.valueAsNumber + e.f.b.valueAsNumber);
     </script>
