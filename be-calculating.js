@@ -207,7 +207,7 @@ e.r = ${js};
             if(prop === undefined) throw 'NI';
             const ao = await ASMR.getAO(remoteEl, {
                 evt: remoteSpecifier.evt || defaultEventType,
-                selfIsVal: remoteSpecifier.path === '$0',
+                selfIsVal: remoteSpecifier.path === '?.$0',
             });
             propToAO[prop] = ao;
         }

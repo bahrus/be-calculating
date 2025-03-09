@@ -256,7 +256,7 @@ Once again, a framework or custom element host or local script can work in partn
 </script>
 ```
 
-Or we can use an inline event handler:
+Or we can use an inline event handler that is still "csp-safe":
 
 ```html
 
