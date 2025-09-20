@@ -23,7 +23,9 @@ Calculate value of the output element from peer input elements.
     +<input type=number id=b name=b value=25>
     =
 
-    <output name=result for="a b" be-calculating=+></output>
+    <output name=result
+     for="a b"
+     be-calculating=+></output>
 </form>
 ```
 
@@ -35,7 +37,8 @@ Calculate value of the output element from peer input elements.
     +<input type=number id=b name=b value=25>
     =
 
-    <output name=result for="a b" 🧮=+></output>
+    <output name=result for="a b"
+      🧮=+></output>
 </form>
 ```
 
