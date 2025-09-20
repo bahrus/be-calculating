@@ -29,7 +29,7 @@
     "be-enhanced": "0.0.187",
     "be-hive": "0.0.265",
     "mount-observer": "0.0.102",
-    "trans-render": "0.0.957"
+    "trans-render": "0.0.958"
   },
   "devDependencies": {
     "spa-ssi": "0.0.10",
