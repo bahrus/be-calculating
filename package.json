@@ -32,7 +32,7 @@
     "trans-render": "0.0.957"
   },
   "devDependencies": {
-    "spa-ssi": "0.0.9",
+    "spa-ssi": "0.0.10",
     "@playwright/test": "1.55.0"
   },
   "scripts": {
