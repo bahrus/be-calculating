@@ -199,19 +199,23 @@ e.r = ${js};
         for(const remoteSpecifier of remoteSpecifiers){
             const remoteEl = await find(enhancedElement, remoteSpecifier);
             if(!(remoteEl instanceof HTMLElement)) continue;
-            if(enhancedElement instanceof HTMLOutputElement && !enhancedElement.matches(`[for~="${remoteEl.id}"]`)){
+            if(!remoteEl.id && (enhancedElement instanceof HTMLOutputElement) && !enhancedElement.matches(`[for~="${remoteEl.id}"]`)){
                 const id = `be-calculating-${cnt}`;
                 remoteEl.id = id;
                 enhancedElement.htmlFor.add(id);
                 cnt++;
             }
-            const prop = remoteSpecifier.prop || remoteEl.dataset.id || remoteEl.id;
-            if(prop === undefined) throw 'NI';
+            let nameOfVariable = 
+                remoteSpecifier.prop === '$0' ? remoteEl.dataset.id || remoteEl.id
+                : remoteSpecifier.prop || remoteEl.dataset.id || remoteEl.id;
+            if(nameOfVariable === undefined) throw 'NI';
+            const {prop} = remoteSpecifier;
             const ao = await ASMR.getAO(remoteEl, {
                 evt: remoteSpecifier.evtName || defaultEventType,
-                selfIsVal: remoteSpecifier.path === '?.$0',
+                selfIsVal: remoteSpecifier.prop === '$0',
+                propToAbsorb: prop
             });
-            propToAO[prop] = ao;
+            propToAO[nameOfVariable] = ao;
         }
         return {
             propToAO
