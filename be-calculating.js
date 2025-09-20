@@ -172,10 +172,12 @@ e.r = ${js};
         const {forArgs, defaultEventType} = self;
         return /** @type {PAP} */ ({
             remoteSpecifiers: forArgs.map(fa  => ({
-                elS: fa,
-                prop: fa,
-                s: '#',
-                evt: defaultEventType
+                // elS: fa,
+                // prop: fa,
+                // s: '#',
+                // evt: defaultEventType
+                id: fa,
+                evtName: defaultEventType,
             })),
         });
     }
@@ -203,10 +205,10 @@ e.r = ${js};
                 enhancedElement.htmlFor.add(id);
                 cnt++;
             }
-            const {prop} = remoteSpecifier;
+            const prop = remoteSpecifier.prop || enhancedElement.dataset.id || enhancedElement.id;
             if(prop === undefined) throw 'NI';
             const ao = await ASMR.getAO(remoteEl, {
-                evt: remoteSpecifier.evt || defaultEventType,
+                evt: remoteSpecifier.evtName || defaultEventType,
                 selfIsVal: remoteSpecifier.path === '?.$0',
             });
             propToAO[prop] = ao;
