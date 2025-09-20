@@ -198,14 +198,14 @@ e.r = ${js};
 
         for(const remoteSpecifier of remoteSpecifiers){
             const remoteEl = await find(enhancedElement, remoteSpecifier);
-            if(!(remoteEl instanceof Element)) continue;
+            if(!(remoteEl instanceof HTMLElement)) continue;
             if(enhancedElement instanceof HTMLOutputElement && !enhancedElement.matches(`[for~="${remoteEl.id}"]`)){
                 const id = `be-calculating-${cnt}`;
                 remoteEl.id = id;
                 enhancedElement.htmlFor.add(id);
                 cnt++;
             }
-            const prop = remoteSpecifier.prop || enhancedElement.dataset.id || enhancedElement.id;
+            const prop = remoteSpecifier.prop || remoteEl.dataset.id || remoteEl.id;
             if(prop === undefined) throw 'NI';
             const ao = await ASMR.getAO(remoteEl, {
                 evt: remoteSpecifier.evtName || defaultEventType,
