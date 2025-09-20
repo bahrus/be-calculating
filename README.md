@@ -221,17 +221,7 @@ Up to now, we've been defaulting the event type to "input" as far as knowing whe
 
 Anything that requires subscribing to alternative or mixed event names, and/or that requires referencing nearby elements using something other than id's, needs to use an alternative to the *for* attribute.  We do so by adopting [DSS](https://github.com/bahrus/trans-render/wiki/VIII.--Directed-Scoped-Specifiers-(DSS)) to describe what to observe, and optionally when to act.
 
-## Example 3b - References by n@me
 
-```html
-<form>
-    <input type="range" name=a value="50">
-    +<input type="number" name=b value="25">
-    =<output 🧮-for="@a and @b" 🧮=+></output>
-</form>
-```
-
-This still happens to assume, by default, that the "input" event is what we should listen for, but having adopted DSS syntax, we can specify any other event name we may want.   Id's and the *for* attribute are generated automatically by *be-calculating* in order to optimize our accessibility experience (if the for attribute/htmlFor property is found to be null/undefined).
 
 
 # Part IV Applied to non output elements
