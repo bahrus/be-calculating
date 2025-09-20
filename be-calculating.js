@@ -48,8 +48,8 @@ class BeCalculating extends BE {
             enhKey:{},
         },
         compacts: {
-            when_enhElLocalName_changes_invoke_categorizeEl: 0,
-            when_handler_changes_invoke_getEvtHandler: 0,
+            when_enhElLocalName_changes_call_categorizeEl: 0,
+            when_handler_changes_call_getEvtHandler: 0,
             pass_length_of_remoteSpecifiers_to_remSpecifierLen: 0,
         },
         actions: {

@@ -26,18 +26,18 @@
     "url": "git+https://github.com/bahrus/be-calculating.git"
   },
   "dependencies": {
-    "be-enhanced": "0.0.169",
-    "be-hive": "0.0.249",
-    "mount-observer": "0.0.44",
-    "trans-render": "0.0.887"
+    "be-enhanced": "0.0.187",
+    "be-hive": "0.0.265",
+    "mount-observer": "0.0.102",
+    "trans-render": "0.0.957"
   },
   "devDependencies": {
-    "ssi-server": "0.0.1",
-    "@playwright/test": "1.51.0"
+    "spa-ssi": "0.0.9",
+    "@playwright/test": "1.55.0"
   },
   "scripts": {
     "test": "playwright test",
-    "serve": "python3 ./node_modules/ssi-server/ssi_server.py",
+    "serve": "node ./node_modules/spa-ssi/serve.js",
     "safari": "npx playwright wk http://localhost:8000",
     "update": "ncu -u && npm install"
   },
