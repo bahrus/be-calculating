@@ -4,19 +4,22 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Example 2a</title>
+    <title>Example 2a - Global Registry</title>
     <!-- #include virtual="/imports.html" -->
+    <be-hive>
+        <script type=emc src="be-calculating/🧮.json"></script>
+    </be-hive>
+    <script type=module>
+        import 'be-hive/be-hive.js';
+        import {register} from 'be-calculating/🧮.js';
+        register('linear', e => e.r = e.f.m * e.f.x + e.f.b);
+    </script>
 </head>
 <body>
-    <script type=module>
-        import {register} from '/🧮.js';
-        register('linear', e => e.r = e.f.m * e.f.x + e.f.b );
-    </script>
-    
     <form>
         <label>
             m
-         <input type=number id=m value=2>
+            <input type=number id=m value=2>
         </label>
         <label>
             x
@@ -31,10 +34,5 @@
     
         <output name=result for="m x b" 🧮=linear></output>
     </form>
-
-    <script type=module>
-        import '/🧮.js'
-    </script>
-
 </body>
 </html>

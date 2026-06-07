@@ -4,19 +4,21 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Example 1c</title>
+    <title>Example 1c - Max</title>
     <!-- #include virtual="/imports.html" -->
+    <be-hive>
+        <script type=emc src="be-calculating/🧮.json"></script>
+    </be-hive>
+    <script type=module>
+        import 'be-hive/be-hive.js';
+    </script>
 </head>
 <body>
     <form>
-        <input type="range" id="a" value="50">
-        +<input type="number" id="b" value="25">
-        =<output for="a b" 🧮=max ></output>
+        max( <input type=range id=a name=a value=50>
+        ,<input type=number id=b name=b value=25>)
+        =
+        <output name=result for="a b" 🧮=max></output>
     </form>
-
-    <script type=module>
-        import '/🧮.js';
-    </script>
-
 </body>
 </html>

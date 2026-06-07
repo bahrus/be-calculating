@@ -4,29 +4,33 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Example 2c</title>
+    <title>Example 2c - CSP Safe JS Expression</title>
     <!-- #include virtual="/imports.html" -->
+    <be-hive>
+        <script type=emc src="be-calculating/🧮.json"></script>
+    </be-hive>
+    <script type=module>
+        import 'be-hive/be-hive.js';
+    </script>
 </head>
 <body>
-    <div>
-        <template shadowrootmode=open>
-        <be-hive></be-hive>
-        <script type=module blocking=render>
-            (await import('/🧮.js'))
-            .w('#QkV8sbnus0SQPVBMxKuVLw')
-            .p(e => e.r = e.f.a**e.f.b)
-        </script>
-        <form >
-            <input type=range id=a name=a value=50>
-            +<input type=number id=b name=b value=25>
-            =
-            <output id=QkV8sbnus0SQPVBMxKuVLw name=result for="a b" 🧮></output>
-        </form>
-    </div>
-
-    <script type=module>
-        import '/🧮.js';
-    </script>
-
+    <form>
+        <label>
+            m
+            <input type=number id=m value=2>
+        </label>
+        <label>
+            x
+            <input type=number id=x value=2>
+        </label>
+         
+        + <label>
+            b
+            <input type=number id=b value=25>
+        </label>
+        =
+    
+        <output name=result for="m x b" 🧮-js="f.m * f.x + f.b"></output>
+    </form>
 </body>
 </html>

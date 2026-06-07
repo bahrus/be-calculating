@@ -4,11 +4,16 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Example 4a</title>
+    <title>Example 4a - Non-output Element</title>
     <!-- #include virtual="/imports.html" -->
+    <be-hive>
+        <script type=emc src="be-calculating/🧮.json"></script>
+    </be-hive>
+    <script type=module>
+        import 'be-hive/be-hive.js';
+    </script>
 </head>
 <body>
-    
     <input id=domain value=emojipedia.org>
     <input id=search value=calculator>
     <a id=link 🧮 🧮-for="#domain #search">
@@ -17,10 +22,5 @@
     <script>
         link.addEventListener('🧮', e => e.r = `https://${e.f.domain}/search?q=${e.f.search}`)
     </script>
-
-    <script type=module>
-        import '/🧮.js'
-    </script>
-
 </body>
 </html>
