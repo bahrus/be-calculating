@@ -44,7 +44,7 @@ export const emc = {
                 ifAllOf: ['defaultEventType', 'remSpecifierLen']
             },
             hydrate: {
-                ifAllOf: ['checkedRegistry', 'propToAO'],
+                ifAllOf: ['checkedRegistry', 'propToInfer'],
                 ifNotAllOf: ['js', 'notYetParsedJS']
             },
             parseJS: {

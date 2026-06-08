@@ -1,9 +1,10 @@
 // @ts-check
-/** @import {Actions, PAP, AllProps, AP, RemoteSpecifier, AbsorbingObject} from './types/be-calculating/types' */;
+/** @import {Actions, PAP, AllProps, AP, RemoteSpecifier} from './types/be-calculating/types' */;
 /** @import {RoundaboutOptions} from './types/roundabout/types' */;
 /** @import {ElementEnhancementGateway, SpawnContext} from './types/assign-gingerly/types' */;
 /** @import {EMC} from './types/mount-observer/types' */;
 /** @import {RAConfig} from './types/roundabout/types' */;
+/** @import {Infer} from './types/inferencer/types' */;
 
 import {CalcEvent, rguid, Registry, aggs} from 'be-calculating/CalcRegistry.js';
 
@@ -174,13 +175,13 @@ e.r = ${js};
      */
     async seek(self) {
         const {remoteSpecifiers, enhancedElement, defaultEventType} = self;
-        const {find} = await import('trans-render/dss/find.js');
-        const {ASMR} = await import('trans-render/asmr/asmr.js');
-        /** @type {{[key: string]: AbsorbingObject}} */
-        const propToAO = {};
+        const {upSearch} = await import('inferencer/upSearch.js');
+        const {Infer} = await import('inferencer/inferencer.js');
+        /** @type {{[key: string]: Infer}} */
+        const propToInfer = {};
 
         for (const remoteSpecifier of remoteSpecifiers) {
-            const remoteEl = await find(enhancedElement, remoteSpecifier);
+            const remoteEl = await upSearch(enhancedElement, remoteSpecifier.id);
             if (!(remoteEl instanceof HTMLElement)) continue;
             if (!remoteEl.id && (enhancedElement instanceof HTMLOutputElement) && !enhancedElement.matches(`[for~="${remoteEl.id}"]`)) {
                 const id = `be-calculating-${cnt}`;
@@ -193,15 +194,11 @@ e.r = ${js};
                 : remoteSpecifier.prop || remoteEl.dataset.id || remoteEl.id;
             if (nameOfVariable === undefined) throw 'NI';
             const {prop} = remoteSpecifier;
-            const ao = await ASMR.getAO(remoteEl, {
-                evt: remoteSpecifier.evtName || defaultEventType,
-                selfIsVal: remoteSpecifier.prop === '$0',
-                propToAbsorb: prop
-            });
-            propToAO[nameOfVariable] = ao;
+            const infer = new Infer(remoteEl, prop);
+            propToInfer[nameOfVariable] = infer;
         }
         return {
-            propToAO
+            propToInfer
         };
     }
 
@@ -217,10 +214,11 @@ e.r = ${js};
             this.#ac = new AbortController();
         }
         const ac = this.#ac;
-        const {propToAO} = self;
-        const aos = Object.values(propToAO);
-        for (const ao of aos) {
-            ao.addEventListener('.', this, {signal: ac.signal});
+        const {propToInfer} = self;
+        for (const name in propToInfer) {
+            const infer = propToInfer[name];
+            const propagator = await infer.getPropagator();
+            propagator.addEventListener(infer.valueProperty, this, {signal: ac.signal});
         }
         this.handleEvent();
         return {
@@ -233,12 +231,12 @@ e.r = ${js};
 
     async handleEvent() {
         const self = /** @type {AP} */ (/** @type {any} */ (this));
-        const {enhancedElement, propToAO, handlerObj, isOutputEl, enhKey} = self;
+        const {enhancedElement, propToInfer, handlerObj, isOutputEl, enhKey} = self;
         const obj = {};
         const args = [];
-        for (const prop in propToAO) {
-            const ao = propToAO[prop];
-            const val = await ao.getValue();
+        for (const prop in propToInfer) {
+            const infer = propToInfer[prop];
+            const val = infer.enhancedElement[infer.valueProperty];
             args.push(val);
             obj[prop] = val;
         }
@@ -259,10 +257,10 @@ e.r = ${js};
                 enhancedElement.dispatchEvent(new Event('output'));
             } else {
                 if (this.#so === undefined) {
-                    const {ASMR} = await import('trans-render/asmr/asmr.js');
-                    this.#so = await ASMR.getSO(enhancedElement);
+                    const {Infer} = await import('inferencer/inferencer.js');
+                    this.#so = new Infer(enhancedElement);
                 }
-                this.#so.setValue(r);
+                this.#so.value = r;
             }
         }
     }

@@ -32,7 +32,7 @@ Call log:
 - text: +
 - spinbutton: "25"
 - text: =
-- status
+- status: "05025"
 ```
 
 # Test source
