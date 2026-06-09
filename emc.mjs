@@ -20,6 +20,7 @@ export const emc = {
             forAttr: '${base}-for',
             eventArg: '${base}-on',
             js: '${base}-js',
+            format: '${base}-format',
         }
     },
     customData: {

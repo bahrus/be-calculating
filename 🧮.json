@@ -10,7 +10,8 @@
             },
             "forAttr": "${base}-for",
             "eventArg": "${base}-on",
-            "js": "${base}-js"
+            "js": "${base}-js",
+            "format": "${base}-format"
         }
     },
     "customData": {

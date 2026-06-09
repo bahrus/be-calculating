@@ -227,6 +227,24 @@ Anything that requires subscribing to alternative or mixed event names, and/or t
 
 
 
+## Output formatting
+
+When the calculated result is a number and the target is an `<output>` element, *be-calculating* applies `toLocaleString()` by default for human-friendly display:
+
+```html
+<output for="a b" 🧮=+></output>
+<!-- displays "2,844,444,530" for large numbers -->
+```
+
+To disable formatting and display the raw numeric value, use `🧮-format="none"`:
+
+```html
+<output for="a b" 🧮=+ 🧮-format="none"></output>
+<!-- displays "2844444530" -->
+```
+
+> **TODO:** Support specifying exact formatting options (e.g., currency, fixed decimals) via the `🧮-format` attribute, potentially leveraging [*be-intl*](https://github.com/bahrus/be-intl) for full `Intl.NumberFormat` integration.
+
 # Part IV Applied to non output elements
 
 This enhancement also supports other elements. 

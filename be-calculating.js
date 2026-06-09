@@ -253,7 +253,11 @@ e.r = ${js};
         const {r} = event;
         if (r !== rguid) {
             if (isOutputEl) {
-                /** @type {HTMLOutputElement} */ (enhancedElement).value = r;
+                const {format} = self;
+                const displayVal = (typeof r === 'number' && format !== 'none')
+                    ? r.toLocaleString()
+                    : r;
+                /** @type {HTMLOutputElement} */ (enhancedElement).value = displayVal;
                 enhancedElement.dispatchEvent(new Event('output'));
             } else {
                 if (this.#so === undefined) {
