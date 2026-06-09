@@ -123,10 +123,11 @@ e.r = ${js};
      * @returns {PAP}
      */
     categorizeEl(self) {
-        const {enhElLocalName} = self;
+        const {enhElLocalName, handler} = self;
         return /** @type {PAP} */ ({
             isOutputEl: enhElLocalName === 'output',
             categorized: true,
+            ...(!handler ? {checkedRegistry: true} : {}),
         });
     }
 
