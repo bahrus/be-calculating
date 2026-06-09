@@ -215,11 +215,18 @@ e.r = ${js};
             this.#ac = new AbortController();
         }
         const ac = this.#ac;
-        const {propToInfer} = self;
+        const {propToInfer, defaultEventType} = self;
         for (const name in propToInfer) {
             const infer = propToInfer[name];
-            const propagator = await infer.getPropagator();
-            propagator.addEventListener(infer.valueProperty, this, {signal: ac.signal});
+            const inferredEvt = infer.eventType;
+            if (defaultEventType !== inferredEvt) {
+                // Explicit event type specified — listen on the element directly
+                infer.enhancedElement.addEventListener(defaultEventType, this, {signal: ac.signal});
+            } else {
+                // Use the propagator for inferred event detection
+                const propagator = await infer.getPropagator();
+                propagator.addEventListener(infer.valueProperty, this, {signal: ac.signal});
+            }
         }
         this.handleEvent();
         return {
