@@ -84,18 +84,18 @@ class BeCalculating {
     }
 
     /**
-     * Parse the 🧮-for attribute for non-output elements using DSS syntax.
+     * Parse the 🧮-for attribute for non-output elements.
+     * Supports space-separated ID references (with or without # prefix).
      * @param {AP} self
-     * @returns {Promise<PAP>}
+     * @returns {PAP}
      */
-    async parseForAttrDSS(self) {
+    parseForAttrDSS(self) {
         const {forAttr, defaultEventType} = self;
-        const {DSSArray} = await import('trans-render/DSSArray.js');
-        const remoteSpecifiers = await DSSArray.parse(forAttr);
-        // Ensure each specifier has an event name
-        for (const spec of remoteSpecifiers) {
-            if (!spec.evtName) spec.evtName = defaultEventType;
-        }
+        const ids = forAttr.trim().split(/\s+/).map(ref => ref.startsWith('#') ? ref.slice(1) : ref);
+        const remoteSpecifiers = ids.map(id => ({
+            id,
+            evtName: defaultEventType,
+        }));
         return /** @type {PAP} */ ({
             remoteSpecifiers
         });
