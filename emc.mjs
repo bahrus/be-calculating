@@ -31,6 +31,9 @@ export const emc = {
             getDefltEvtType: {
                 ifAllOf: ['enhElLocalName', 'categorized']
             },
+            getEvtHandler: {
+                ifAtLeastOneOf: ['handler', 'js']
+            },
             parseForAttr: {
                 ifAllOf: ['forAttr', 'isOutputEl']
             },
@@ -54,7 +57,6 @@ export const emc = {
         },
         compacts: {
             when_enhElLocalName_changes_call_categorizeEl: 0,
-            when_handler_changes_call_getEvtHandler: 0,
             pass_length_of_remoteSpecifiers_to_remSpecifierLen: 0,
         },
         defaultPropVals: {
