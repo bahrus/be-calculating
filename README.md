@@ -13,7 +13,8 @@ Calculate the (text) value of the adorned element based on peer element (text) v
 
 ## Why not just use a component with a computed property?
 
-> "Shouldn't we host this form within a component (custom element or framework) and calculate the sum as a computed property or expression, then bind the UI to that?"
+<details>
+<summary>Shouldn't we host this form within a component and calculate the sum as a computed property or expression, then bind the UI to that?</summary>
 
 The component/computed-property approach is valid and often appropriate. But it carries assumptions that don't always hold:
 
@@ -28,6 +29,8 @@ The component/computed-property approach is valid and often appropriate. But it 
 5. **Composition over encapsulation.** Enhancements compose with any element in any context — inside components, across shadow boundaries, in server-rendered partials. A computed property is locked to its component's scope.
 
 That said — if you already have a component managing form state, and the calculation depends on private internal state, a computed property is the right tool. *be-calculating* shines when the inputs and outputs are visible in the DOM and the calculation is a peer-to-peer relationship, not an internal implementation detail.
+
+</details>
 
 # Part I  Enhancing the output element with built in aggregators
 
