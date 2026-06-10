@@ -11,6 +11,24 @@ Calculate the (text) value of the adorned element based on peer element (text) v
 
 *be-calculating* is basically the code-first counterpoint to the declarative [*be-observant*](https://github.com/bahrus/be-observant) enhancement, when the full power of the JavaScript run time engine is needed from the get-go.
 
+## Why not just use a component with a computed property?
+
+> "Shouldn't we host this form within a component (custom element or framework) and calculate the sum as a computed property or expression, then bind the UI to that?"
+
+The component/computed-property approach is valid and often appropriate. But it carries assumptions that don't always hold:
+
+1. **Not everything lives inside a component.** Server-rendered HTML, CMS output, static sites, progressive enhancement scenarios — these produce markup that isn't wrapped in a component boundary. Adding a custom element just to compute `a + b` is ceremony without substance.
+
+2. **The output element already exists for this purpose.** HTML has `<output for="a b">` — a native element designed to display calculated results from form inputs. Frameworks ignore it because it doesn't fit their data-binding model. This enhancement makes it work as intended.
+
+3. **Coupling vs. cohesion.** A component binds the calculation to a specific template structure. *be-calculating* binds it to the *relationship between elements* — which is what `for` already expresses declaratively. Move the elements, rename the component, refactor the template — the enhancement still works as long as the IDs exist.
+
+4. **Granularity.** Not every derived value justifies a component with state management, lifecycle hooks, and a shadow DOM. Sometimes you just want `a + b = output`. The cognitive overhead should match the complexity of the task.
+
+5. **Composition over encapsulation.** Enhancements compose with any element in any context — inside components, across shadow boundaries, in server-rendered partials. A computed property is locked to its component's scope.
+
+That said — if you already have a component managing form state, and the calculation depends on private internal state, a computed property is the right tool. *be-calculating* shines when the inputs and outputs are visible in the DOM and the calculation is a peer-to-peer relationship, not an internal implementation detail.
+
 # Part I  Enhancing the output element with built in aggregators
 
 Calculate value of the output element from peer input elements.
