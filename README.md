@@ -220,13 +220,6 @@ Up to now, we've been defaulting the event type to "input" as far as knowing whe
 </form>
 ```
 
-## Alternative element references and/or event names for each observed element
-
-Anything that requires subscribing to alternative or mixed event names, and/or that requires referencing nearby elements using something other than id's, needs to use an alternative to the *for* attribute.  We do so by adopting [DSS](https://github.com/bahrus/trans-render/wiki/VIII.--Directed-Scoped-Specifiers-(DSS)) to describe what to observe, and optionally when to act.
-
-
-
-
 ## Output formatting
 
 When the calculated result is a number and the target is an `<output>` element, *be-calculating* applies `toLocaleString()` by default for human-friendly display:
@@ -284,26 +277,24 @@ Or we can use an inline event handler that is still "csp-safe":
 
 In the examples above, we engaged in "mind reading" in order to pass to the event handler the precise values we want to use in order to calculate the result.
 
-The DSS syntax this package relies on allows us to override these mind readings, and specify which property to pass.  
-
 But what if you encounter this situation:
 
-> Thanks but no thanks to all your "mind reading" -- could you please just pass in the dependent elements when they change? I have full, unfettered access to the JavaScript engine, so I can just extract things out of the elements that I need without your help!
+> Thanks but no thanks to all your "mind reading" — could you please just pass in the dependent elements when they change? I have full, unfettered access to the JavaScript engine, so I can just extract things out of the elements that I need without your help!
 
-To do so, specify this as follows:
+To do so, add the `🧮-raw` attribute:
 
 ```html
 <form>
     <input type="range" id="a" value="50">
     +<input type="number" id="b" value="25">
-    =<output id=output 🧮-for="#a?.$0 and #b?.$0"></output>
+    =<output id=output for="a b" 🧮 🧮-raw></output>
     <script>
         output.addEventListener('🧮', e => e.r = e.f.a.valueAsNumber + e.f.b.valueAsNumber);
     </script>
 </form>
 ```
 
-In particular, DSS now supports ?.$0 to specify the element itself as the thing that needs passing.
+When `🧮-raw` is present, `e.f.a` and `e.f.b` are the actual DOM elements rather than their inferred values. This gives the handler full control over what to extract.
 
 
 

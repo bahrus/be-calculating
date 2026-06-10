@@ -215,17 +215,23 @@ e.r = ${js};
             this.#ac = new AbortController();
         }
         const ac = this.#ac;
-        const {propToInfer, defaultEventType} = self;
+        const {propToInfer, defaultEventType, raw} = self;
+        const isRaw = raw !== undefined;
         for (const name in propToInfer) {
             const infer = propToInfer[name];
-            const inferredEvt = infer.eventType;
-            if (defaultEventType !== inferredEvt) {
-                // Explicit event type specified — listen on the element directly
+            if (isRaw) {
+                // Raw mode — listen on the element directly
                 infer.enhancedElement.addEventListener(defaultEventType, this, {signal: ac.signal});
             } else {
-                // Use the propagator for inferred event detection
-                const propagator = await infer.getPropagator();
-                propagator.addEventListener(infer.valueProperty, this, {signal: ac.signal});
+                const inferredEvt = infer.eventType;
+                if (defaultEventType !== inferredEvt) {
+                    // Explicit event type specified — listen on the element directly
+                    infer.enhancedElement.addEventListener(defaultEventType, this, {signal: ac.signal});
+                } else {
+                    // Use the propagator for inferred event detection
+                    const propagator = await infer.getPropagator();
+                    propagator.addEventListener(infer.valueProperty, this, {signal: ac.signal});
+                }
             }
         }
         this.handleEvent();
@@ -239,12 +245,13 @@ e.r = ${js};
 
     async handleEvent() {
         const self = /** @type {AP} */ (/** @type {any} */ (this));
-        const {enhancedElement, propToInfer, handlerObj, isOutputEl, enhKey} = self;
+        const {enhancedElement, propToInfer, handlerObj, isOutputEl, enhKey, raw} = self;
+        const isRaw = raw !== undefined;
         const obj = {};
         const args = [];
         for (const prop in propToInfer) {
             const infer = propToInfer[prop];
-            const val = infer.enhancedElement[infer.valueProperty];
+            const val = isRaw ? infer.enhancedElement : infer.enhancedElement[infer.valueProperty];
             args.push(val);
             obj[prop] = val;
         }

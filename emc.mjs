@@ -21,6 +21,7 @@ export const emc = {
             eventArg: '${base}-on',
             js: '${base}-js',
             format: '${base}-format',
+            raw: '${base}-raw',
         }
     },
     customData: {

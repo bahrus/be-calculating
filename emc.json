@@ -11,7 +11,8 @@
             "forAttr": "${base}-for",
             "eventArg": "${base}-on",
             "js": "${base}-js",
-            "format": "${base}-format"
+            "format": "${base}-format",
+            "raw": "${base}-raw"
         }
     },
     "customData": {
