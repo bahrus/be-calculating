@@ -86,10 +86,9 @@ Unfortunately, the platform has proven to be quite unfriendly to HTML-first solu
 The developer can create a custom calculating function, as shown below.  Doing so will cascade through the page into any ShadowDOM realms.  The advantages is it makes it highly reusable.  The thing to be cautious about is that it is "global" within the confines of all the elements adorned by the 🧮 attribute.
 
 ```html
-<script type=module blocking=render>
-    (await (import'be-calculating/🧮.js'))
-        .register('linear', e => e.r = e.f.m * e.f.x + e.f.b)
-    ;
+<script type=module>
+    import {register} from 'be-calculating/🧮.js';
+    register('linear', e => e.r = e.f.m * e.f.x + e.f.b);
 </script>
 
 <form>
@@ -119,7 +118,7 @@ So the event provides the "f" property, which is basically the factors we want t
 But in some cases, we don't want to base our expression on the names or id's of the elements, but instead on the position (or maybe the arguments are all treated the same). So we can apply our expression to the  the array of arguments corresponding to the elements.  In fact, the examples in part I were using reducers based on the args property of the event.  So built in to 🧮 are registered event handlers such as
 
 ```JavaScript
-Registry.register(emc, '+', e => e.r = e.args.reduce((acc, arg) => acc + arg));
+Registry.register('+', e => e.r = e.args.reduce((acc, arg) => acc + arg));
 ```
 
 ## Example 2b  Traditional local event handler
@@ -160,7 +159,7 @@ The example above, while simple has a number of issues:
 
 So to do the example above in a  way that addresses these concerns, we can go in one of two ways, each with their advantages and disadvantages:
 
-## Example 3c CSP Safe Peer script element with self-awareness enhancement
+## Example 2c CSP Safe inline JS expression
 
 
 ```html
@@ -250,9 +249,9 @@ Once again, a framework or custom element host or local script can work in partn
 
 ```html
 
-<input name=domain value=emojipedia.org>
-<input name=search value=calculator>
-<a id=link 🧮-for="@domain and @search">
+<input id=domain value=emojipedia.org>
+<input id=search value=calculator>
+<a id=link 🧮 🧮-for="domain search">
     Emoji link
 </a>
 <script>
@@ -264,9 +263,9 @@ Or we can use an inline event handler that is still "csp-safe":
 
 ```html
 
-<input name=domain value=emojipedia.org>
-<input name=search value=calculator>
-<a id=link 🧮-for="@domain and @search" 🧮-js="`https://${f.domain}/search?q=${f.search}`">
+<input id=domain value=emojipedia.org>
+<input id=search value=calculator>
+<a id=link 🧮-for="domain search" 🧮-js="`https://${f.domain}/search?q=${f.search}`">
     Emoji link
 </a>
 ```
