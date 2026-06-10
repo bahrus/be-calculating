@@ -1,6 +1,6 @@
 # be-calculating (🧮) 
 
-[![The Plan](https://www.berfrois.com/uploads/2011/06/rr3.jpg)](https://www.berfrois.com/2011/06/wile-e-coyote-pursues-road-runner/)
+> *"A calculating mind is a terrible thing to waste."* — [Wile E. Coyote, Super Genius](https://en.wikipedia.org/wiki/Wile_E._Coyote_and_the_Road_Runner)
 
 [![Playwright Tests](https://github.com/bahrus/be-calculating/actions/workflows/CI.yml/badge.svg?branch=baseline)](https://github.com/bahrus/be-calculating/actions/workflows/CI.yml)
 [![How big is this package in your project?](https://img.shields.io/bundlephobia/minzip/be-calculating?style=for-the-badge)](https://bundlephobia.com/result?p=be-calculating)
