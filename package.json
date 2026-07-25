@@ -26,16 +26,16 @@
     "url": "git+https://github.com/bahrus/be-calculating.git"
   },
   "dependencies": {
-    "be-hive": "0.1.13",
-    "inferencer": "0.0.10",
-    "mount-observer": "0.1.39",
-    "roundabout-lib": "0.0.21",
-    "nested-regex-groups": "0.0.6",
+    "assign-gingerly": "0.0.64",
+    "be-hive": "0.1.15",
+    "mount-observer": "0.1.43",
+    "roundabout-lib": "0.0.28",
+    "nested-regex-groups": "0.0.7",
     "trans-render": "0.0.961"
   },
   "devDependencies": {
     "spa-ssi": "0.0.27",
-    "@playwright/test": "1.60.0"
+    "@playwright/test": "1.62.0"
   },
   "scripts": {
     "build": "node build.mjs",

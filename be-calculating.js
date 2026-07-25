@@ -176,8 +176,8 @@ e.r = ${js};
      */
     async seek(self) {
         const {remoteSpecifiers, enhancedElement, defaultEventType} = self;
-        const {upSearch} = await import('inferencer/upSearch.js');
-        const {Infer} = await import('inferencer/inferencer.js');
+        const {upSearch} = await import('assign-gingerly/inferencer/upSearch.js');
+        const {Infer} = await import('assign-gingerly/inferencer/inferencer.js');
         /** @type {{[key: string]: Infer}} */
         const propToInfer = {};
 
@@ -276,7 +276,7 @@ e.r = ${js};
                 enhancedElement.dispatchEvent(new Event('output'));
             } else {
                 if (this.#so === undefined) {
-                    const {Infer} = await import('inferencer/inferencer.js');
+                    const {Infer} = await import('assign-gingerly/inferencer/inferencer.js');
                     this.#so = new Infer(enhancedElement);
                 }
                 this.#so.value = r;
