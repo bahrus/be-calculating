@@ -26,7 +26,7 @@
     "url": "git+https://github.com/bahrus/be-calculating.git"
   },
   "dependencies": {
-    "assign-gingerly": "0.0.87",
+    "assign-gingerly": "0.0.93",
     "be-hive": "0.1.18",
     "mount-observer": "0.1.53",
     "roundabout-lib": "0.0.36",
@@ -34,7 +34,7 @@
     "trans-render": "0.0.961"
   },
   "devDependencies": {
-    "spa-ssi": "0.0.27",
+    "spa-ssi": "0.0.28",
     "@playwright/test": "1.62.1"
   },
   "scripts": {
