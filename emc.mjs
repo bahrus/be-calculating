@@ -9,7 +9,7 @@
  */
 export const emc = {
     enhConfig: {
-        enhKey: 'be-calculating',
+        enhKey: 'beCalculating',
         spawn: 'be-calculating/be-calculating.js',
         withAttrs: {
             base: 'be-calculating',
