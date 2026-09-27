@@ -30,10 +30,17 @@ export const emc = {
         },
         actions: {
             getDefltEvtType: {
-                ifAllOf: ['enhElLocalName', 'categorized']
+                // eventArg is listed so roundabout monitors it -- otherwise an
+                // imperatively set eventArg is clobbered by defaultPropVals.
+                ifAllOf: ['enhElLocalName', 'categorized', 'eventArg']
             },
+            // Runs once initialized (a handler set imperatively before roundabout
+            // finishes never registers as a change), then on every handler change.
+            // It is the only action that sets checkedRegistry, so hydrate never
+            // runs before the handler is resolved.
             getEvtHandler: {
-                ifAtLeastOneOf: ['handler', 'js']
+                ifKeyIn: ['initialized', 'handler'],
+                ifAllOf: ['initialized']
             },
             parseForAttr: {
                 ifAllOf: ['forAttr', 'isOutputEl']
@@ -49,11 +56,11 @@ export const emc = {
                 ifAllOf: ['defaultEventType', 'remSpecifierLen']
             },
             hydrate: {
-                ifAllOf: ['checkedRegistry', 'propToInfer'],
+                ifAllOf: ['checkedRegistry', 'propToInfer', 'initialized'],
                 ifNotAllOf: ['js', 'notYetParsedJS']
             },
             parseJS: {
-                ifAllOf: ['js', 'notYetParsedJS']
+                ifAllOf: ['js', 'notYetParsedJS', 'initialized']
             }
         },
         compacts: {

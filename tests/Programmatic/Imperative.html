@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Programmatic imperative</title>
+    <!-- #include virtual="/imports.html" -->
+</head>
+<body>
+    <input id=domain value=emojipedia.org>
+    <input id=search value=calculator>
+    <a id=link>Emoji link</a>
+    <script type=module>
+        import {defBeCalculating} from '/def.js';
+        const emc = await defBeCalculating(document.body);
+        const beCalculating = link.enh.get(emc);
+        Object.assign(beCalculating, {
+            forAttr: ['domain', 'search'],
+            // a handler function can be passed directly -- no registry, no event listener.
+            handler: e => e.r = `https://${e.f.domain}/search?q=${e.f.search}`,
+        });
+    </script>
+    <div id=target></div>
+    <script type=module>
+        setTimeout(() => {
+            if(link.href === 'https://emojipedia.org/search?q=calculator') target.setAttribute('mark', 'good');
+        }, 1000);
+    </script>
+</body>
+</html>

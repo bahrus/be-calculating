@@ -25,13 +25,17 @@
             "getDefltEvtType": {
                 "ifAllOf": [
                     "enhElLocalName",
-                    "categorized"
+                    "categorized",
+                    "eventArg"
                 ]
             },
             "getEvtHandler": {
-                "ifAtLeastOneOf": [
-                    "handler",
-                    "js"
+                "ifKeyIn": [
+                    "initialized",
+                    "handler"
+                ],
+                "ifAllOf": [
+                    "initialized"
                 ]
             },
             "parseForAttr": {
@@ -65,7 +69,8 @@
             "hydrate": {
                 "ifAllOf": [
                     "checkedRegistry",
-                    "propToInfer"
+                    "propToInfer",
+                    "initialized"
                 ],
                 "ifNotAllOf": [
                     "js",
@@ -75,7 +80,8 @@
             "parseJS": {
                 "ifAllOf": [
                     "js",
-                    "notYetParsedJS"
+                    "notYetParsedJS",
+                    "initialized"
                 ]
             }
         },

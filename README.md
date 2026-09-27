@@ -318,6 +318,50 @@ To do so, add the `🧮-raw` attribute:
 
 When `🧮-raw` is present, `e.f.a` and `e.f.b` are the actual DOM elements rather than their inferred values. This gives the handler full control over what to extract.
 
+# Part V Programmatic attachment (no attribute)
+
+Frameworks that render on the client can attach be-calculating without any attribute.  First register the enhancement's config once:
+
+```JS
+import { defBeCalculating } from 'be-calculating/def.js';
+const emc = await defBeCalculating(document.body); // or a shadow root's host, for a scoped registry
+```
+
+Then set properties matching the attributes:
+
+| Attribute                                | Property    | Notes                                                                 |
+|------------------------------------------|-------------|-----------------------------------------------------------------------|
+| `for` / `🧮-for`                          | `forAttr`   | Space-separated string, or an array of IDs.  Works for output elements without a `for` attribute too. |
+| `🧮`                                      | `handler`   | Name of a built-in / registered handler (`'+'`, `'max'`, ...), or the handler function itself. |
+| `🧮-on`                                   | `eventArg`  | Defaults to `'input'`.                                                |
+| `🧮-js`                                   | `js`        |                                                                       |
+| `🧮-format`                               | `format`    |                                                                       |
+| `🧮-raw`                                  | `raw`       | `true` to turn on raw mode.                                           |
+
+### Declarative -- via `enh.set`
+
+```JS
+// equivalent to <output for="a b" 🧮=+>
+output.enh.set.beCalculating.forAttr = ['a', 'b'];
+output.enh.beCalculating.handler = '+';
+```
+
+Only the first property needs `.set` -- it triggers the attachment.  This can be done before or after `defBeCalculating` has been called.
+
+### Imperative -- via `enh.get()`
+
+```JS
+// equivalent to Example 4a, but with the handler passed in directly
+Object.assign(link.enh.get(emc), {
+    forAttr: ['domain', 'search'],
+    handler: e => e.r = `https://${e.f.domain}/search?q=${e.f.search}`,
+});
+```
+
+When attached programmatically, the event dispatched on the element is named `beCalculating` rather than `🧮`, so prefer passing `handler` as a function over adding an event listener.
+
+See [demo/Programmatic](demo/Programmatic/) for runnable examples.
+
 
 
 

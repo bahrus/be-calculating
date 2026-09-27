@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Programmatic imperative with eventArg</title>
+    <!-- #include virtual="/imports.html" -->
+</head>
+<body>
+    <form>
+        <input type=range id=a value=50>
+        +<input type=number id=b value=25>
+        =<output id=output></output>
+    </form>
+    <script type=module>
+        import {defBeCalculating} from '/def.js';
+        const emc = await defBeCalculating(document.body);
+        // equivalent to <output for="a b" be-calculating=+ be-calculating-on=change>
+        Object.assign(output.enh.get(emc), {
+            forAttr: 'a b',
+            handler: '+',
+            eventArg: 'change',
+        });
+    </script>
+</body>
+</html>

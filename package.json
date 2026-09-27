@@ -13,11 +13,15 @@
   "exports": {
     ".": "./be-calculating.js",
     "./be-calculating.js": "./be-calculating.js",
-    "./emc.js": "./emc.js",
+    "./CalcRegistry.js": "./CalcRegistry.js",
+    "./def.js": "./def.js",
+    "./emc.json": "./emc.json",
+    "./🧮.json": "./🧮.json",
     "./🧮.js": "./🧮.js"
   },
   "files": [
     "*.js",
+    "*.json",
     "types.d.ts"
   ],
   "types": "types.d.ts",

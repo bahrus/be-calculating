@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Programmatic declarative out of sequence</title>
+    <!-- #include virtual="/imports.html" -->
+</head>
+<body>
+    <form>
+        <input type=range id=a value=50>
+        *<input type=number id=b value=25>
+        =<output id=output></output>
+    </form>
+    <script type=module>
+        import {defBeCalculating} from '/def.js';
+        // set before the config is registered -- the spawn is deferred until defBeCalculating runs.
+        output.enh.set.beCalculating.forAttr = ['a', 'b'];
+        output.enh.beCalculating.handler = '*';
+        await defBeCalculating(document.body);
+    </script>
+</body>
+</html>

@@ -33,7 +33,7 @@ class BeCalculating {
      * @param {PAP} initVals
      */
     async init(self, enhancedElement, ctx, initVals) {
-        const {customData} = /** @type {EMC<any, AllProps, Element, RAConfig<AllProps, Actions>>} */ (ctx.emc);
+        const {customData} = /** @type {EMC<any, AllProps, Element, RAConfig<AllProps, Actions>>} */ (ctx.emc || ctx.config);
         // For output elements, read the native 'for' attribute as forAttr
         const isOutput = enhancedElement.localName === 'output';
         const nativeFor = isOutput && enhancedElement.hasAttribute('for') 
@@ -47,13 +47,14 @@ class BeCalculating {
                 enhancedElement,
                 ...customData?.defaultPropVals,
                 enhElLocalName: enhancedElement.localName,
-                enhKey: ctx.emc?.enhConfig?.enhKey || 'be-calculating',
+                enhKey: (ctx.emc?.enhConfig ?? ctx.config)?.enhKey || 'be-calculating',
                 customHandlers: Registry.getHandlers(),
                 ...(nativeFor ? {forAttr: nativeFor} : {}),
                 ...initVals
             }
         };
-        (await import('roundabout-lib/roundabout.js')).roundabout(raOptions);
+        await (await import('roundabout-lib/roundabout.js')).roundabout(raOptions);
+        self.initialized = true;
     }
 
     /**
@@ -77,22 +78,24 @@ class BeCalculating {
             this.#ignoreForAttr = false;
             return {};
         }
-        const {enhancedElement} = self;
+        // forAttr is seeded from the native for attribute in init, but may
+        // also be set programmatically on an output element with no for attribute.
+        const {forAttr} = self;
         return {
-            forArgs: Array.from(/** @type {HTMLOutputElement} */ (enhancedElement).htmlFor)
+            forArgs: toIds(forAttr)
         };
     }
 
     /**
      * Parse the 🧮-for attribute for non-output elements.
-     * Supports space-separated ID references (with or without # prefix).
+     * Supports space-separated ID references (with or without # prefix),
+     * or an array of them when set programmatically.
      * @param {AP} self
      * @returns {PAP}
      */
     parseForAttrDSS(self) {
         const {forAttr, defaultEventType} = self;
-        const ids = forAttr.trim().split(/\s+/).map(ref => ref.startsWith('#') ? ref.slice(1) : ref);
-        const remoteSpecifiers = ids.map(id => ({
+        const remoteSpecifiers = toIds(forAttr).map(id => ({
             id,
             evtName: defaultEventType,
         }));
@@ -123,11 +126,10 @@ e.r = ${js};
      * @returns {PAP}
      */
     categorizeEl(self) {
-        const {enhElLocalName, handler} = self;
+        const {enhElLocalName} = self;
         return /** @type {PAP} */ ({
             isOutputEl: enhElLocalName === 'output',
             categorized: true,
-            ...(!handler ? {checkedRegistry: true} : {}),
         });
     }
 
@@ -138,6 +140,13 @@ e.r = ${js};
     getEvtHandler(self) {
         const {handler, handlerObj: ho, customHandlers} = self;
         const checkedRegistry = true;
+        if (typeof handler === 'function') {
+            // Programmatic callers may pass the handler function directly.
+            return /** @type {PAP} */ ({
+                handlerObj: handler,
+                checkedRegistry
+            });
+        }
         if (!handler || ho) {
             return /** @type {PAP} */ ({
                 checkedRegistry
@@ -216,7 +225,7 @@ e.r = ${js};
         }
         const ac = this.#ac;
         const {propToInfer, defaultEventType, raw} = self;
-        const isRaw = raw !== undefined;
+        const isRaw = raw !== undefined && raw !== false;
         for (const name in propToInfer) {
             const infer = propToInfer[name];
             if (isRaw) {
@@ -246,7 +255,7 @@ e.r = ${js};
     async handleEvent() {
         const self = /** @type {AP} */ (/** @type {any} */ (this));
         const {enhancedElement, propToInfer, handlerObj, isOutputEl, enhKey, raw} = self;
-        const isRaw = raw !== undefined;
+        const isRaw = raw !== undefined && raw !== false;
         const obj = {};
         const args = [];
         for (const prop in propToInfer) {
@@ -292,6 +301,17 @@ e.r = ${js};
         const {enhancedElement, enhKey} = self;
         enhancedElement.dispatchEvent(event);
     }
+}
+
+/**
+ * Parse ID references -- a space-separated string, as in the for / 🧮-for
+ * attributes, or an array -- with or without a # prefix.
+ * @param {string | string[]} forAttr
+ * @returns {string[]}
+ */
+function toIds(forAttr) {
+    const refs = Array.isArray(forAttr) ? forAttr : forAttr.trim().split(/\s+/);
+    return refs.map(ref => ref.startsWith('#') ? ref.slice(1) : ref);
 }
 
 export {BeCalculating, CalcEvent};
