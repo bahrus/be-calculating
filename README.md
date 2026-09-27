@@ -320,7 +320,15 @@ When `🧮-raw` is present, `e.f.a` and `e.f.b` are the actual DOM elements rath
 
 # Part V Programmatic attachment (no attribute)
 
-Frameworks that render on the client can attach be-calculating without any attribute.  First register the enhancement's config once:
+The attribute syntax shown in Parts I - IV shines for server-rendered HTML and progressive enhancement:  the markup alone says what is calculated from what.  But most web development today renders on the client, with a framework (Lit, React, Vue, Svelte, etc.) that already has a JavaScript reference to each element it creates.  In that setting, attaching be-calculating programmatically is the better fit:
+
+1.  **A less clunky API.**  Frameworks tend to be awkward about setting arbitrary (let alone emoji) attributes.  Programmatically, you can also pass things an attribute can't hold:  the calculation itself as a function (no global registry, no event listener, no CSP-constrained inline JS), and the dependencies as an array of IDs.
+2.  **Less stringifying and parsing.**  With attributes, the framework serializes each setting to a string, which be-calculating then parses back apart.  Setting the properties directly skips both steps.
+3.  **Less overhead monitoring attributes.**  The attribute approach relies on [be-hive](https://github.com/bahrus/be-hive) / [mount-observer](https://github.com/bahrus/mount-observer) watching the DOM for elements that carry (or gain) the attribute, and for changes to its value.  The programmatic approach needs none of that -- `def.js` just registers the enhancement's config, and the enhancement is attached exactly when, and to exactly the elements, your code says.
+
+Both approaches produce the same enhancement, with the same inference and formatting rules, so you can mix them in one app -- attributes for server-rendered islands, programmatic attachment inside client-rendered components.
+
+First register the enhancement's config once:
 
 ```JS
 import { defBeCalculating } from 'be-calculating/def.js';

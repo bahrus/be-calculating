@@ -104,3 +104,29 @@ the expected value.
 - `emc.json` / `🧮.json` were regenerated with `npm run build`.
 - The README has a new "Part V Programmatic attachment" section.
 
+## Bruce's Response
+
+For both be-bound and be-calculating's README.md, can you add a little more editorial support for using the programmatic approach when using a client side binding framework.  Advantages include:
+
+1.  A less clunky API than setting attributed.
+2.  Less stringifying/parsing
+3.  Less overhead needed to monitor attribute changes.
+
+## Response to Bruce's Response
+
+Done, in both be-bound's and be-calculating's README. The programmatic
+section now opens with an editorial intro:
+
+- It frames the attribute syntax as the right fit for server-rendered HTML
+  and progressive enhancement, and the programmatic approach as the right fit
+  when a client-side framework already holds a reference to each element.
+- Your three advantages are spelled out with concrete examples:
+  - A less clunky API: for be-calculating, this includes passing the
+    calculation as a function and the dependencies as an array.
+  - Less stringifying/parsing.
+  - Less overhead monitoring attributes: `def.js` only registers the config.
+    It loads neither be-hive nor mount-observer, which is what watches the
+    DOM for attributes. I checked that assign-gingerly's `object-extension.js`
+    doesn't import mount-observer.
+- It notes that the two approaches produce the same enhancement and can be
+  mixed in one app.
