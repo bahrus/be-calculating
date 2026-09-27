@@ -130,3 +130,25 @@ section now opens with an editorial intro:
     doesn't import mount-observer.
 - It notes that the two approaches produce the same enhancement and can be
   mixed in one app.
+
+## Bruce's Response II
+
+The verbiage looks great.  Can you please update [Import Addendum](../types/ImportantEnhancementAddendum.md) to provide better guidance on how to word the README?
+
+
+## Response to Bruce's Response II
+
+I added a new step, **"6. Document it in the README"**, to the end of
+[the addendum](../types/ImportantEnhancementAddendum.md). It turns the wording
+used in be-bound's and be-calculating's READMEs into guidance, covering:
+
+- where the section goes (after the attribute examples);
+- the editorial intro: when attributes vs. programmatic attachment fits, and
+  the three advantages. Each advantage should be made concrete for the
+  enhancement, and the mount-observer claim checked before making it;
+- the "same enhancement, mix them freely" close;
+- the registration snippet;
+- an attribute → property mapping table;
+- the two patterns with examples;
+- gotchas such as the different event name;
+- a link to `demo/Programmatic/`.
